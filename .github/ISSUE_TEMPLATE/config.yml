@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Submit a PR
+    url: https://github.com/Ronokof/Henkan/pulls
+    about: If your request/issue involves code changes, submit a PR instead of opening an issue.
+  - name: How to contribute
+    url: https://github.com/Ronokof/Henkan/blob/main/CONTRIBUTING.md
+    about: Learn how you can contribute to this project.
+  - name: Other questions regarding the library
+    url: https://github.com/Ronokof/Henkan/discussions
+    about: For general questions about Henkan, open a discussion.

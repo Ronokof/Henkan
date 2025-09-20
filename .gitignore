@@ -1,0 +1,11 @@
+node_modules/
+
+**/**/*.txt
+**/**/*.xml
+**/**/*.utf
+**/**/*.zip
+**/**/*.gz
+**/**/*.tgz
+**/**/*.mp3
+
+package-lock.json
