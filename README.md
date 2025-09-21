@@ -1,6 +1,6 @@
 # henkan
 
-A Node.JS library that helps you convert any dictionary from [EDRDG](https://www.edrdg.org/), transform their entries into more user-friendly schemas and create Anki notes from the them.
+A Node.JS library that helps you convert any dictionary from [EDRDG](https://www.edrdg.org/), transform their entries into more user-friendly schemas and create Anki notes from them.
 
 > The library is used for the [Full Japanese Study Deck](https://ankiweb.net/shared/info/1407096987), so some features might be tailored specifically to the deck.
 
