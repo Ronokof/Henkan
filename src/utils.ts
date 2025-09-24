@@ -1762,11 +1762,11 @@ export function generateAnkiNote(entry: Result): string[] {
 export function generateAnkiNotesFile(list: Result[]): string | undefined {
   if (list.length > 0) {
     const headers: string[] = [
-      "#separator:tab\n",
-      "#html:true\n",
-      "#guid column:1\n",
-      "#notetype column:2\n",
-      "#deck column:3\n",
+      "#separator:tab",
+      "#html:true",
+      "#guid column:1",
+      "#notetype column:2",
+      "#deck column:3",
     ];
 
     const ankiNotes: string = list
@@ -1785,7 +1785,7 @@ export function generateAnkiNotesFile(list: Result[]): string | undefined {
 
     if (ankiNotes.length === 0) throw new Error("Invalid list");
 
-    return `${headers.join("")}${ankiNotes}`;
+    return `${headers.join("\n")}\n${ankiNotes}`;
   } else console.log("No entries available for Anki notes creation");
 
   return undefined;

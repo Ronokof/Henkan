@@ -2203,11 +2203,11 @@ function generateAnkiNote(entry) {
 function generateAnkiNotesFile(list) {
   if (list.length > 0) {
     const headers = [
-      "#separator:tab\n",
-      "#html:true\n",
-      "#guid column:1\n",
-      "#notetype column:2\n",
-      "#deck column:3\n"
+      "#separator:tab",
+      "#html:true",
+      "#guid column:1",
+      "#notetype column:2",
+      "#deck column:3"
     ];
     const ankiNotes = list.map((result) => {
       if (!result.noteID || !result.noteTypeName || !result.deckPath)
@@ -2219,7 +2219,8 @@ function generateAnkiNotesFile(list) {
       return `${result.noteID}	${result.noteTypeName}	${result.deckPath}	${note.join("	")}`;
     }).join("\n").trim();
     if (ankiNotes.length === 0) throw new Error("Invalid list");
-    return `${headers.join("")}${ankiNotes}`;
+    return `${headers.join("\n")}
+${ankiNotes}`;
   } else console.log("No entries available for Anki notes creation");
   return void 0;
 }
