@@ -6,7 +6,7 @@
 
 # Interface: DictWord
 
-Defined in: types.ts:125
+Defined in: [types.ts:125](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L125)
 
 JMdict entry (word)
 
@@ -18,7 +18,7 @@ Equivalent to the `entry` JMdict element
 
 > `readonly` **id**: `string`
 
-Defined in: types.ts:129
+Defined in: [types.ts:129](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L129)
 
 The entry sequence number
 
@@ -28,7 +28,7 @@ The entry sequence number
 
 > `optional` **kanjiForms**: [`DictKanjiForm`](DictKanjiForm.md)[]
 
-Defined in: types.ts:133
+Defined in: [types.ts:133](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L133)
 
 The word's kanji forms
 
@@ -38,7 +38,7 @@ The word's kanji forms
 
 > **meanings**: [`DictMeaning`](DictMeaning.md)[]
 
-Defined in: types.ts:141
+Defined in: [types.ts:141](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L141)
 
 The word's meanings/senses
 
@@ -48,6 +48,6 @@ The word's meanings/senses
 
 > **readings**: [`DictReading`](DictReading.md)[]
 
-Defined in: types.ts:137
+Defined in: [types.ts:137](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L137)
 
 The word's readings

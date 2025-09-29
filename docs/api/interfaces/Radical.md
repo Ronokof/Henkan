@@ -6,7 +6,7 @@
 
 # Interface: Radical
 
-Defined in: types.ts:506
+Defined in: [types.ts:506](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L506)
 
 Kanji radical/component information
 
@@ -20,7 +20,7 @@ Kanji radical/component information
 
 > `optional` **deckPath**: `string`
 
-Defined in: types.ts:366
+Defined in: [types.ts:366](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L366)
 
 The full path of the Anki deck
 
@@ -30,11 +30,21 @@ The full path of the Anki deck
 
 ***
 
+### fromJpdb?
+
+> `optional` **fromJpdb**: `true`
+
+Defined in: [types.ts:542](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L542)
+
+Whether or not this radical/component object contains information **only** from `jpdb.io`
+
+***
+
 ### id?
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: types.ts:358
+Defined in: [types.ts:358](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L358)
 
 ID used for the Anki note ID
 
@@ -48,7 +58,7 @@ ID used for the Anki note ID
 
 > `optional` **kanji**: [`Kanji`](Kanji.md)[]
 
-Defined in: types.ts:534
+Defined in: [types.ts:534](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L534)
 
 Kanji that include the radical/component
 
@@ -58,7 +68,7 @@ Kanji that include the radical/component
 
 > **meanings**: `string`[]
 
-Defined in: types.ts:518
+Defined in: [types.ts:518](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L518)
 
 The radical/component meanings
 
@@ -68,7 +78,7 @@ The radical/component meanings
 
 > `optional` **mnemonic**: `string`
 
-Defined in: types.ts:530
+Defined in: [types.ts:530](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L530)
 
 The radical/component mnemonic
 
@@ -78,7 +88,7 @@ The radical/component mnemonic
 
 > `readonly` `optional` **noteID**: `` `radical_${string}` ``
 
-Defined in: types.ts:354
+Defined in: [types.ts:354](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L354)
 
 ID used for the resulting Anki note
 
@@ -92,7 +102,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: types.ts:362
+Defined in: [types.ts:362](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L362)
 
 Anki note type name
 
@@ -106,7 +116,7 @@ Anki note type name
 
 > `readonly` **radical**: `string`
 
-Defined in: types.ts:510
+Defined in: [types.ts:510](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L510)
 
 The radical/component character
 
@@ -116,7 +126,7 @@ The radical/component character
 
 > **reading**: `string`
 
-Defined in: types.ts:514
+Defined in: [types.ts:514](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L514)
 
 The radical/component reading (in kana)
 
@@ -126,7 +136,7 @@ The radical/component reading (in kana)
 
 > `optional` **sources**: `string`[]
 
-Defined in: types.ts:538
+Defined in: [types.ts:538](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L538)
 
 The sources from which data for this radical/component has been extracted
 
@@ -136,7 +146,7 @@ The sources from which data for this radical/component has been extracted
 
 > `optional` **strokes**: `string`
 
-Defined in: types.ts:522
+Defined in: [types.ts:522](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L522)
 
 The stroke count of the radical/component
 
@@ -146,7 +156,7 @@ The stroke count of the radical/component
 
 > `optional` **svg**: `string`
 
-Defined in: types.ts:526
+Defined in: [types.ts:526](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L526)
 
 The radical/component SVG filename
 
@@ -156,7 +166,7 @@ The radical/component SVG filename
 
 > `optional` **tags**: `string`[]
 
-Defined in: types.ts:370
+Defined in: [types.ts:370](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L370)
 
 Tags generated based on the entry's information
 

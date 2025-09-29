@@ -6,7 +6,7 @@
 
 # Interface: Reading
 
-Defined in: types.ts:394
+Defined in: [types.ts:394](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L394)
 
 A reading of the word
 
@@ -18,7 +18,7 @@ Converted from [DictReading](DictReading.md)
 
 > `optional` **audio**: `string`
 
-Defined in: types.ts:406
+Defined in: [types.ts:406](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L406)
 
 The filename of an audio file for the reading
 
@@ -28,7 +28,7 @@ The filename of an audio file for the reading
 
 > `optional` **notes**: `string`[]
 
-Defined in: types.ts:402
+Defined in: [types.ts:402](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L402)
 
 Optional notes for the reading
 
@@ -38,6 +38,6 @@ Optional notes for the reading
 
 > `readonly` **reading**: `string`
 
-Defined in: types.ts:398
+Defined in: [types.ts:398](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L398)
 
 The reading (in kana)

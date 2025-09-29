@@ -6,7 +6,7 @@
 
 # Interface: ResultEntry\<EntryType\>
 
-Defined in: types.ts:350
+Defined in: [types.ts:350](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L350)
 
 Basic Anki note information
 
@@ -30,7 +30,7 @@ Basic Anki note information
 
 > `optional` **deckPath**: `string`
 
-Defined in: types.ts:366
+Defined in: [types.ts:366](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L366)
 
 The full path of the Anki deck
 
@@ -40,7 +40,7 @@ The full path of the Anki deck
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: types.ts:358
+Defined in: [types.ts:358](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L358)
 
 ID used for the Anki note ID
 
@@ -50,7 +50,7 @@ ID used for the Anki note ID
 
 > `readonly` `optional` **noteID**: `` `${EntryType}_${string}` ``
 
-Defined in: types.ts:354
+Defined in: [types.ts:354](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L354)
 
 ID used for the resulting Anki note
 
@@ -60,7 +60,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: types.ts:362
+Defined in: [types.ts:362](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L362)
 
 Anki note type name
 
@@ -70,6 +70,6 @@ Anki note type name
 
 > `optional` **tags**: `string`[]
 
-Defined in: types.ts:370
+Defined in: [types.ts:370](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L370)
 
 Tags generated based on the entry's information

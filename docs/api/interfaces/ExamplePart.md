@@ -6,7 +6,7 @@
 
 # Interface: ExamplePart
 
-Defined in: types.ts:279
+Defined in: [types.ts:279](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L279)
 
 A word/part from the `B` section of a Tanaka Corpus `examples.utf` entry
 
@@ -16,7 +16,7 @@ A word/part from the `B` section of a Tanaka Corpus `examples.utf` entry
 
 > **baseForm**: `string`
 
-Defined in: types.ts:283
+Defined in: [types.ts:283](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L283)
 
 The common form in which the word is found in JMdict
 
@@ -26,7 +26,7 @@ The common form in which the word is found in JMdict
 
 > `optional` **edited**: `true`
 
-Defined in: types.ts:307
+Defined in: [types.ts:307](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L307)
 
 Whether or not the word is part of an entry that has been edited and adapted
 
@@ -40,7 +40,7 @@ Whether or not the word is part of an entry that has been edited and adapted
 
 > `optional` **glossNumber**: `number`
 
-Defined in: types.ts:291
+Defined in: [types.ts:291](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L291)
 
 The JMdict sense number corresponding to the word’s usage in the phrase
 
@@ -50,7 +50,7 @@ The JMdict sense number corresponding to the word’s usage in the phrase
 
 > `optional` **inflectedForm**: `string`
 
-Defined in: types.ts:295
+Defined in: [types.ts:295](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L295)
 
 The actual form in which the word is used in the phrase
 
@@ -60,7 +60,7 @@ The actual form in which the word is used in the phrase
 
 > `optional` **reading**: `string`
 
-Defined in: types.ts:287
+Defined in: [types.ts:287](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L287)
 
 The reading (in kana) of the word
 
@@ -70,6 +70,6 @@ The reading (in kana) of the word
 
 > `optional` **referenceID**: `string`
 
-Defined in: types.ts:299
+Defined in: [types.ts:299](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L299)
 
 A sequence number that references a JMdict entry associated with the word

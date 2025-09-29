@@ -510,6 +510,10 @@ export interface Radical extends ResultEntry<"radical"> {
      * The sources from which data for this radical/component has been extracted
      */
     sources?: string[] | undefined;
+    /**
+     * Whether or not this radical/component object contains information **only** from `jpdb.io`
+     */
+    fromJpdb?: true | undefined;
 }
 /**
  * Phrase information

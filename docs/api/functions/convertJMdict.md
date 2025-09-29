@@ -8,7 +8,7 @@
 
 > **convertJMdict**(`xmlString`): [`DictWord`](../interfaces/DictWord.md)[]
 
-Defined in: utils.ts:121
+Defined in: [utils.ts:121](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/utils.ts#L121)
 
 Converts a JMdict `JMdict_e.xml`/`JMdict_e` file into an array of [DictWord](../interfaces/DictWord.md) objects.
 

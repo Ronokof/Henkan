@@ -6,7 +6,7 @@
 
 # Interface: Kana
 
-Defined in: types.ts:598
+Defined in: [types.ts:602](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L602)
 
 Kana information
 
@@ -20,7 +20,7 @@ Kana information
 
 > `optional` **audio**: `string`
 
-Defined in: types.ts:610
+Defined in: [types.ts:614](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L614)
 
 The filename of an audio file for the kana reading
 
@@ -30,7 +30,7 @@ The filename of an audio file for the kana reading
 
 > `optional` **deckPath**: `string`
 
-Defined in: types.ts:366
+Defined in: [types.ts:366](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L366)
 
 The full path of the Anki deck
 
@@ -44,7 +44,7 @@ The full path of the Anki deck
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: types.ts:358
+Defined in: [types.ts:358](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L358)
 
 ID used for the Anki note ID
 
@@ -58,7 +58,7 @@ ID used for the Anki note ID
 
 > `readonly` **kana**: `string`
 
-Defined in: types.ts:602
+Defined in: [types.ts:606](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L606)
 
 The kana character
 
@@ -68,7 +68,7 @@ The kana character
 
 > `readonly` `optional` **noteID**: `` `kana_${string}` ``
 
-Defined in: types.ts:354
+Defined in: [types.ts:354](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L354)
 
 ID used for the resulting Anki note
 
@@ -82,7 +82,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: types.ts:362
+Defined in: [types.ts:362](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L362)
 
 Anki note type name
 
@@ -96,7 +96,7 @@ Anki note type name
 
 > **reading**: `string`
 
-Defined in: types.ts:606
+Defined in: [types.ts:610](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L610)
 
 The romaji reading of the kana
 
@@ -106,7 +106,7 @@ The romaji reading of the kana
 
 > `optional` **svg**: `string`
 
-Defined in: types.ts:614
+Defined in: [types.ts:618](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L618)
 
 The kana SVG filename
 
@@ -116,7 +116,7 @@ The kana SVG filename
 
 > `optional` **tags**: `string`[]
 
-Defined in: types.ts:370
+Defined in: [types.ts:370](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/types.ts#L370)
 
 Tags generated based on the entry's information
 
