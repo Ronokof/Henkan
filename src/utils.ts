@@ -774,6 +774,8 @@ export function getWord(
         };
       });
 
+      let usuallyInKanaMeanings: number = 0;
+
       word.translations = dictWord.meanings.map((dictMeaning: DictMeaning) => {
         if (!dictMeaning.translations)
           throw new Error(`No translations for ${dictWord!.id}`);
@@ -831,9 +833,12 @@ export function getWord(
         wordAddNoteArray(dictMeaning.info, (info: string) =>
           lookupWordNote(info, notes, word.tags!, false, info),
         );
-        wordAddNoteArray(dictMeaning.misc, (misc: string) =>
-          lookupWordNote(misc, notes, word.tags!, false, misc),
-        );
+        wordAddNoteArray(dictMeaning.misc, (misc: string) => {
+          lookupWordNote(misc, notes, word.tags!, false, misc);
+
+          if (misc.toLowerCase() === "word usually written using kana alone")
+            usuallyInKanaMeanings++;
+        });
 
         for (let i: number = 0; i < notes.length; i++)
           notes[i] = capitalizeString(notes[i]!);
@@ -843,6 +848,12 @@ export function getWord(
           notes: notes,
         };
       });
+
+      if (
+        word.translations &&
+        word.translations.length === usuallyInKanaMeanings
+      )
+        word.usuallyInKana = true;
 
       if (kanjiDic && word.kanjiForms) {
         word.kanji = [];
@@ -940,13 +951,21 @@ export function getWord(
           }
         }
 
-        word.phrases = (
-          examples.length > 5 ? examples.slice(0, 5) : examples
-        ).map((ex: TanakaExample) => ({
-          phrase: ex.furigana ?? ex.phrase,
-          translation: ex.translation,
-          originalPhrase: ex.phrase,
-        }));
+        examples = examples.filter(
+          (example: TanakaExample, index: number, arr: TanakaExample[]) =>
+            arr.findIndex(
+              (ex: TanakaExample) => ex.phrase === example.phrase,
+            ) === index,
+        );
+
+        if (examples.length > 0)
+          word.phrases = (
+            examples.length > 5 ? examples.slice(0, 5) : examples
+          ).map((ex: TanakaExample) => ({
+            phrase: ex.furigana ?? ex.phrase,
+            translation: ex.translation,
+            originalPhrase: ex.phrase,
+          }));
       }
 
       return word;
@@ -1469,14 +1488,8 @@ export function generateAnkiNote(entry: Result): string[] {
   if (isWord(entry)) {
     if (!entry.translations) throw new Error(`Invalid word: ${entry.noteID}`);
 
-    const usuallyInKana: boolean = entry.translations.every(
-      (translation) =>
-        translation.notes &&
-        translation.notes.includes("Word usually written using kana alone"),
-    );
-
     fields.push(
-      ...(entry.kanjiForms && !usuallyInKana
+      ...(entry.kanjiForms && !entry.usuallyInKana
         ? [
             entry.kanjiForms
               .map(

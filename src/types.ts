@@ -594,6 +594,12 @@ export interface Word extends ResultEntry<"word"> {
    * A word is considered *common* if the {@link DictWord.readings} and/or the {@link DictWord.kanjiForms} array(s) include(s) at least one element with the {@link DictReading.commonness} or {@link DictKanjiForm.commonness} property defined.
    */
   common?: true | undefined;
+  /**
+   * Whether or not the word is typically written in kana alone
+   *
+   * Set to `true` only if the word is usually written in kana for all word senses.
+   */
+  usuallyInKana?: true | undefined;
 }
 
 /**

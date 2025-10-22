@@ -1538,6 +1538,7 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
           } : {}
         };
       });
+      let usuallyInKanaMeanings = 0;
       word.translations = dictWord.meanings.map((dictMeaning) => {
         if (!dictMeaning.translations)
           throw new Error(`No translations for ${dictWord.id}`);
@@ -1591,10 +1592,11 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
           dictMeaning.info,
           (info) => lookupWordNote(info, notes, word.tags, false, info)
         );
-        wordAddNoteArray(
-          dictMeaning.misc,
-          (misc) => lookupWordNote(misc, notes, word.tags, false, misc)
-        );
+        wordAddNoteArray(dictMeaning.misc, (misc) => {
+          lookupWordNote(misc, notes, word.tags, false, misc);
+          if (misc.toLowerCase() === "word usually written using kana alone")
+            usuallyInKanaMeanings++;
+        });
         for (let i = 0; i < notes.length; i++)
           notes[i] = capitalizeString(notes[i]);
         return {
@@ -1602,6 +1604,8 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
           notes
         };
       });
+      if (word.translations && word.translations.length === usuallyInKanaMeanings)
+        word.usuallyInKana = true;
       if (kanjiDic && word.kanjiForms) {
         word.kanji = [];
         for (const kanjiForm of word.kanjiForms)
@@ -1675,11 +1679,17 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
             ];
           }
         }
-        word.phrases = (examples.length > 5 ? examples.slice(0, 5) : examples).map((ex) => ({
-          phrase: ex.furigana ?? ex.phrase,
-          translation: ex.translation,
-          originalPhrase: ex.phrase
-        }));
+        examples = examples.filter(
+          (example, index, arr) => arr.findIndex(
+            (ex) => ex.phrase === example.phrase
+          ) === index
+        );
+        if (examples.length > 0)
+          word.phrases = (examples.length > 5 ? examples.slice(0, 5) : examples).map((ex) => ({
+            phrase: ex.furigana ?? ex.phrase,
+            translation: ex.translation,
+            originalPhrase: ex.phrase
+          }));
       }
       return word;
     } else throw new Error(`Word${id ? ` ${id}` : ""} not found`);
@@ -1973,11 +1983,8 @@ function generateAnkiNote(entry) {
   const fields = [];
   if (isWord(entry)) {
     if (!entry.translations) throw new Error(`Invalid word: ${entry.noteID}`);
-    const usuallyInKana = entry.translations.every(
-      (translation) => translation.notes && translation.notes.includes("Word usually written using kana alone")
-    );
     fields.push(
-      ...entry.kanjiForms && !usuallyInKana ? [
+      ...entry.kanjiForms && !entry.usuallyInKana ? [
         entry.kanjiForms.map(
           (kanjiFormEntry, index) => `${index > 0 ? "<details><summary>Show kanji form</summary>" : ""}${createEntry(`<span class="word word-kanjiform">${index === 0 ? "<ruby><rb>" : ""}${kanjiFormEntry.kanjiForm}${index === 0 ? `</rb><rt>${entry.readings[0].reading}</rt></ruby>` : ""}</span>`, kanjiFormEntry.notes)}${index > 0 ? "</details>" : ""}`
         ).join(""),

@@ -6,9 +6,9 @@
 
 # Function: synthesizeSpeech()
 
-> **synthesizeSpeech**(`client`, `ssmlText`, `options`): `Promise`\<`null` \| `Buffer`\<`ArrayBuffer`\>\>
+> **synthesizeSpeech**(`client`, `ssmlText`, `options`): `Promise`\<`Buffer`\<`ArrayBuffer`\> \| `null`\>
 
-Defined in: [utils.ts:1373](https://github.com/Ronokof/Henkan/blob/98f666aefeafaf05969bb220cc1183df13aaacbd/src/utils.ts#L1373)
+Defined in: [utils.ts:1392](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/utils.ts#L1392)
 
 Synthesizes text to speech audio using \[Amazon Polly\](https://aws.amazon.com/polly/).
 
@@ -34,6 +34,6 @@ Other speech generation settings
 
 ## Returns
 
-`Promise`\<`null` \| `Buffer`\<`ArrayBuffer`\>\>
+`Promise`\<`Buffer`\<`ArrayBuffer`\> \| `null`\>
 
 A promise resolving with an audio stream buffer or with `null` if the generation failed
