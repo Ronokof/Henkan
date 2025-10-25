@@ -8,7 +8,7 @@
 
 > **generateAnkiNotesFile**(`list`): `string` \| `undefined`
 
-Defined in: [utils.ts:1775](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/utils.ts#L1775)
+Defined in: [utils.ts:1775](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/utils.ts#L1775)
 
 Generates an Anki notes file with each entry’s info organized into fields, either in HTML or plain text.
 

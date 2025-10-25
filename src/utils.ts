@@ -1783,6 +1783,7 @@ export function generateAnkiNotesFile(list: Result[]): string | undefined {
     ];
 
     const ankiNotes: string = list
+      .filter((result: Result) => result.doNotCreateNote === undefined)
       .map((result: Result) => {
         if (!result.noteID || !result.noteTypeName || !result.deckPath)
           throw new Error("Invalid result");

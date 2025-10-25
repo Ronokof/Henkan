@@ -368,6 +368,10 @@ export interface ResultEntry<EntryType extends string> {
    * Tags generated based on the entry's information
    */
   tags?: string[] | undefined;
+  /**
+   * Whether or not this entry should be converted into an Anki note
+   */
+  doNotCreateNote?: true | undefined;
 }
 
 /**

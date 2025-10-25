@@ -1,6 +1,6 @@
 {
   "name": "henkan",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Node.JS library that helps you convert any dictionary from EDRDG, transform their entries into more user-friendly schemas and create Anki notes from them.",
   "keywords": [
     "fjsd",
@@ -74,7 +74,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@aws-sdk/client-polly": "^3.914.0",
+    "@aws-sdk/client-polly": "^3.917.0",
     "iconv-lite": "^0.7.0",
     "kuroshiro": "^1.2.0",
     "kuroshiro-analyzer-kuromoji": "^1.1.0",

@@ -6,7 +6,7 @@
 
 # Interface: Kana
 
-Defined in: [types.ts:608](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L608)
+Defined in: [types.ts:612](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L612)
 
 Kana information
 
@@ -20,7 +20,7 @@ Kana information
 
 > `optional` **audio**: `string`
 
-Defined in: [types.ts:620](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L620)
+Defined in: [types.ts:624](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L624)
 
 The filename of an audio file for the kana reading
 
@@ -30,7 +30,7 @@ The filename of an audio file for the kana reading
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:366](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L366)
+Defined in: [types.ts:366](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L366)
 
 The full path of the Anki deck
 
@@ -40,11 +40,25 @@ The full path of the Anki deck
 
 ***
 
+### doNotCreateNote?
+
+> `optional` **doNotCreateNote**: `true`
+
+Defined in: [types.ts:374](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L374)
+
+Whether or not this entry should be converted into an Anki note
+
+#### Inherited from
+
+[`ResultEntry`](ResultEntry.md).[`doNotCreateNote`](ResultEntry.md#donotcreatenote)
+
+***
+
 ### id?
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: [types.ts:358](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L358)
+Defined in: [types.ts:358](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L358)
 
 ID used for the Anki note ID
 
@@ -58,7 +72,7 @@ ID used for the Anki note ID
 
 > `readonly` **kana**: `string`
 
-Defined in: [types.ts:612](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L612)
+Defined in: [types.ts:616](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L616)
 
 The kana character
 
@@ -68,7 +82,7 @@ The kana character
 
 > `readonly` `optional` **noteID**: `` `kana_${string}` ``
 
-Defined in: [types.ts:354](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L354)
+Defined in: [types.ts:354](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L354)
 
 ID used for the resulting Anki note
 
@@ -82,7 +96,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:362](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L362)
+Defined in: [types.ts:362](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L362)
 
 Anki note type name
 
@@ -96,7 +110,7 @@ Anki note type name
 
 > **reading**: `string`
 
-Defined in: [types.ts:616](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L616)
+Defined in: [types.ts:620](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L620)
 
 The romaji reading of the kana
 
@@ -106,7 +120,7 @@ The romaji reading of the kana
 
 > `optional` **svg**: `string`
 
-Defined in: [types.ts:624](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L624)
+Defined in: [types.ts:628](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L628)
 
 The kana SVG filename
 
@@ -116,7 +130,7 @@ The kana SVG filename
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:370](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L370)
+Defined in: [types.ts:370](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L370)
 
 Tags generated based on the entry's information
 

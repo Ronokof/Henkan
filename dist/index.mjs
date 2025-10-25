@@ -2159,7 +2159,7 @@ function generateAnkiNotesFile(list) {
       "#notetype column:2",
       "#deck column:3"
     ];
-    const ankiNotes = list.map((result) => {
+    const ankiNotes = list.filter((result) => result.doNotCreateNote === void 0).map((result) => {
       if (!result.noteID || !result.noteTypeName || !result.deckPath)
         throw new Error("Invalid result");
       const note = generateAnkiNote(result);

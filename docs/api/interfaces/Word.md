@@ -6,7 +6,7 @@
 
 # Interface: Word
 
-Defined in: [types.ts:570](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L570)
+Defined in: [types.ts:574](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L574)
 
 Word information
 
@@ -22,7 +22,7 @@ Converted from [DictWord](DictWord.md)
 
 > `optional` **common**: `true`
 
-Defined in: [types.ts:596](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L596)
+Defined in: [types.ts:600](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L600)
 
 Whether or not the word is common
 
@@ -34,7 +34,7 @@ A word is considered *common* if the [DictWord.readings](DictWord.md#readings) a
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:366](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L366)
+Defined in: [types.ts:366](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L366)
 
 The full path of the Anki deck
 
@@ -44,11 +44,25 @@ The full path of the Anki deck
 
 ***
 
+### doNotCreateNote?
+
+> `optional` **doNotCreateNote**: `true`
+
+Defined in: [types.ts:374](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L374)
+
+Whether or not this entry should be converted into an Anki note
+
+#### Inherited from
+
+[`ResultEntry`](ResultEntry.md).[`doNotCreateNote`](ResultEntry.md#donotcreatenote)
+
+***
+
 ### id?
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: [types.ts:358](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L358)
+Defined in: [types.ts:358](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L358)
 
 ID used for the Anki note ID
 
@@ -62,7 +76,7 @@ ID used for the Anki note ID
 
 > `optional` **kanji**: [`Kanji`](Kanji.md)[]
 
-Defined in: [types.ts:586](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L586)
+Defined in: [types.ts:590](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L590)
 
 A list of kanji used in the kanji forms
 
@@ -72,7 +86,7 @@ A list of kanji used in the kanji forms
 
 > `optional` **kanjiForms**: [`KanjiForm`](KanjiForm.md)[]
 
-Defined in: [types.ts:582](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L582)
+Defined in: [types.ts:586](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L586)
 
 The word kanji forms
 
@@ -82,7 +96,7 @@ The word kanji forms
 
 > `readonly` `optional` **noteID**: `` `word_${string}` ``
 
-Defined in: [types.ts:354](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L354)
+Defined in: [types.ts:354](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L354)
 
 ID used for the resulting Anki note
 
@@ -96,7 +110,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:362](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L362)
+Defined in: [types.ts:362](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L362)
 
 Anki note type name
 
@@ -110,7 +124,7 @@ Anki note type name
 
 > `optional` **phrases**: [`Phrase`](Phrase.md)[]
 
-Defined in: [types.ts:590](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L590)
+Defined in: [types.ts:594](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L594)
 
 Phrases associated to the word
 
@@ -120,7 +134,7 @@ Phrases associated to the word
 
 > **readings**: [`Reading`](Reading.md)[]
 
-Defined in: [types.ts:574](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L574)
+Defined in: [types.ts:578](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L578)
 
 The word readings (in kana)
 
@@ -130,7 +144,7 @@ The word readings (in kana)
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:370](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L370)
+Defined in: [types.ts:370](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L370)
 
 Tags generated based on the entry's information
 
@@ -144,7 +158,7 @@ Tags generated based on the entry's information
 
 > `optional` **translations**: [`Translation`](Translation.md)[]
 
-Defined in: [types.ts:578](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L578)
+Defined in: [types.ts:582](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L582)
 
 The word translations/senses
 
@@ -154,7 +168,7 @@ The word translations/senses
 
 > `optional` **usuallyInKana**: `true`
 
-Defined in: [types.ts:602](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L602)
+Defined in: [types.ts:606](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L606)
 
 Whether or not the word is typically written in kana alone
 

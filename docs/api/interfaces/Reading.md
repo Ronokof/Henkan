@@ -6,7 +6,7 @@
 
 # Interface: Reading
 
-Defined in: [types.ts:394](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L394)
+Defined in: [types.ts:398](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L398)
 
 A reading of the word
 
@@ -18,7 +18,7 @@ Converted from [DictReading](DictReading.md)
 
 > `optional` **audio**: `string`
 
-Defined in: [types.ts:406](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L406)
+Defined in: [types.ts:410](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L410)
 
 The filename of an audio file for the reading
 
@@ -28,7 +28,7 @@ The filename of an audio file for the reading
 
 > `optional` **notes**: `string`[]
 
-Defined in: [types.ts:402](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L402)
+Defined in: [types.ts:406](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L406)
 
 Optional notes for the reading
 
@@ -38,6 +38,6 @@ Optional notes for the reading
 
 > `readonly` **reading**: `string`
 
-Defined in: [types.ts:398](https://github.com/Ronokof/Henkan/blob/2ebb5bac1977f3a31819e77efebc48d02b0a7059/src/types.ts#L398)
+Defined in: [types.ts:402](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L402)
 
 The reading (in kana)
