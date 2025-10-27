@@ -33,9 +33,10 @@ export declare function shuffleArray<T>(arr: T[]): T[];
 /**
  * Converts a JMdict `JMdict_e.xml`/`JMdict_e` file into an array of {@link DictWord} objects.
  * @param xmlString The raw `JMdict_e.xml`/`JMdict_e` file contents
+ * @param examples An array of converted `Tanaka Corpus` examples
  * @returns An array of converted {@link DictWord} objects
  */
-export declare function convertJMdict(xmlString: string): DictWord[];
+export declare function convertJMdict(xmlString: string, examples?: TanakaExample[] | undefined): DictWord[];
 /**
  * Converts a KANJIDIC `kanjidic2.xml` file into an array of {@link DictKanji} objects.
  * @param xmlString The raw `kanjidic2.xml` file contents

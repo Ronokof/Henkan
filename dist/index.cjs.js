@@ -1203,7 +1203,7 @@ function shuffleArray(arr) {
   }
   return a;
 }
-function convertJMdict(xmlString) {
+function convertJMdict(xmlString, examples) {
   try {
     const dictParsed = import_libxmljs2.default.parseXml(xmlString, {
       dtdvalid: true,
@@ -1237,8 +1237,10 @@ function convertJMdict(xmlString) {
                 );
               if (isStringArray(kanjiForm.ke_inf))
                 form.notes = kanjiForm.ke_inf;
-              if (isStringArray(kanjiForm.ke_pri))
+              if (isStringArray(kanjiForm.ke_pri)) {
                 form.commonness = kanjiForm.ke_pri;
+                if (entryObj.isCommon === void 0) entryObj.isCommon = true;
+              }
               if (form.form.length > 0) entryObj.kanjiForms.push(form);
             }
           }
@@ -1251,10 +1253,12 @@ function convertJMdict(xmlString) {
                 throw new Error(`Invalid JMdict entry reading: ${entryObj.id}`);
               if (isStringArray(reading.re_inf))
                 readingObj.notes = reading.re_inf;
-              if (isStringArray(reading.re_pri))
-                readingObj.commonness = reading.re_pri;
               if (isStringArray(reading.re_restr))
                 readingObj.kanjiFormRestrictions = reading.re_restr;
+              if (isStringArray(reading.re_pri)) {
+                readingObj.commonness = reading.re_pri;
+                if (entryObj.isCommon === void 0) entryObj.isCommon = true;
+              }
               if (readingObj.reading.length > 0)
                 entryObj.readings.push(readingObj);
             }
@@ -1290,6 +1294,40 @@ function convertJMdict(xmlString) {
               if (meaningObj.partOfSpeech && meaningObj.partOfSpeech.length > 0 || meaningObj.translations && meaningObj.translations.length > 0)
                 entryObj.meanings.push(meaningObj);
             }
+          if (examples) {
+            const readings2 = new Set(
+              entryObj.readings.filter(
+                (reading) => !reading.notes || reading.notes && !reading.notes.some(
+                  (note) => notSearchedForms.has(note)
+                )
+              ).map((reading) => reading.reading)
+            );
+            const kanjiForms2 = entryObj.kanjiForms ? new Set(
+              entryObj.kanjiForms.map(
+                (kanjiForm) => kanjiForm.form
+              )
+            ) : void 0;
+            let kanjiFormExamples = false;
+            let readingExamples = false;
+            if (kanjiForms2) {
+              outer: for (const example of examples)
+                for (const part of example.parts)
+                  if (kanjiForms2.has(part.baseForm)) {
+                    kanjiFormExamples = true;
+                    break outer;
+                  }
+            }
+            if (!kanjiFormExamples) {
+              outer: for (const example of examples)
+                for (const part of example.parts)
+                  if (readings2.has(part.baseForm)) {
+                    readingExamples = true;
+                    break outer;
+                  }
+            }
+            if (kanjiFormExamples || readingExamples)
+              entryObj.hasPhrases = true;
+          }
           if (entryObj.id.length > 0 && entryObj.readings.length > 0 && entryObj.meanings.length > 0)
             dict.push(entryObj);
         }

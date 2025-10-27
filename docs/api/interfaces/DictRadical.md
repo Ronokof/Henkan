@@ -6,7 +6,7 @@
 
 # Interface: DictRadical
 
-Defined in: [types.ts:245](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L245)
+Defined in: [types.ts:255](https://github.com/Ronokof/Henkan/blob/52fe6d98746996eb6471b21af2a4100c9ce484cf/src/types.ts#L255)
 
 RADKFILE2 entry (radical)
 
@@ -16,7 +16,7 @@ RADKFILE2 entry (radical)
 
 > **kanji**: [`DictKanji`](DictKanji.md)[]
 
-Defined in: [types.ts:253](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L253)
+Defined in: [types.ts:263](https://github.com/Ronokof/Henkan/blob/52fe6d98746996eb6471b21af2a4100c9ce484cf/src/types.ts#L263)
 
 The kanji that include the radical
 
@@ -26,7 +26,7 @@ The kanji that include the radical
 
 > `readonly` **radical**: `string`
 
-Defined in: [types.ts:249](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L249)
+Defined in: [types.ts:259](https://github.com/Ronokof/Henkan/blob/52fe6d98746996eb6471b21af2a4100c9ce484cf/src/types.ts#L259)
 
 The radical character
 
@@ -36,6 +36,6 @@ The radical character
 
 > **strokes**: `string`
 
-Defined in: [types.ts:257](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/types.ts#L257)
+Defined in: [types.ts:267](https://github.com/Ronokof/Henkan/blob/52fe6d98746996eb6471b21af2a4100c9ce484cf/src/types.ts#L267)
 
 The stroke count of the radical

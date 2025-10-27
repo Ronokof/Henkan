@@ -136,6 +136,16 @@ export interface DictWord {
      * The word's meanings/senses
      */
     meanings: DictMeaning[];
+    /**
+     * Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
+     */
+    isCommon?: true | undefined;
+    /**
+     * Whether or not the entry has at least one Tanaka Corpus phrase associated with it
+     *
+     * **May not always be accurate**
+     */
+    hasPhrases?: true | undefined;
 }
 /**
  * Miscellaneous information about the kanji

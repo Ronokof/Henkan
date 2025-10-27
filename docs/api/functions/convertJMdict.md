@@ -6,9 +6,9 @@
 
 # Function: convertJMdict()
 
-> **convertJMdict**(`xmlString`): [`DictWord`](../interfaces/DictWord.md)[]
+> **convertJMdict**(`xmlString`, `examples?`): [`DictWord`](../interfaces/DictWord.md)[]
 
-Defined in: [utils.ts:121](https://github.com/Ronokof/Henkan/blob/a8409ff59a4d15090def2ea20c6de370a8a9f4b3/src/utils.ts#L121)
+Defined in: [utils.ts:122](https://github.com/Ronokof/Henkan/blob/52fe6d98746996eb6471b21af2a4100c9ce484cf/src/utils.ts#L122)
 
 Converts a JMdict `JMdict_e.xml`/`JMdict_e` file into an array of [DictWord](../interfaces/DictWord.md) objects.
 
@@ -19,6 +19,12 @@ Converts a JMdict `JMdict_e.xml`/`JMdict_e` file into an array of [DictWord](../
 `string`
 
 The raw `JMdict_e.xml`/`JMdict_e` file contents
+
+### examples?
+
+[`TanakaExample`](../interfaces/TanakaExample.md)[]
+
+An array of converted `Tanaka Corpus` examples
 
 ## Returns
 

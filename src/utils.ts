@@ -116,9 +116,13 @@ export function shuffleArray<T>(arr: T[]): T[] {
 /**
  * Converts a JMdict `JMdict_e.xml`/`JMdict_e` file into an array of {@link DictWord} objects.
  * @param xmlString The raw `JMdict_e.xml`/`JMdict_e` file contents
+ * @param examples An array of converted `Tanaka Corpus` examples
  * @returns An array of converted {@link DictWord} objects
  */
-export function convertJMdict(xmlString: string): DictWord[] {
+export function convertJMdict(
+  xmlString: string,
+  examples?: TanakaExample[] | undefined,
+): DictWord[] {
   try {
     const dictParsed: libxml.Document = libxml.parseXml(xmlString, {
       dtdvalid: true,
@@ -170,8 +174,11 @@ export function convertJMdict(xmlString: string): DictWord[] {
 
               if (isStringArray(kanjiForm.ke_inf))
                 form.notes = kanjiForm.ke_inf;
-              if (isStringArray(kanjiForm.ke_pri))
+              if (isStringArray(kanjiForm.ke_pri)) {
                 form.commonness = kanjiForm.ke_pri;
+
+                if (entryObj.isCommon === undefined) entryObj.isCommon = true;
+              }
 
               if (form.form.length > 0) entryObj.kanjiForms.push(form);
             }
@@ -190,10 +197,13 @@ export function convertJMdict(xmlString: string): DictWord[] {
 
               if (isStringArray(reading.re_inf))
                 readingObj.notes = reading.re_inf;
-              if (isStringArray(reading.re_pri))
-                readingObj.commonness = reading.re_pri;
               if (isStringArray(reading.re_restr))
                 readingObj.kanjiFormRestrictions = reading.re_restr;
+              if (isStringArray(reading.re_pri)) {
+                readingObj.commonness = reading.re_pri;
+
+                if (entryObj.isCommon === undefined) entryObj.isCommon = true;
+              }
 
               if (readingObj.reading.length > 0)
                 entryObj.readings.push(readingObj);
@@ -248,6 +258,51 @@ export function convertJMdict(xmlString: string): DictWord[] {
               )
                 entryObj.meanings.push(meaningObj);
             }
+
+          if (examples) {
+            const readings: Set<string> = new Set<string>(
+              entryObj.readings
+                .filter(
+                  (reading: DictReading) =>
+                    !reading.notes ||
+                    (reading.notes &&
+                      !reading.notes.some((note: string) =>
+                        notSearchedForms.has(note),
+                      )),
+                )
+                .map((reading: DictReading) => reading.reading),
+            );
+            const kanjiForms: Set<string> | undefined = entryObj.kanjiForms
+              ? new Set<string>(
+                  entryObj.kanjiForms.map(
+                    (kanjiForm: DictKanjiForm) => kanjiForm.form,
+                  ),
+                )
+              : undefined;
+
+            let kanjiFormExamples: boolean = false;
+            let readingExamples: boolean = false;
+
+            if (kanjiForms)
+              outer: for (const example of examples)
+                for (const part of example.parts)
+                  if (kanjiForms.has(part.baseForm)) {
+                    kanjiFormExamples = true;
+
+                    break outer;
+                  }
+
+            if (!kanjiFormExamples)
+              outer: for (const example of examples)
+                for (const part of example.parts)
+                  if (readings.has(part.baseForm)) {
+                    readingExamples = true;
+                    break outer;
+                  }
+
+            if (kanjiFormExamples || readingExamples)
+              entryObj.hasPhrases = true;
+          }
 
           if (
             entryObj.id.length > 0 &&
