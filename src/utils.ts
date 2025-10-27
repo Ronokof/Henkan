@@ -135,6 +135,17 @@ export function convertJMdict(
     xml.parseString(dictParsed, (err: Error | null, result: any) => {
       if (err) throw err;
 
+      let tanakaBaseParts: Set<string> | undefined = undefined;
+
+      if (examples)
+        tanakaBaseParts = new Set<string>(
+          examples
+            .map((example: TanakaExample) =>
+              example.parts.map((part: ExamplePart) => part.baseForm),
+            )
+            .flat(),
+        );
+
       if (
         result.JMdict &&
         typeof result.JMdict === "object" &&
@@ -283,22 +294,18 @@ export function convertJMdict(
             let kanjiFormExamples: boolean = false;
             let readingExamples: boolean = false;
 
-            if (kanjiForms)
-              outer: for (const example of examples)
-                for (const part of example.parts)
-                  if (kanjiForms.has(part.baseForm)) {
-                    kanjiFormExamples = true;
-
-                    break outer;
-                  }
-
-            if (!kanjiFormExamples)
-              outer: for (const example of examples)
-                for (const part of example.parts)
-                  if (readings.has(part.baseForm)) {
-                    readingExamples = true;
-                    break outer;
-                  }
+            if (kanjiForms && kanjiForms.size > 0 && tanakaBaseParts)
+              for (const kf of kanjiForms)
+                if (tanakaBaseParts.has(kf)) {
+                  kanjiFormExamples = true;
+                  break;
+                }
+            if (!kanjiFormExamples && readings.size > 0 && tanakaBaseParts)
+              for (const r of readings)
+                if (tanakaBaseParts.has(r)) {
+                  readingExamples = true;
+                  break;
+                }
 
             if (kanjiFormExamples || readingExamples)
               entryObj.hasPhrases = true;

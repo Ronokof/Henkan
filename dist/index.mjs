@@ -1160,6 +1160,13 @@ function convertJMdict(xmlString, examples) {
     const dict = [];
     xml.parseString(dictParsed, (err, result) => {
       if (err) throw err;
+      let tanakaBaseParts = void 0;
+      if (examples)
+        tanakaBaseParts = new Set(
+          examples.map(
+            (example) => example.parts.map((part) => part.baseForm)
+          ).flat()
+        );
       if (result.JMdict && typeof result.JMdict === "object" && isValidArray(result.JMdict.entry))
         for (const entry of result.JMdict.entry) {
           const entryObj = {
@@ -1255,21 +1262,19 @@ function convertJMdict(xmlString, examples) {
             ) : void 0;
             let kanjiFormExamples = false;
             let readingExamples = false;
-            if (kanjiForms2) {
-              outer: for (const example of examples)
-                for (const part of example.parts)
-                  if (kanjiForms2.has(part.baseForm)) {
-                    kanjiFormExamples = true;
-                    break outer;
-                  }
+            if (kanjiForms2 && kanjiForms2.size > 0 && tanakaBaseParts) {
+              for (const kf of kanjiForms2)
+                if (tanakaBaseParts.has(kf)) {
+                  kanjiFormExamples = true;
+                  break;
+                }
             }
-            if (!kanjiFormExamples) {
-              outer: for (const example of examples)
-                for (const part of example.parts)
-                  if (readings2.has(part.baseForm)) {
-                    readingExamples = true;
-                    break outer;
-                  }
+            if (!kanjiFormExamples && readings2.size > 0 && tanakaBaseParts) {
+              for (const r of readings2)
+                if (tanakaBaseParts.has(r)) {
+                  readingExamples = true;
+                  break;
+                }
             }
             if (kanjiFormExamples || readingExamples)
               entryObj.hasPhrases = true;
