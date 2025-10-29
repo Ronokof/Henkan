@@ -146,7 +146,7 @@ export interface DictWord {
   /**
    * Whether or not the entry has at least one Tanaka Corpus phrase associated with it
    *
-   * **May not always be accurate**
+   * **May not always be accurate** (It may only be `true` incorrectly. If it is `undefined`, the report is 100% correct.)
    */
   hasPhrases?: true | undefined;
 }
@@ -247,6 +247,10 @@ export interface DictKanji {
    * The "readings-meanings" groups and nanori readings of the kanji
    */
   readingMeaning: DictKanjiReadingMeaning[];
+  /**
+   * Whether or not the kanji is kokuji
+   */
+  isKokuji?: true | undefined;
 }
 
 /**
@@ -324,11 +328,11 @@ export interface TanakaExample {
   /**
    * The Japanese phrase (found in the `A` section, **before** the tab)
    */
-  phrase: string;
+  readonly phrase: string;
   /**
    * The English translation of the phrase (found in the `A` section, **after** the tab)
    */
-  translation: string;
+  readonly translation: string;
   /**
    * The `B` section, split into parts
    */
@@ -382,6 +386,20 @@ export interface ResultEntry<EntryType extends string> {
    * Whether or not this entry should be converted into an Anki note
    */
   doNotCreateNote?: true | undefined;
+}
+
+/**
+ * A pair of a "kanji form"/"reading"/"sense" note and its associated tag
+ */
+export interface NoteAndTag {
+  /**
+   * The note
+   */
+  readonly note?: string | undefined;
+  /**
+   * The tag
+   */
+  readonly tag?: string | undefined;
 }
 
 /**
@@ -504,6 +522,10 @@ export interface Kanji extends ResultEntry<"kanji"> {
    * @see {@link DictKanjiMisc.frequency}
    */
   frequency?: string | undefined;
+  /**
+   * Whether or not the kanji is kokuji
+   */
+  kokuji?: true | undefined;
   /**
    * The source (besides KANJIDIC) from which data for this kanji has been extracted
    */

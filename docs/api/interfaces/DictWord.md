@@ -6,7 +6,7 @@
 
 # Interface: DictWord
 
-Defined in: [types.ts:125](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/types.ts#L125)
+Defined in: [types.ts:125](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/types.ts#L125)
 
 JMdict entry (word)
 
@@ -18,11 +18,11 @@ Equivalent to the `entry` JMdict element
 
 > `optional` **hasPhrases**: `true`
 
-Defined in: [types.ts:151](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/types.ts#L151)
+Defined in: [types.ts:151](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/types.ts#L151)
 
 Whether or not the entry has at least one Tanaka Corpus phrase associated with it
 
-**May not always be accurate**
+**May not always be accurate** (It may only be `true` incorrectly. If it is `undefined`, the report is 100% correct.)
 
 ***
 
@@ -30,7 +30,7 @@ Whether or not the entry has at least one Tanaka Corpus phrase associated with i
 
 > `readonly` **id**: `string`
 
-Defined in: [types.ts:129](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/types.ts#L129)
+Defined in: [types.ts:129](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/types.ts#L129)
 
 The entry sequence number
 
@@ -40,7 +40,7 @@ The entry sequence number
 
 > `optional` **isCommon**: `true`
 
-Defined in: [types.ts:145](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/types.ts#L145)
+Defined in: [types.ts:145](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/types.ts#L145)
 
 Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
 
@@ -50,7 +50,7 @@ Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
 
 > `optional` **kanjiForms**: [`DictKanjiForm`](DictKanjiForm.md)[]
 
-Defined in: [types.ts:133](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/types.ts#L133)
+Defined in: [types.ts:133](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/types.ts#L133)
 
 The word's kanji forms
 
@@ -60,7 +60,7 @@ The word's kanji forms
 
 > **meanings**: [`DictMeaning`](DictMeaning.md)[]
 
-Defined in: [types.ts:141](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/types.ts#L141)
+Defined in: [types.ts:141](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/types.ts#L141)
 
 The word's meanings/senses
 
@@ -70,6 +70,6 @@ The word's meanings/senses
 
 > **readings**: [`DictReading`](DictReading.md)[]
 
-Defined in: [types.ts:137](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/types.ts#L137)
+Defined in: [types.ts:137](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/types.ts#L137)
 
 The word's readings

@@ -8,7 +8,7 @@
 
 > **shuffleArray**\<`T`\>(`arr`): `T`[]
 
-Defined in: [utils.ts:99](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/utils.ts#L99)
+Defined in: [utils.ts:100](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/utils.ts#L100)
 
 Shuffles an array using the `Fisher–Yates shuffle` algorithm
 

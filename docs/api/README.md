@@ -24,6 +24,7 @@
 - [Kanji](interfaces/Kanji.md)
 - [KanjiComponent](interfaces/KanjiComponent.md)
 - [KanjiForm](interfaces/KanjiForm.md)
+- [NoteAndTag](interfaces/NoteAndTag.md)
 - [Phrase](interfaces/Phrase.md)
 - [Radical](interfaces/Radical.md)
 - [Reading](interfaces/Reading.md)

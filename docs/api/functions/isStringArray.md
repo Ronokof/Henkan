@@ -8,7 +8,7 @@
 
 > **isStringArray**(`arg`): `arg is string[]`
 
-Defined in: [utils.ts:85](https://github.com/Ronokof/Henkan/blob/cdcdfbcc72ca03339cd98398efd7d5e82826d66f/src/utils.ts#L85)
+Defined in: [utils.ts:86](https://github.com/Ronokof/Henkan/blob/0242f1c5122d344151cda089e111ebb217d29eb9/src/utils.ts#L86)
 
 Checks if the argument is an array of strings.
 

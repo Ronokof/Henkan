@@ -32,6 +32,7 @@ import {
   Kanji,
   KanjiComponent,
   KanjiForm,
+  NoteAndTag,
   Phrase,
   Radical,
   Reading,
@@ -426,9 +427,15 @@ export function convertKanjiDic(xmlString: string): DictKanji[] {
 
                   if (isValidArray(group.meaning))
                     for (const meaning of group.meaning)
-                      if (typeof meaning === "string")
-                        groupObj.meanings.push(meaning);
+                      if (typeof meaning === "string") {
+                        if (
+                          kanjiObj.isKokuji === undefined &&
+                          meaning === "(kokuji)"
+                        )
+                          kanjiObj.isKokuji = true;
 
+                        groupObj.meanings.push(meaning);
+                      }
                   if (
                     groupObj.readings.length > 0 ||
                     groupObj.meanings.length > 0
@@ -722,23 +729,27 @@ export function convertKradFile(
 
 function lookupWordNote(
   key: string,
-  notes: string[],
-  tags: string[],
-  required?: boolean,
-  fallback?: string,
-) {
+  notes?: string[] | undefined,
+  tags?: string[] | undefined,
+  required?: boolean | undefined,
+  fallback?: string | undefined,
+): NoteAndTag {
   const info: readonly [string, string] | undefined = noteMap.get(
     key.toLowerCase(),
   );
 
   if (!info) {
     if (required) throw new Error(`Invalid note info for ${key}`);
-    notes.push(fallback ?? key);
-    return;
+
+    if (notes) notes.push(fallback ?? key);
+
+    return { note: fallback ?? key };
   }
 
-  tags.push(info[0]);
-  notes.push(info[1]);
+  if (tags) tags.push(`word::${info[0]}`);
+  if (notes) notes.push(info[1]);
+
+  return { note: info[1], tag: `word::${info[0]}` };
 }
 
 const wordAddNoteArray: (
@@ -781,60 +792,61 @@ export function getWord(
         noteID: `word_${dictWord.id}`,
         ...(noteTypeName ? { noteTypeName: noteTypeName } : {}),
         ...(deckPath ? { deckPath: deckPath } : {}),
+        tags: [],
       };
+
+      if (dictWord.isCommon === true) word.common = true;
 
       if (dictWord.kanjiForms)
         word.kanjiForms = dictWord.kanjiForms.map(
-          (dictKanjiForm: DictKanjiForm) => {
-            if (
-              dictKanjiForm.commonness &&
-              dictKanjiForm.commonness.length > 0 &&
-              word.common === undefined
-            )
-              word.common = true;
+          (dictKanjiForm: DictKanjiForm) => ({
+            kanjiForm: dictKanjiForm.form,
+            ...(dictKanjiForm.notes
+              ? {
+                  notes: dictKanjiForm.notes.map((note: string) => {
+                    const noteAndTag: NoteAndTag = lookupWordNote(
+                      note,
+                      undefined,
+                      word.tags!,
+                      false,
+                      note,
+                    );
 
-            return {
-              kanjiForm: dictKanjiForm.form,
-              ...(dictKanjiForm.notes
-                ? {
-                    notes: dictKanjiForm.notes.map((note: string) =>
-                      capitalizeString(note),
-                    ),
-                  }
-                : {}),
-            };
-          },
+                    return capitalizeString(noteAndTag.note ?? note);
+                  }),
+                }
+              : {}),
+          }),
         );
 
-      word.readings = dictWord.readings.map((dictReading: DictReading) => {
-        if (
-          dictReading.commonness &&
-          dictReading.commonness.length > 0 &&
-          word.common === undefined
-        )
-          word.common = true;
+      word.readings = dictWord.readings.map((dictReading: DictReading) => ({
+        reading: dictReading.reading,
+        ...(dictReading.kanjiFormRestrictions || dictReading.notes
+          ? {
+              notes: [
+                ...(dictReading.kanjiFormRestrictions
+                  ? dictReading.kanjiFormRestrictions.map(
+                      (restriction: string) =>
+                        `Reading restricted to ${restriction}`,
+                    )
+                  : []),
+                ...(dictReading.notes
+                  ? dictReading.notes.map((note: string) => {
+                      const noteAndTag: NoteAndTag = lookupWordNote(
+                        note,
+                        undefined,
+                        word.tags!,
+                        false,
+                        note,
+                      );
 
-        return {
-          reading: dictReading.reading,
-          ...(dictReading.kanjiFormRestrictions || dictReading.notes
-            ? {
-                notes: [
-                  ...(dictReading.kanjiFormRestrictions
-                    ? dictReading.kanjiFormRestrictions.map(
-                        (restriction: string) =>
-                          `Reading restricted to ${restriction}`,
-                      )
-                    : []),
-                  ...(dictReading.notes
-                    ? dictReading.notes.map((note: string) =>
-                        capitalizeString(note),
-                      )
-                    : []),
-                ],
-              }
-            : {}),
-        };
-      });
+                      return capitalizeString(noteAndTag.note ?? note);
+                    })
+                  : []),
+              ],
+            }
+          : {}),
+      }));
 
       let usuallyInKanaMeanings: number = 0;
 
@@ -864,7 +876,6 @@ export function getWord(
         );
 
         const notes: string[] = [];
-        word.tags = [];
 
         wordAddNoteArray(
           dictMeaning.kanjiFormRestrictions,
@@ -946,7 +957,7 @@ export function getWord(
         if (word.kanji.length === 0) delete word.kanji;
       }
 
-      if (examples) {
+      if (examples && dictWord.hasPhrases === true) {
         const readings: Set<string> = new Set<string>(
           word.readings
             .filter(
@@ -1230,10 +1241,13 @@ export function getKanji(
         if (codePoint !== undefined) {
           codePoint = codePoint.toString(16);
 
-          const svg: string | undefined = svgList.find(
-            (svgFile: string) =>
-              svgFile.toLowerCase() === `0${codePoint}.svg` ||
-              svgFile.toLowerCase() === `${codePoint}.svg`,
+          const fileNames: [string, string] = [
+            `0${codePoint}.svg`,
+            `${codePoint}.svg`,
+          ];
+
+          const svg: string | undefined = svgList.find((svgFile: string) =>
+            fileNames.includes(svgFile.toLowerCase()),
           );
 
           if (svg) kanji.svg = svg;
@@ -1242,25 +1256,18 @@ export function getKanji(
 
       kanji.tags = [];
 
-      if (
-        kanji.meanings &&
-        kanji.meanings.some((meaning: string) => meaning === "(kokuji)")
-      ) {
-        kanji.tags.push("kokuji");
-        kanji.meanings = kanji.meanings.filter(
-          (meaning: string) => meaning !== "(kokuji)",
-        );
+      if (dictKanji.isKokuji === true) {
+        kanji.kokuji = true;
+        kanji.tags.push("kanji::kokuji");
       }
 
       kanji.tags.push(
-        ...(!kanji.onyomi ? ["no::onyomi"] : []),
-        ...(!kanji.kunyomi ? ["no::kunyomi"] : []),
-        ...(kanji.nanori ? ["has::nanori"] : []),
-        ...(kanji.svg ? ["has::svg"] : []),
-        ...(kanji.strokes && kanji.strokes.length > 0
-          ? [`strokes::${kanji.strokes}`]
-          : []),
-        ...(kanji.words ? ["has::words"] : []),
+        `kanji::onyomi::${kanji.onyomi?.length ?? 0}`,
+        `kanji::kunyomi::${kanji.kunyomi?.length ?? 0}`,
+        `kanji::nanori::${kanji.nanori?.length ?? 0}`,
+        `kanji::strokes::${kanji.strokes ?? "unknown"}`,
+        `kanji::words::${kanji.words?.length ?? 0}`,
+        ...(kanji.svg ? ["kanji::has_svg"] : []),
       );
 
       return kanji;
@@ -1309,12 +1316,27 @@ export function getKanjiExtended(
     if (useJpdbWords === true && info.words && info.words.length > 0)
       kanji.words = info.words;
 
-    if (kanji.mnemonic && kanji.mnemonic.length > 0 && kanji.tags)
-      kanji.tags.push("has::mnemonic");
-    if (kanji.components && kanji.components.length > 0 && kanji.tags)
-      kanji.tags.push(`components::${kanji.components.length}`);
-    if (kanji.words && kanji.tags && !kanji.tags.includes("has::words"))
-      kanji.tags.push("has::words");
+    if (kanji.tags) {
+      kanji.tags.push(`kanji::components::${kanji.components?.length ?? 0}`);
+
+      if (kanji.mnemonic && kanji.mnemonic.length > 0)
+        kanji.tags.push("kanji::has_mnemonic");
+
+      if (useJpdbWords === true && kanji.words)
+        if (
+          !kanji.tags.some((tag: string, index: number) => {
+            if (tag.startsWith("kanji::words::")) {
+              kanji.tags!.splice(
+                index,
+                1,
+                `kanji::words::${kanji.words?.length ?? 0}`,
+              );
+              return true;
+            } else return false;
+          })
+        )
+          kanji.tags.push(`kanji::words::${kanji.words?.length ?? 0}`);
+    }
 
     if (
       kanji.fromJpdb === true &&
@@ -1689,7 +1711,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="kanji kanji-onyomi">(no onyomi) (kokuji)</span>',
+        : `<span class="kanji kanji-onyomi">(no onyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span`,
       entry.kunyomi
         ? entry.kunyomi
             .map((kunyomiEntry: string) =>
@@ -1698,7 +1720,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="kanji kanji-kunyomi">(no kunyomi)</span>',
+        : `<span class="kanji kanji-kunyomi">(no kunyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span>`,
       entry.nanori
         ? entry.nanori
             .map((nanoriEntry: string) =>
