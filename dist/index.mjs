@@ -1881,6 +1881,13 @@ function getKanji(kanjiChar, dict, jmDict, svgList, noteTypeName, deckPath) {
       if (dictKanji.isKokuji === true) {
         kanji.kokuji = true;
         kanji.tags.push("kanji::kokuji");
+        if (kanji.meanings)
+          kanji.meanings.splice(
+            kanji.meanings.findIndex(
+              (meaning) => meaning === "(kokuji)"
+            ),
+            1
+          );
       }
       kanji.tags.push(
         `kanji::onyomi::${((_a = kanji.onyomi) == null ? void 0 : _a.length) ?? 0}`,

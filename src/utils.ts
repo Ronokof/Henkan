@@ -1259,6 +1259,14 @@ export function getKanji(
       if (dictKanji.isKokuji === true) {
         kanji.kokuji = true;
         kanji.tags.push("kanji::kokuji");
+
+        if (kanji.meanings)
+          kanji.meanings.splice(
+            kanji.meanings.findIndex(
+              (meaning: string) => meaning === "(kokuji)",
+            ),
+            1,
+          );
       }
 
       kanji.tags.push(
