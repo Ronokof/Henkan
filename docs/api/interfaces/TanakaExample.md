@@ -6,7 +6,7 @@
 
 # Interface: TanakaExample
 
-Defined in: [types.ts:327](https://github.com/Ronokof/Henkan/blob/4dfe59969f2c1e39e98e2e78ce7a889a52f6ddd1/src/types.ts#L327)
+Defined in: [types.ts:327](https://github.com/Ronokof/Henkan/blob/2d98b6e5634153020788b30661eddbf25999f1e0/src/types.ts#L327)
 
 Tanaka Corpus `examples.utf` examples
 
@@ -16,7 +16,7 @@ Tanaka Corpus `examples.utf` examples
 
 > `optional` **furigana**: `string`
 
-Defined in: [types.ts:343](https://github.com/Ronokof/Henkan/blob/4dfe59969f2c1e39e98e2e78ce7a889a52f6ddd1/src/types.ts#L343)
+Defined in: [types.ts:343](https://github.com/Ronokof/Henkan/blob/2d98b6e5634153020788b30661eddbf25999f1e0/src/types.ts#L343)
 
 The Japanese phrase, with furigana attached
 
@@ -26,7 +26,7 @@ The Japanese phrase, with furigana attached
 
 > **parts**: [`ExamplePart`](ExamplePart.md)[]
 
-Defined in: [types.ts:339](https://github.com/Ronokof/Henkan/blob/4dfe59969f2c1e39e98e2e78ce7a889a52f6ddd1/src/types.ts#L339)
+Defined in: [types.ts:339](https://github.com/Ronokof/Henkan/blob/2d98b6e5634153020788b30661eddbf25999f1e0/src/types.ts#L339)
 
 The `B` section, split into parts
 
@@ -36,7 +36,7 @@ The `B` section, split into parts
 
 > `readonly` **phrase**: `string`
 
-Defined in: [types.ts:331](https://github.com/Ronokof/Henkan/blob/4dfe59969f2c1e39e98e2e78ce7a889a52f6ddd1/src/types.ts#L331)
+Defined in: [types.ts:331](https://github.com/Ronokof/Henkan/blob/2d98b6e5634153020788b30661eddbf25999f1e0/src/types.ts#L331)
 
 The Japanese phrase (found in the `A` section, **before** the tab)
 
@@ -46,6 +46,6 @@ The Japanese phrase (found in the `A` section, **before** the tab)
 
 > `readonly` **translation**: `string`
 
-Defined in: [types.ts:335](https://github.com/Ronokof/Henkan/blob/4dfe59969f2c1e39e98e2e78ce7a889a52f6ddd1/src/types.ts#L335)
+Defined in: [types.ts:335](https://github.com/Ronokof/Henkan/blob/2d98b6e5634153020788b30661eddbf25999f1e0/src/types.ts#L335)
 
 The English translation of the phrase (found in the `A` section, **after** the tab)
