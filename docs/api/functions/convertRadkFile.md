@@ -8,7 +8,7 @@
 
 > **convertRadkFile**(`radkBuffer`, `kanjiDic`): [`DictRadical`](../interfaces/DictRadical.md)[]
 
-Defined in: [utils.ts:593](https://github.com/Ronokof/Henkan/blob/6262dd222273c37331a77569c74f9782658ccfdc/src/utils.ts#L593)
+Defined in: [utils.ts:599](https://github.com/Ronokof/Henkan/blob/4dfe59969f2c1e39e98e2e78ce7a889a52f6ddd1/src/utils.ts#L599)
 
 Converts a `radkfile2` file into an array of [DictRadical](../interfaces/DictRadical.md) objects.
 

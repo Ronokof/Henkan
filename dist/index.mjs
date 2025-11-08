@@ -1171,13 +1171,15 @@ function convertJMdict(xmlString, examples) {
     const dict = [];
     xml.parseString(dictParsed, (err, result) => {
       if (err) throw err;
-      let tanakaBaseParts = void 0;
-      if (examples)
-        tanakaBaseParts = new Set(
-          examples.map(
-            (example) => example.parts.map((part) => part.baseForm)
-          ).flat()
-        );
+      const tanakaParts = examples && examples.length > 0 ? new Set(
+        examples.map(
+          (example) => example.parts.map((part) => [
+            part.baseForm,
+            ...part.reading ? [part.reading] : [],
+            ...part.referenceID ? [part.referenceID] : []
+          ])
+        ).flat(2)
+      ) : void 0;
       if (result.JMdict && typeof result.JMdict === "object" && isValidArray(result.JMdict.entry))
         for (const entry of result.JMdict.entry) {
           const entryObj = {
@@ -1261,36 +1263,36 @@ function convertJMdict(xmlString, examples) {
           if (examples) {
             const readings2 = new Set(
               entryObj.readings.filter(
-                (reading) => !reading.notes || !reading.notes.some(
+                (reading) => (!reading.notes || !reading.notes.some(
                   (note) => notSearchedForms.has(note)
-                )
+                )) && (entryObj.isCommon === void 0 || reading.commonness && reading.commonness.length > 0)
               ).map((reading) => reading.reading)
             );
             const kanjiForms2 = entryObj.kanjiForms ? new Set(
               entryObj.kanjiForms.filter(
-                (kanjiForm) => !kanjiForm.notes || !kanjiForm.notes.some(
+                (kanjiForm) => (!kanjiForm.notes || !kanjiForm.notes.some(
                   (note) => notSearchedForms.has(note)
-                )
+                )) && (entryObj.isCommon === void 0 || kanjiForm.commonness && kanjiForm.commonness.length > 0)
               ).map((kanjiForm) => kanjiForm.form)
             ) : void 0;
-            let kanjiFormExamples = false;
-            let readingExamples = false;
-            if (kanjiForms2 && kanjiForms2.size > 0 && tanakaBaseParts) {
+            let existsExample = false;
+            if (kanjiForms2 && kanjiForms2.size > 0 && tanakaParts) {
               for (const kf of kanjiForms2)
-                if (tanakaBaseParts.has(kf)) {
-                  kanjiFormExamples = true;
+                if (tanakaParts.has(kf)) {
+                  existsExample = true;
                   break;
                 }
             }
-            if ((!kanjiFormExamples || entryObj.isCommon === true) && readings2.size > 0 && tanakaBaseParts) {
+            if (!existsExample && readings2.size > 0 && tanakaParts) {
               for (const r of readings2)
-                if (tanakaBaseParts.has(r)) {
-                  readingExamples = true;
+                if (tanakaParts.has(r)) {
+                  existsExample = true;
                   break;
                 }
             }
-            if (kanjiFormExamples || readingExamples)
-              entryObj.hasPhrases = true;
+            if (!existsExample && tanakaParts && tanakaParts.has(entryObj.id))
+              existsExample = true;
+            if (existsExample) entryObj.hasPhrases = true;
           }
           if (entryObj.id.length > 0 && entryObj.readings.length > 0 && entryObj.meanings.length > 0)
             dict.push(entryObj);
