@@ -65,10 +65,21 @@ var symbolMap = {
   "&": "\u30A2\u30F3\u30C9"
 };
 var notSearchedForms = /* @__PURE__ */ new Set([
+  "search-only kana form",
   "Search-only kana form",
+  "rarely used kana form",
   "Rarely used kana form",
+  "out-dated or obsolete kana usage",
   "Out-dated or obsolete kana usage",
-  "Word containing out-dated kanji or kanji usage"
+  "search-only kanji form",
+  "Search-only kanji form",
+  "rarely-used kanji form",
+  "Rarely-used kanji form",
+  "out-dated kanji",
+  "Out-dated kanji form",
+  "out-dated kanji or kanji usage",
+  "word containing out-dated kanji or kanji usage",
+  "Out-dated kanji or kanji usage"
 ]);
 var noteMap = /* @__PURE__ */ new Map([
   ["brazilian", ["dialect::brazilian", "Dialect: Brazilian"]],
@@ -1250,15 +1261,17 @@ function convertJMdict(xmlString, examples) {
           if (examples) {
             const readings2 = new Set(
               entryObj.readings.filter(
-                (reading) => !reading.notes || reading.notes && !reading.notes.some(
+                (reading) => !reading.notes || !reading.notes.some(
                   (note) => notSearchedForms.has(note)
                 )
               ).map((reading) => reading.reading)
             );
             const kanjiForms2 = entryObj.kanjiForms ? new Set(
-              entryObj.kanjiForms.map(
-                (kanjiForm) => kanjiForm.form
-              )
+              entryObj.kanjiForms.filter(
+                (kanjiForm) => !kanjiForm.notes || !kanjiForm.notes.some(
+                  (note) => notSearchedForms.has(note)
+                )
+              ).map((kanjiForm) => kanjiForm.form)
             ) : void 0;
             let kanjiFormExamples = false;
             let readingExamples = false;
@@ -1269,7 +1282,7 @@ function convertJMdict(xmlString, examples) {
                   break;
                 }
             }
-            if (!kanjiFormExamples && readings2.size > 0 && tanakaBaseParts) {
+            if ((!kanjiFormExamples || entryObj.isCommon === true) && readings2.size > 0 && tanakaBaseParts) {
               for (const r of readings2)
                 if (tanakaBaseParts.has(r)) {
                   readingExamples = true;
@@ -1570,7 +1583,8 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
                 );
                 return capitalizeString(noteAndTag.note ?? note);
               })
-            } : {}
+            } : {},
+            ...dictKanjiForm.commonness && dictKanjiForm.commonness.length > 0 ? { common: true } : {}
           })
         );
       word.readings = dictWord.readings.map((dictReading) => ({
@@ -1591,7 +1605,8 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
               return capitalizeString(noteAndTag.note ?? note);
             }) : []
           ]
-        } : {}
+        } : {},
+        ...dictReading.commonness && dictReading.commonness.length > 0 ? { common: true } : {}
       }));
       let usuallyInKanaMeanings = 0;
       word.translations = dictWord.meanings.map((dictMeaning) => {
@@ -1684,36 +1699,61 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
         if (word.kanji.length === 0) delete word.kanji;
       }
       if (examples && dictWord.hasPhrases === true) {
+        let pushIfUnique2 = function(ex) {
+          if (!seenPhrases.has(ex.phrase)) {
+            wordExamples.push(ex);
+            seenPhrases.add(ex.phrase);
+          }
+        };
+        var pushIfUnique = pushIfUnique2;
         const readings = new Set(
           word.readings.filter(
-            (reading) => !reading.notes || reading.notes && !reading.notes.some(
+            (reading) => (!reading.notes || !reading.notes.some(
               (note) => notSearchedForms.has(note)
-            )
+            )) && (word.common === void 0 || reading.common === true)
           ).map((reading) => reading.reading)
         );
         const kanjiForms = word.kanjiForms ? new Set(
-          word.kanjiForms.map(
-            (kanjiForm) => kanjiForm.kanjiForm
-          )
+          word.kanjiForms.filter(
+            (kanjiForm) => (!kanjiForm.notes || !kanjiForm.notes.some(
+              (note) => notSearchedForms.has(note)
+            )) && (word.common === void 0 || kanjiForm.common === true)
+          ).map((kanjiForm) => kanjiForm.kanjiForm)
         ) : void 0;
         const kanjiFormExamples = [];
+        const readingMatchingKanjiFormExamples = [];
         const readingExamples = [];
-        if (kanjiForms) {
-          for (const example of examples)
-            for (const part of example.parts)
-              if (kanjiForms.has(part.baseForm))
-                kanjiFormExamples.push(example);
-        }
-        if (kanjiFormExamples.length === 0) {
-          for (const example of examples)
-            for (const part of example.parts)
-              if (readings.has(part.baseForm)) readingExamples.push(example);
-        }
-        examples = [...kanjiFormExamples, ...readingExamples];
+        for (const example of examples)
+          for (const part of example.parts) {
+            const readingMatch = part.reading && readings.has(part.reading) || readings.has(part.baseForm);
+            if (kanjiForms && kanjiForms.size > 0 && kanjiForms.has(part.baseForm)) {
+              if (readingMatch) readingMatchingKanjiFormExamples.push(example);
+              else kanjiFormExamples.push(example);
+              break;
+            }
+            if (readingMatch || part.referenceID && word.id && part.referenceID === word.id) {
+              readingExamples.push(example);
+              break;
+            }
+          }
+        const exampleSize = (/* @__PURE__ */ new Set([
+          ...readingMatchingKanjiFormExamples,
+          ...kanjiFormExamples,
+          ...readingExamples
+        ])).size;
+        const includeKanjiFormExamples = readingMatchingKanjiFormExamples.length < Math.max(2, Math.round(exampleSize * 0.05));
+        const includeReadingExamples = word.usuallyInKana === void 0 && includeKanjiFormExamples && readingExamples.length >= Math.max(10, Math.round(exampleSize * 0.15)) || word.usuallyInKana === true && readingExamples.length >= Math.max(2, Math.round(exampleSize * 0.5));
+        const seenPhrases = /* @__PURE__ */ new Set();
+        let wordExamples = [];
+        for (const ex of readingMatchingKanjiFormExamples) pushIfUnique2(ex);
+        if (includeKanjiFormExamples)
+          for (const ex of kanjiFormExamples) pushIfUnique2(ex);
+        if (includeReadingExamples)
+          for (const ex of readingExamples) pushIfUnique2(ex);
         if (word.translations) {
           const glossSpecificExamples = [];
           for (let i = 0; i < word.translations.length; i++) {
-            outer: for (const example of examples)
+            outer: for (const example of wordExamples)
               for (const part of example.parts)
                 if (part.glossNumber === i + 1) {
                   glossSpecificExamples.push(example);
@@ -1722,24 +1762,19 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
             if (glossSpecificExamples.length === 5) break;
           }
           if (glossSpecificExamples.length === 5)
-            examples = glossSpecificExamples;
+            wordExamples = glossSpecificExamples;
           else if (glossSpecificExamples.length > 0) {
-            const seenPhrases = new Set(
+            const seenPhrases2 = new Set(
               glossSpecificExamples.map((ex) => ex.phrase)
             );
-            examples = [
+            wordExamples = [
               ...glossSpecificExamples,
-              ...examples.filter((ex) => !seenPhrases.has(ex.phrase)).slice(0, 5 - glossSpecificExamples.length)
+              ...wordExamples.filter((ex) => !seenPhrases2.has(ex.phrase)).slice(0, 5 - glossSpecificExamples.length)
             ];
           }
         }
-        examples = examples.filter(
-          (example, index, arr) => arr.findIndex(
-            (ex) => ex.phrase === example.phrase
-          ) === index
-        );
-        if (examples.length > 0)
-          word.phrases = (examples.length > 5 ? examples.slice(0, 5) : examples).map((ex) => ({
+        if (wordExamples.length > 0)
+          word.phrases = (wordExamples.length > 5 ? wordExamples.slice(0, 5) : wordExamples).map((ex) => ({
             phrase: ex.furigana ?? ex.phrase,
             translation: ex.translation,
             originalPhrase: ex.phrase

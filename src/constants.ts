@@ -65,10 +65,21 @@ export const symbolMap: Record<string, string> = {
 };
 
 export const notSearchedForms: Set<string> = new Set<string>([
+  "search-only kana form",
   "Search-only kana form",
+  "rarely used kana form",
   "Rarely used kana form",
+  "out-dated or obsolete kana usage",
   "Out-dated or obsolete kana usage",
-  "Word containing out-dated kanji or kanji usage",
+  "search-only kanji form",
+  "Search-only kanji form",
+  "rarely-used kanji form",
+  "Rarely-used kanji form",
+  "out-dated kanji",
+  "Out-dated kanji form",
+  "out-dated kanji or kanji usage",
+  "word containing out-dated kanji or kanji usage",
+  "Out-dated kanji or kanji usage",
 ]);
 
 export const noteMap: Map<string, readonly [string, string]> = new Map<

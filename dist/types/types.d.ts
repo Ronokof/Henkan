@@ -394,6 +394,10 @@ export interface KanjiForm {
      * Optional notes for the kanji form
      */
     notes?: string[] | undefined;
+    /**
+     * Whether or not the kanji form is common
+     */
+    common?: true | undefined;
 }
 /**
  * A reading of the word
@@ -409,6 +413,10 @@ export interface Reading {
      * Optional notes for the reading
      */
     notes?: string[] | undefined;
+    /**
+     * Whether or not the reading is common
+     */
+    common?: true | undefined;
     /**
      * The filename of an audio file for the reading
      */
