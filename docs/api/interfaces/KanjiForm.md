@@ -6,7 +6,7 @@
 
 # Interface: KanjiForm
 
-Defined in: [types.ts:410](https://github.com/Ronokof/Henkan/blob/816cb7d78982f239ab9f2aa79affb0568f5754f9/src/types.ts#L410)
+Defined in: [types.ts:410](https://github.com/Ronokof/Henkan/blob/6262dd222273c37331a77569c74f9782658ccfdc/src/types.ts#L410)
 
 A kanji form of the word
 
@@ -18,7 +18,7 @@ Converted from a [DictKanjiForm](DictKanjiForm.md)
 
 > `optional` **common**: `true`
 
-Defined in: [types.ts:422](https://github.com/Ronokof/Henkan/blob/816cb7d78982f239ab9f2aa79affb0568f5754f9/src/types.ts#L422)
+Defined in: [types.ts:422](https://github.com/Ronokof/Henkan/blob/6262dd222273c37331a77569c74f9782658ccfdc/src/types.ts#L422)
 
 Whether or not the kanji form is common
 
@@ -28,7 +28,7 @@ Whether or not the kanji form is common
 
 > `readonly` **kanjiForm**: `string`
 
-Defined in: [types.ts:414](https://github.com/Ronokof/Henkan/blob/816cb7d78982f239ab9f2aa79affb0568f5754f9/src/types.ts#L414)
+Defined in: [types.ts:414](https://github.com/Ronokof/Henkan/blob/6262dd222273c37331a77569c74f9782658ccfdc/src/types.ts#L414)
 
 The kanji form
 
@@ -38,6 +38,6 @@ The kanji form
 
 > `optional` **notes**: `string`[]
 
-Defined in: [types.ts:418](https://github.com/Ronokof/Henkan/blob/816cb7d78982f239ab9f2aa79affb0568f5754f9/src/types.ts#L418)
+Defined in: [types.ts:418](https://github.com/Ronokof/Henkan/blob/6262dd222273c37331a77569c74f9782658ccfdc/src/types.ts#L418)
 
 Optional notes for the kanji form
