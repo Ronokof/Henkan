@@ -10,7 +10,7 @@ export const regexps: UsefulRegExps = {
   tanakaID: /#ID=\d+_\d+$/,
   tanakaPart:
     /(?<base>[^()\[\]\{\}\s]+)(?:\((?<reading>[\S]+)\))?(?:\[(?<glossnum>[\S]+)\])?(?:\{(?<inflection>[\S]+)\})?/,
-  tanakaReferenceID: /#([\d]+)/,
+  tanakaReferenceID: /#(?<entryid>[\d]+)/,
 };
 
 export const romajiMap: Record<string, string> = {

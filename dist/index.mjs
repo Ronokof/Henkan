@@ -14,7 +14,7 @@ var regexps = {
   regExChars: /[-\/\\^$*+?.()|[\]{}]/,
   tanakaID: /#ID=\d+_\d+$/,
   tanakaPart: /(?<base>[^()\[\]\{\}\s]+)(?:\((?<reading>[\S]+)\))?(?:\[(?<glossnum>[\S]+)\])?(?:\{(?<inflection>[\S]+)\})?/,
-  tanakaReferenceID: /#([\d]+)/
+  tanakaReferenceID: /#(?<entryid>[\d]+)/
 };
 var romajiMap = {
   A: "\u30A8\u30FC",
@@ -1408,9 +1408,9 @@ async function convertTanakaCorpus(tanakaString, generateFurigana) {
               if (reading)
                 if (regexps.tanakaReferenceID.test(reading)) {
                   const referenceID = regexps.tanakaReferenceID.exec(reading);
-                  if (!referenceID)
+                  if (!referenceID || !referenceID.groups || !referenceID.groups["entryid"])
                     throw new Error(`Invalid reference ID: ${reading}`);
-                  examplePart.referenceID = referenceID[0];
+                  examplePart.referenceID = referenceID.groups["entryid"];
                 } else examplePart.reading = reading;
               if (glossNumber)
                 examplePart.glossNumber = glossNumber.startsWith("0") ? Number.parseInt(glossNumber.substring(1)) : Number.parseInt(glossNumber);
@@ -1702,13 +1702,6 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
         if (word.kanji.length === 0) delete word.kanji;
       }
       if (examples && dictWord.hasPhrases === true) {
-        let pushIfUnique2 = function(ex) {
-          if (!seenPhrases.has(ex.phrase)) {
-            wordExamples.push(ex);
-            seenPhrases.add(ex.phrase);
-          }
-        };
-        var pushIfUnique = pushIfUnique2;
         const readings = new Set(
           word.readings.filter(
             (reading) => (!reading.notes || !reading.notes.some(
@@ -1726,46 +1719,55 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
         const kanjiFormExamples = [];
         const readingMatchingKanjiFormExamples = [];
         const readingExamples = [];
+        const partParts = /* @__PURE__ */ new Set();
         for (const example of examples)
           for (const part of example.parts) {
-            const readingMatch = part.reading && readings.has(part.reading) || readings.has(part.baseForm);
+            const readingAsReadingMatch = part.reading !== void 0 && readings.has(part.reading);
             if (kanjiForms && kanjiForms.size > 0 && kanjiForms.has(part.baseForm)) {
-              if (readingMatch) readingMatchingKanjiFormExamples.push(example);
-              else kanjiFormExamples.push(example);
+              if (readingAsReadingMatch) {
+                readingMatchingKanjiFormExamples.push(example);
+                partParts.add(part.baseForm).add(part.reading);
+              } else {
+                kanjiFormExamples.push(example);
+                partParts.add(part.baseForm);
+              }
               break;
             }
-            if (readingMatch || part.referenceID && word.id && part.referenceID === word.id) {
+            const readingAsBaseFormMatch = readings.has(part.baseForm);
+            const referenceIDMatch = part.referenceID !== void 0 && word.id !== void 0 && part.referenceID === word.id;
+            if (readingAsReadingMatch || readingAsBaseFormMatch || referenceIDMatch) {
               readingExamples.push(example);
+              if (readingAsReadingMatch) partParts.add(part.reading);
+              if (readingAsBaseFormMatch) partParts.add(part.baseForm);
+              if (referenceIDMatch) partParts.add(part.referenceID);
               break;
             }
           }
-        const exampleSize = (/* @__PURE__ */ new Set([
-          ...readingMatchingKanjiFormExamples,
-          ...kanjiFormExamples,
-          ...readingExamples
-        ])).size;
+        const exampleSize = readingMatchingKanjiFormExamples.length + kanjiFormExamples.length + readingExamples.length;
         const includeKanjiFormExamples = readingMatchingKanjiFormExamples.length < Math.max(2, Math.round(exampleSize * 0.05));
         const includeReadingExamples = word.usuallyInKana === void 0 && includeKanjiFormExamples && readingExamples.length >= Math.max(10, Math.round(exampleSize * 0.15)) || word.usuallyInKana === true && readingExamples.length >= Math.max(2, Math.round(exampleSize * 0.5));
-        const seenPhrases = /* @__PURE__ */ new Set();
-        let wordExamples = [];
-        for (const ex of readingMatchingKanjiFormExamples) pushIfUnique2(ex);
-        if (includeKanjiFormExamples)
-          for (const ex of kanjiFormExamples) pushIfUnique2(ex);
-        if (includeReadingExamples)
-          for (const ex of readingExamples) pushIfUnique2(ex);
+        let wordExamples = [
+          ...readingMatchingKanjiFormExamples,
+          ...includeKanjiFormExamples ? kanjiFormExamples : [],
+          ...includeReadingExamples ? readingExamples : []
+        ];
         if (word.translations) {
           const glossSpecificExamples = [];
+          const seenPhrases = /* @__PURE__ */ new Set();
           for (let i = 0; i < word.translations.length; i++) {
-            outer: for (const example of wordExamples)
+            outer: for (const example of wordExamples) {
+              if (seenPhrases.has(example.phrase)) continue;
               for (const part of example.parts)
-                if (part.glossNumber === i + 1) {
+                if (part.glossNumber === i + 1 && (partParts.has(part.baseForm) || part.reading && partParts.has(part.reading) || part.referenceID && partParts.has(part.referenceID))) {
                   glossSpecificExamples.push(example);
+                  seenPhrases.add(example.phrase);
                   break outer;
                 }
+            }
             if (glossSpecificExamples.length === 5) break;
           }
           if (glossSpecificExamples.length === 5)
-            wordExamples = glossSpecificExamples;
+            wordExamples = [...glossSpecificExamples];
           else if (glossSpecificExamples.length > 0) {
             const seenPhrases2 = new Set(
               glossSpecificExamples.map((ex) => ex.phrase)
