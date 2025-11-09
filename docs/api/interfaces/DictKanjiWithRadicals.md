@@ -6,7 +6,7 @@
 
 # Interface: DictKanjiWithRadicals
 
-Defined in: [types.ts:277](https://github.com/Ronokof/Henkan/blob/2d98b6e5634153020788b30661eddbf25999f1e0/src/types.ts#L277)
+Defined in: [types.ts:277](https://github.com/Ronokof/Henkan/blob/a0628d36c81810a27b826ff1126891d82f33661f/src/types.ts#L277)
 
 KRADFILE2 entry (kanji with its radicals/components)
 
@@ -16,7 +16,7 @@ KRADFILE2 entry (kanji with its radicals/components)
 
 > `readonly` **kanji**: `string`
 
-Defined in: [types.ts:281](https://github.com/Ronokof/Henkan/blob/2d98b6e5634153020788b30661eddbf25999f1e0/src/types.ts#L281)
+Defined in: [types.ts:281](https://github.com/Ronokof/Henkan/blob/a0628d36c81810a27b826ff1126891d82f33661f/src/types.ts#L281)
 
 The kanji character
 
@@ -26,7 +26,7 @@ The kanji character
 
 > **radicals**: (`string` \| [`DictKanji`](DictKanji.md))[]
 
-Defined in: [types.ts:287](https://github.com/Ronokof/Henkan/blob/2d98b6e5634153020788b30661eddbf25999f1e0/src/types.ts#L287)
+Defined in: [types.ts:287](https://github.com/Ronokof/Henkan/blob/a0628d36c81810a27b826ff1126891d82f33661f/src/types.ts#L287)
 
 The radicals/components that make up the kanji
 

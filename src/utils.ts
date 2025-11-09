@@ -761,10 +761,12 @@ function lookupWordNote(
     return { note: fallback ?? key };
   }
 
-  if (tags) tags.push(`word::${info[0]}`);
+  const tag: string = `word::${info[0]}`;
+
+  if (tags && !tags.includes(tag)) tags.push(tag);
   if (notes) notes.push(info[1]);
 
-  return { note: info[1], tag: `word::${info[0]}` };
+  return { note: info[1], tag: tag };
 }
 
 const wordAddNoteArray: (

@@ -2,9 +2,9 @@ const esbuild = require('esbuild');
 const pkg = require('../package.json');
 const { builtinModules } = require('module');
 
-const deps = (pkg.dependencies) ? Object.keys(pkg.dependencies || {}) : [];
-const peerDeps = (pkg.peerDependencies) ? Object.keys(pkg.peerDependencies || {}) : [];
-const optionalDeps = (pkg.optionalDependencies) ? Object.keys(pkg.optionalDependencies || {}) : [];
+const deps = (pkg.dependencies) ? Object.keys(pkg.dependencies) : [];
+const peerDeps = (pkg.peerDependencies) ? Object.keys(pkg.peerDependencies) : [];
+const optionalDeps = (pkg.optionalDependencies) ? Object.keys(pkg.optionalDependencies) : [];
 
 const external = [
   ...builtinModules,
