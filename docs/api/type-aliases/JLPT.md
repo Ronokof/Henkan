@@ -8,6 +8,6 @@
 
 > **JLPT** = `"N5"` \| `"N4"` \| `"N3"` \| `"N2"` \| `"N1"`
 
-Defined in: [types.ts:4](https://github.com/Ronokof/Henkan/blob/a0628d36c81810a27b826ff1126891d82f33661f/src/types.ts#L4)
+Defined in: [types.ts:4](https://github.com/Ronokof/Henkan/blob/01286919f67c03d612f8888caf771598291b536e/src/types.ts#L4)
 
 JLPT levels
