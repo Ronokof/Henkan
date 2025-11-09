@@ -6,7 +6,7 @@
 
 # Interface: DictReading
 
-Defined in: [types.ts:40](https://github.com/Ronokof/Henkan/blob/d6fc3941570042889245ed58f548d9841ac9c78a/src/types.ts#L40)
+Defined in: [types.ts:40](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L40)
 
 Word reading information
 
@@ -18,7 +18,7 @@ Equivalent to the `r_ele` JMdict element
 
 > `optional` **commonness**: `string`[]
 
-Defined in: [types.ts:56](https://github.com/Ronokof/Henkan/blob/d6fc3941570042889245ed58f548d9841ac9c78a/src/types.ts#L56)
+Defined in: [types.ts:56](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L56)
 
 Priority codes
 
@@ -32,7 +32,7 @@ Priority codes
 
 > `optional` **kanjiFormRestrictions**: `string`[]
 
-Defined in: [types.ts:60](https://github.com/Ronokof/Henkan/blob/d6fc3941570042889245ed58f548d9841ac9c78a/src/types.ts#L60)
+Defined in: [types.ts:60](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L60)
 
 Kanji forms the reading is restricted to
 
@@ -42,7 +42,7 @@ Kanji forms the reading is restricted to
 
 > `optional` **notes**: `string`[]
 
-Defined in: [types.ts:50](https://github.com/Ronokof/Henkan/blob/d6fc3941570042889245ed58f548d9841ac9c78a/src/types.ts#L50)
+Defined in: [types.ts:50](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L50)
 
 Other information about the reading
 
@@ -56,6 +56,6 @@ Other information about the reading
 
 > `readonly` **reading**: `string`
 
-Defined in: [types.ts:44](https://github.com/Ronokof/Henkan/blob/d6fc3941570042889245ed58f548d9841ac9c78a/src/types.ts#L44)
+Defined in: [types.ts:44](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L44)
 
 The reading of the word
