@@ -136,21 +136,6 @@ export function convertJMdict(
     xml.parseString(dictParsed, (err: Error | null, result: any) => {
       if (err) throw err;
 
-      const tanakaParts: Set<string> | undefined =
-        examples && examples.length > 0
-          ? new Set<string>(
-              examples
-                .map((example: TanakaExample) =>
-                  example.parts.map((part: ExamplePart) => [
-                    part.baseForm,
-                    ...(part.reading ? [part.reading] : []),
-                    ...(part.referenceID ? [part.referenceID] : []),
-                  ]),
-                )
-                .flat(2),
-            )
-          : undefined;
-
       if (
         result.JMdict &&
         typeof result.JMdict === "object" &&
@@ -225,7 +210,9 @@ export function convertJMdict(
                 entryObj.readings.push(readingObj);
             }
 
-          if (isValidArray(meanings))
+          if (isValidArray(meanings)) {
+            let usuallyInKanaMeanings: number = 0;
+
             for (const meaning of meanings) {
               const meaningObj: DictMeaning = {};
 
@@ -253,6 +240,7 @@ export function convertJMdict(
                       type: gloss.$.g_type,
                     });
               }
+
               if (isStringArray(meaning.xref))
                 meaningObj.references = meaning.xref;
               if (isStringArray(meaning.stagk))
@@ -263,7 +251,17 @@ export function convertJMdict(
               if (isStringArray(meaning.field))
                 meaningObj.fields = meaning.field;
               if (isStringArray(meaning.s_inf)) meaningObj.info = meaning.s_inf;
-              if (isStringArray(meaning.misc)) meaningObj.misc = meaning.misc;
+              if (isStringArray(meaning.misc)) {
+                meaningObj.misc = meaning.misc;
+
+                if (
+                  meaningObj.misc &&
+                  meaningObj.misc.includes(
+                    "word usually written using kana alone",
+                  )
+                )
+                  usuallyInKanaMeanings++;
+              }
               if (isStringArray(meaning.dial))
                 meaningObj.dialects = meaning.dial;
 
@@ -274,6 +272,10 @@ export function convertJMdict(
               )
                 entryObj.meanings.push(meaningObj);
             }
+
+            if (entryObj.meanings.length === usuallyInKanaMeanings)
+              entryObj.usuallyInKana = true;
+          }
 
           if (examples) {
             const readings: Set<string> = new Set<string>(
@@ -306,25 +308,124 @@ export function convertJMdict(
                 )
               : undefined;
 
-            let existsExample: boolean = false;
+            const kanjiFormExamples: TanakaExample[] = [];
+            const readingMatchingKanjiFormExamples: TanakaExample[] = [];
+            const readingExamples: TanakaExample[] = [];
 
-            if (kanjiForms && kanjiForms.size > 0 && tanakaParts)
-              for (const kf of kanjiForms)
-                if (tanakaParts.has(kf)) {
-                  existsExample = true;
+            const partParts: Set<string> = new Set<string>();
+
+            for (const example of examples)
+              for (const part of example.parts) {
+                const readingAsReadingMatch: boolean =
+                  part.reading !== undefined && readings.has(part.reading);
+
+                if (
+                  kanjiForms &&
+                  kanjiForms.size > 0 &&
+                  kanjiForms.has(part.baseForm)
+                ) {
+                  if (readingAsReadingMatch) {
+                    readingMatchingKanjiFormExamples.push(example);
+                    partParts.add(part.baseForm).add(part.reading!);
+                  } else {
+                    kanjiFormExamples.push(example);
+                    partParts.add(part.baseForm);
+                  }
+
                   break;
                 }
-            if (!existsExample && readings.size > 0 && tanakaParts)
-              for (const r of readings)
-                if (tanakaParts.has(r)) {
-                  existsExample = true;
+
+                const readingAsBaseFormMatch: boolean = readings.has(
+                  part.baseForm,
+                );
+                const referenceIDMatch: boolean =
+                  part.referenceID !== undefined &&
+                  entryObj.id !== undefined &&
+                  part.referenceID === entryObj.id;
+
+                if (
+                  readingAsReadingMatch ||
+                  readingAsBaseFormMatch ||
+                  referenceIDMatch
+                ) {
+                  readingExamples.push(example);
+
+                  if (readingAsReadingMatch) partParts.add(part.reading!);
+                  if (readingAsBaseFormMatch) partParts.add(part.baseForm);
+                  if (referenceIDMatch) partParts.add(part.referenceID!);
+
                   break;
                 }
+              }
 
-            if (!existsExample && tanakaParts && tanakaParts.has(entryObj.id))
-              existsExample = true;
+            const exampleSize: number =
+              readingMatchingKanjiFormExamples.length +
+              kanjiFormExamples.length +
+              readingExamples.length;
 
-            if (existsExample) entryObj.hasPhrases = true;
+            const includeKanjiFormExamples: boolean =
+              readingMatchingKanjiFormExamples.length <
+              Math.max(2, Math.round(exampleSize * 0.05));
+            const includeReadingExamples: boolean =
+              (entryObj.usuallyInKana === undefined &&
+                includeKanjiFormExamples &&
+                readingExamples.length >=
+                  Math.max(10, Math.round(exampleSize * 0.15))) ||
+              (entryObj.usuallyInKana === true &&
+                readingExamples.length >=
+                  Math.max(2, Math.round(exampleSize * 0.5)));
+
+            let wordExamples: TanakaExample[] = [
+              ...readingMatchingKanjiFormExamples,
+              ...(includeKanjiFormExamples ? kanjiFormExamples : []),
+              ...(includeReadingExamples ? readingExamples : []),
+            ];
+
+            const glossSpecificExamples: TanakaExample[] = [];
+            const seenPhrases: Set<string> = new Set<string>();
+
+            for (let i: number = 0; i < entryObj.meanings.length; i++) {
+              outer: for (const example of wordExamples) {
+                if (seenPhrases.has(example.phrase)) continue;
+
+                for (const part of example.parts)
+                  if (
+                    part.glossNumber === i + 1 &&
+                    (partParts.has(part.baseForm) ||
+                      (part.reading && partParts.has(part.reading)) ||
+                      (part.referenceID && partParts.has(part.referenceID)))
+                  ) {
+                    glossSpecificExamples.push(example);
+                    seenPhrases.add(example.phrase);
+
+                    break outer;
+                  }
+              }
+
+              if (glossSpecificExamples.length === 5) break;
+            }
+
+            if (glossSpecificExamples.length === 5)
+              wordExamples = [...glossSpecificExamples];
+            else if (glossSpecificExamples.length > 0) {
+              const seenPhrases: Set<string> = new Set<string>(
+                glossSpecificExamples.map((ex: TanakaExample) => ex.phrase),
+              );
+
+              wordExamples = [
+                ...glossSpecificExamples,
+                ...wordExamples
+                  .filter((ex: TanakaExample) => !seenPhrases.has(ex.phrase))
+                  .slice(0, 5 - glossSpecificExamples.length),
+              ];
+            }
+
+            if (wordExamples.length > 0)
+              entryObj.phraseIDs = (
+                wordExamples.length > 5
+                  ? wordExamples.slice(0, 5)
+                  : wordExamples
+              ).map((ex: TanakaExample) => ex.id);
           }
 
           if (
@@ -505,10 +606,16 @@ export async function convertTanakaCorpus(
           let b: string | undefined = tanakaParsed[i + 1];
 
           if (a && b && a.startsWith("A: ") && b.startsWith("B: ")) {
-            a = a.replace("A: ", "").replace(regexps.tanakaID, "");
+            a = a.replace("A: ", "");
             b = b.replace("B: ", "");
 
-            const aParts: string[] = a.split("\t");
+            const idMatch: RegExpExecArray | null = regexps.tanakaID.exec(a);
+            if (!idMatch || !idMatch.groups || !idMatch.groups["id"])
+              throw new Error(`Invalid phrase ID for ${a}`);
+
+            const aParts: string[] = a
+              .replace(regexps.tanakaID, "")
+              .split("\t");
             const bParts: ExamplePart[] = b
               .split(" ")
               .filter((part: string) => part.trim().length !== 0)
@@ -575,8 +682,9 @@ export async function convertTanakaCorpus(
                 })) as string;
 
               tanakaArray.push({
-                phrase: phrase,
-                translation: translation,
+                id: idMatch.groups["id"].trim() as `${number}_${number}`,
+                phrase: phrase.trim(),
+                translation: translation.trim(),
                 parts: bParts,
                 ...(furigana ? { furigana: furigana } : {}),
               });
@@ -595,13 +703,13 @@ export async function convertTanakaCorpus(
 }
 
 /**
- * Converts a `radkfile2` file into an array of {@link DictRadical} objects.
- * @param radkBuffer A raw `radkfile2` buffer
+ * Converts a `radkfile` file into an array of {@link DictRadical} objects.
+ * @param radkBuffer A raw `radkfile` buffer
  * @param kanjiDic An array of converted `KANJIDIC` entries
  * @returns An array of converted {@link DictRadical} objects
  */
 export function convertRadkFile(
-  radkBuffer: NonSharedBuffer,
+  radkBuffer: Buffer<ArrayBuffer>,
   kanjiDic: DictKanji[],
 ): DictRadical[] {
   try {
@@ -663,14 +771,14 @@ export function convertRadkFile(
 }
 
 /**
- * Converts a `kradfile2` file into an array of {@link DictKanjiWithRadicals} objects.
- * @param kradBuffer A raw `kradfile2` buffer
+ * Converts a `kradfile` file into an array of {@link DictKanjiWithRadicals} objects.
+ * @param kradBuffer A raw `kradfile` buffer
  * @param kanjiDic An array of converted `KANJIDIC` entries
  * @param katakanaList An array of katakana {@link Kana} objects
  * @returns An array of converted {@link DictKanjiWithRadicals} objects
  */
 export function convertKradFile(
-  kradBuffer: NonSharedBuffer,
+  kradBuffer: Buffer<ArrayBuffer>,
   kanjiDic: DictKanji[],
   katakanaList: Kana[],
 ): DictKanjiWithRadicals[] {
@@ -875,8 +983,6 @@ export function getWord(
           : {}),
       }));
 
-      let usuallyInKanaMeanings: number = 0;
-
       word.translations = dictWord.meanings.map((dictMeaning: DictMeaning) => {
         if (!dictMeaning.translations)
           throw new Error(`No translations for ${dictWord!.id}`);
@@ -933,12 +1039,9 @@ export function getWord(
         wordAddNoteArray(dictMeaning.info, (info: string) =>
           lookupWordNote(info, notes, word.tags!, false, info),
         );
-        wordAddNoteArray(dictMeaning.misc, (misc: string) => {
-          lookupWordNote(misc, notes, word.tags!, false, misc);
-
-          if (misc.toLowerCase() === "word usually written using kana alone")
-            usuallyInKanaMeanings++;
-        });
+        wordAddNoteArray(dictMeaning.misc, (misc: string) =>
+          lookupWordNote(misc, notes, word.tags!, false, misc),
+        );
 
         for (let i: number = 0; i < notes.length; i++)
           notes[i] = capitalizeString(notes[i]!);
@@ -949,11 +1052,7 @@ export function getWord(
         };
       });
 
-      if (
-        word.translations &&
-        word.translations.length === usuallyInKanaMeanings
-      )
-        word.usuallyInKana = true;
+      if (dictWord.usuallyInKana === true) word.usuallyInKana = true;
 
       if (kanjiDic && word.kanjiForms) {
         word.kanji = [];
@@ -984,154 +1083,19 @@ export function getWord(
         if (word.kanji.length === 0) delete word.kanji;
       }
 
-      if (examples && dictWord.hasPhrases === true) {
-        const readings: Set<string> = new Set<string>(
-          word.readings
-            .filter(
-              (reading: Reading) =>
-                (!reading.notes ||
-                  !reading.notes.some((note: string) =>
-                    notSearchedForms.has(note),
-                  )) &&
-                (word.common === undefined || reading.common === true),
-            )
-            .map((reading: Reading) => reading.reading),
-        );
-        const kanjiForms: Set<string> | undefined = word.kanjiForms
-          ? new Set<string>(
-              word.kanjiForms
-                .filter(
-                  (kanjiForm: KanjiForm) =>
-                    (!kanjiForm.notes ||
-                      !kanjiForm.notes.some((note: string) =>
-                        notSearchedForms.has(note),
-                      )) &&
-                    (word.common === undefined || kanjiForm.common === true),
-                )
-                .map((kanjiForm: KanjiForm) => kanjiForm.kanjiForm),
-            )
-          : undefined;
+      if (examples && dictWord.phraseIDs && dictWord.phraseIDs.length > 0) {
+        word.phrases = [];
 
-        const kanjiFormExamples: TanakaExample[] = [];
-        const readingMatchingKanjiFormExamples: TanakaExample[] = [];
-        const readingExamples: TanakaExample[] = [];
+        const phraseIDs: Set<`${number}_${number}`> =
+          new Set<`${number}_${number}`>(dictWord.phraseIDs);
 
-        const partParts: Set<string> = new Set<string>();
-
-        for (const example of examples)
-          for (const part of example.parts) {
-            const readingAsReadingMatch: boolean =
-              part.reading !== undefined && readings.has(part.reading);
-
-            if (
-              kanjiForms &&
-              kanjiForms.size > 0 &&
-              kanjiForms.has(part.baseForm)
-            ) {
-              if (readingAsReadingMatch) {
-                readingMatchingKanjiFormExamples.push(example);
-                partParts.add(part.baseForm).add(part.reading!);
-              } else {
-                kanjiFormExamples.push(example);
-                partParts.add(part.baseForm);
-              }
-
-              break;
-            }
-
-            const readingAsBaseFormMatch: boolean = readings.has(part.baseForm);
-            const referenceIDMatch: boolean =
-              part.referenceID !== undefined &&
-              word.id !== undefined &&
-              part.referenceID === word.id;
-
-            if (
-              readingAsReadingMatch ||
-              readingAsBaseFormMatch ||
-              referenceIDMatch
-            ) {
-              readingExamples.push(example);
-
-              if (readingAsReadingMatch) partParts.add(part.reading!);
-              if (readingAsBaseFormMatch) partParts.add(part.baseForm);
-              if (referenceIDMatch) partParts.add(part.referenceID!);
-
-              break;
-            }
-          }
-
-        const exampleSize: number =
-          readingMatchingKanjiFormExamples.length +
-          kanjiFormExamples.length +
-          readingExamples.length;
-
-        const includeKanjiFormExamples: boolean =
-          readingMatchingKanjiFormExamples.length <
-          Math.max(2, Math.round(exampleSize * 0.05));
-        const includeReadingExamples: boolean =
-          (word.usuallyInKana === undefined &&
-            includeKanjiFormExamples &&
-            readingExamples.length >=
-              Math.max(10, Math.round(exampleSize * 0.15))) ||
-          (word.usuallyInKana === true &&
-            readingExamples.length >=
-              Math.max(2, Math.round(exampleSize * 0.5)));
-
-        let wordExamples: TanakaExample[] = [
-          ...readingMatchingKanjiFormExamples,
-          ...(includeKanjiFormExamples ? kanjiFormExamples : []),
-          ...(includeReadingExamples ? readingExamples : []),
-        ];
-
-        if (word.translations) {
-          const glossSpecificExamples: TanakaExample[] = [];
-          const seenPhrases: Set<string> = new Set<string>();
-
-          for (let i: number = 0; i < word.translations.length; i++) {
-            outer: for (const example of wordExamples) {
-              if (seenPhrases.has(example.phrase)) continue;
-
-              for (const part of example.parts)
-                if (
-                  part.glossNumber === i + 1 &&
-                  (partParts.has(part.baseForm) ||
-                    (part.reading && partParts.has(part.reading)) ||
-                    (part.referenceID && partParts.has(part.referenceID)))
-                ) {
-                  glossSpecificExamples.push(example);
-                  seenPhrases.add(example.phrase);
-
-                  break outer;
-                }
-            }
-
-            if (glossSpecificExamples.length === 5) break;
-          }
-
-          if (glossSpecificExamples.length === 5)
-            wordExamples = [...glossSpecificExamples];
-          else if (glossSpecificExamples.length > 0) {
-            const seenPhrases: Set<string> = new Set<string>(
-              glossSpecificExamples.map((ex: TanakaExample) => ex.phrase),
-            );
-
-            wordExamples = [
-              ...glossSpecificExamples,
-              ...wordExamples
-                .filter((ex: TanakaExample) => !seenPhrases.has(ex.phrase))
-                .slice(0, 5 - glossSpecificExamples.length),
-            ];
-          }
-        }
-
-        if (wordExamples.length > 0)
-          word.phrases = (
-            wordExamples.length > 5 ? wordExamples.slice(0, 5) : wordExamples
-          ).map((ex: TanakaExample) => ({
-            phrase: ex.furigana ?? ex.phrase,
-            translation: ex.translation,
-            originalPhrase: ex.phrase,
-          }));
+        for (const ex of examples)
+          if (phraseIDs.has(ex.id))
+            word.phrases.push({
+              phrase: ex.furigana ?? ex.phrase,
+              translation: ex.translation,
+              originalPhrase: ex.phrase,
+            });
       }
 
       return word;

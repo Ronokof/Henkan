@@ -117,7 +117,7 @@ export interface DictMeaning {
 /**
  * JMdict entry (word)
  *
- * Equivalent to the `entry` JMdict element
+ * Equivalent to the `entry` JMdict element + miscellaneous info
  */
 export interface DictWord {
     /**
@@ -141,11 +141,15 @@ export interface DictWord {
      */
     isCommon?: true | undefined;
     /**
-     * Whether or not the entry has at least one Tanaka Corpus phrase associated with it
+     * Whether or not the word is typically written in kana alone
      *
-     * **May not always be accurate** (It may only be `true` incorrectly. If it is `undefined`, the report is 100% correct.)
+     * Set to `true` only if the word is usually written in kana for all word senses.
      */
-    hasPhrases?: true | undefined;
+    usuallyInKana?: true | undefined;
+    /**
+     * IDs of Tanaka Corpus phrases associated with the entry
+     */
+    phraseIDs?: `${number}_${number}`[] | undefined;
 }
 /**
  * Miscellaneous information about the kanji
@@ -314,6 +318,10 @@ export interface ExamplePart {
  */
 export interface TanakaExample {
     /**
+     * The ID of the example
+     */
+    readonly id: `${number}_${number}`;
+    /**
      * The Japanese phrase (found in the `A` section, **before** the tab)
      */
     readonly phrase: string;
@@ -324,11 +332,11 @@ export interface TanakaExample {
     /**
      * The `B` section, split into parts
      */
-    parts: ExamplePart[];
+    readonly parts: ExamplePart[];
     /**
      * The Japanese phrase, with furigana attached
      */
-    furigana?: string | undefined;
+    readonly furigana?: string | undefined;
 }
 /**
  * Any type of entry list
@@ -604,15 +612,11 @@ export interface Word extends ResultEntry<"word"> {
      */
     phrases?: Phrase[] | undefined;
     /**
-     * Whether or not the word is common
-     *
-     * A word is considered *common* if the {@link DictWord.readings} and/or the {@link DictWord.kanjiForms} array(s) include(s) at least one element with the {@link DictReading.commonness} or {@link DictKanjiForm.commonness} property defined.
+     * @see {@link DictWord.isCommon}
      */
     common?: true | undefined;
     /**
-     * Whether or not the word is typically written in kana alone
-     *
-     * Set to `true` only if the word is usually written in kana for all word senses.
+     * @see {@link DictWord.usuallyInKana}
      */
     usuallyInKana?: true | undefined;
 }

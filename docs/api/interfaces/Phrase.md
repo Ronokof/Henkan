@@ -6,7 +6,7 @@
 
 # Interface: Phrase
 
-Defined in: [types.ts:594](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L594)
+Defined in: [types.ts:602](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L602)
 
 Phrase information
 
@@ -18,7 +18,7 @@ Converted from [TanakaExample](TanakaExample.md)
 
 > `readonly` **originalPhrase**: `string`
 
-Defined in: [types.ts:606](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L606)
+Defined in: [types.ts:614](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L614)
 
 #### See
 
@@ -30,7 +30,7 @@ Defined in: [types.ts:606](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f
 
 > `readonly` **phrase**: `string`
 
-Defined in: [types.ts:598](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L598)
+Defined in: [types.ts:606](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L606)
 
 The Japanese phrase, either with furigana attached or not
 
@@ -40,7 +40,7 @@ The Japanese phrase, either with furigana attached or not
 
 > `readonly` **translation**: `string`
 
-Defined in: [types.ts:602](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L602)
+Defined in: [types.ts:610](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L610)
 
 #### See
 

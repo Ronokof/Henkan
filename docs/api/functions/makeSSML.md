@@ -8,7 +8,7 @@
 
 > **makeSSML**(`formText`, `fullReading`): `string`
 
-Defined in: [utils.ts:1492](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/utils.ts#L1492)
+Defined in: [utils.ts:1456](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/utils.ts#L1456)
 
 Builds SSML text for Japanese words
 

@@ -7,7 +7,7 @@ export const regexps: UsefulRegExps = {
   scriptSplit:
     /([\p{sc=Han}]+|[\p{sc=Hiragana}]+|[\p{sc=Katakana}]+|[^\p{sc=Han}\p{sc=Hiragana}\p{sc=Katakana}]+)/u,
   regExChars: /[-\/\\^$*+?.()|[\]{}]/,
-  tanakaID: /#ID=\d+_\d+$/,
+  tanakaID: /#ID=(?<id>\d+_\d+)$/,
   tanakaPart:
     /(?<base>[^()\[\]\{\}\s]+)(?:\((?<reading>[\S]+)\))?(?:\[(?<glossnum>[\S]+)\])?(?:\{(?<inflection>[\S]+)\})?/,
   tanakaReferenceID: /#(?<entryid>[\d]+)/,

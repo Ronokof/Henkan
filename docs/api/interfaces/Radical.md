@@ -6,7 +6,7 @@
 
 # Interface: Radical
 
-Defined in: [types.ts:550](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L550)
+Defined in: [types.ts:558](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L558)
 
 Kanji radical/component information
 
@@ -20,7 +20,7 @@ Kanji radical/component information
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:380](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L380)
+Defined in: [types.ts:388](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L388)
 
 The full path of the Anki deck
 
@@ -34,7 +34,7 @@ The full path of the Anki deck
 
 > `optional` **doNotCreateNote**: `true`
 
-Defined in: [types.ts:388](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L388)
+Defined in: [types.ts:396](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L396)
 
 Whether or not this entry should be converted into an Anki note
 
@@ -48,7 +48,7 @@ Whether or not this entry should be converted into an Anki note
 
 > `optional` **fromJpdb**: `true`
 
-Defined in: [types.ts:586](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L586)
+Defined in: [types.ts:594](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L594)
 
 Whether or not this radical/component object contains information **only** from `jpdb.io`
 
@@ -58,7 +58,7 @@ Whether or not this radical/component object contains information **only** from 
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: [types.ts:372](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L372)
+Defined in: [types.ts:380](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L380)
 
 ID used for the Anki note ID
 
@@ -72,7 +72,7 @@ ID used for the Anki note ID
 
 > `optional` **kanji**: [`Kanji`](Kanji.md)[]
 
-Defined in: [types.ts:578](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L578)
+Defined in: [types.ts:586](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L586)
 
 Kanji that include the radical/component
 
@@ -82,7 +82,7 @@ Kanji that include the radical/component
 
 > **meanings**: `string`[]
 
-Defined in: [types.ts:562](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L562)
+Defined in: [types.ts:570](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L570)
 
 The radical/component meanings
 
@@ -92,7 +92,7 @@ The radical/component meanings
 
 > `optional` **mnemonic**: `string`
 
-Defined in: [types.ts:574](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L574)
+Defined in: [types.ts:582](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L582)
 
 The radical/component mnemonic
 
@@ -102,7 +102,7 @@ The radical/component mnemonic
 
 > `readonly` `optional` **noteID**: `` `radical_${string}` ``
 
-Defined in: [types.ts:368](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L368)
+Defined in: [types.ts:376](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L376)
 
 ID used for the resulting Anki note
 
@@ -116,7 +116,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:376](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L376)
+Defined in: [types.ts:384](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L384)
 
 Anki note type name
 
@@ -130,7 +130,7 @@ Anki note type name
 
 > `readonly` **radical**: `string`
 
-Defined in: [types.ts:554](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L554)
+Defined in: [types.ts:562](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L562)
 
 The radical/component character
 
@@ -140,7 +140,7 @@ The radical/component character
 
 > **reading**: `string`
 
-Defined in: [types.ts:558](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L558)
+Defined in: [types.ts:566](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L566)
 
 The radical/component reading (in kana)
 
@@ -150,7 +150,7 @@ The radical/component reading (in kana)
 
 > `optional` **sources**: `string`[]
 
-Defined in: [types.ts:582](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L582)
+Defined in: [types.ts:590](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L590)
 
 The sources from which data for this radical/component has been extracted
 
@@ -160,7 +160,7 @@ The sources from which data for this radical/component has been extracted
 
 > `optional` **strokes**: `string`
 
-Defined in: [types.ts:566](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L566)
+Defined in: [types.ts:574](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L574)
 
 The stroke count of the radical/component
 
@@ -170,7 +170,7 @@ The stroke count of the radical/component
 
 > `optional` **svg**: `string`
 
-Defined in: [types.ts:570](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L570)
+Defined in: [types.ts:578](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L578)
 
 The radical/component SVG filename
 
@@ -180,7 +180,7 @@ The radical/component SVG filename
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:384](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L384)
+Defined in: [types.ts:392](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L392)
 
 Tags generated based on the entry's information
 

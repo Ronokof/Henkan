@@ -51,20 +51,20 @@ export declare function convertKanjiDic(xmlString: string): DictKanji[];
  */
 export declare function convertTanakaCorpus(tanakaString: string, generateFurigana?: true): Promise<TanakaExample[]>;
 /**
- * Converts a `radkfile2` file into an array of {@link DictRadical} objects.
- * @param radkBuffer A raw `radkfile2` buffer
+ * Converts a `radkfile` file into an array of {@link DictRadical} objects.
+ * @param radkBuffer A raw `radkfile` buffer
  * @param kanjiDic An array of converted `KANJIDIC` entries
  * @returns An array of converted {@link DictRadical} objects
  */
-export declare function convertRadkFile(radkBuffer: NonSharedBuffer, kanjiDic: DictKanji[]): DictRadical[];
+export declare function convertRadkFile(radkBuffer: Buffer<ArrayBuffer>, kanjiDic: DictKanji[]): DictRadical[];
 /**
- * Converts a `kradfile2` file into an array of {@link DictKanjiWithRadicals} objects.
- * @param kradBuffer A raw `kradfile2` buffer
+ * Converts a `kradfile` file into an array of {@link DictKanjiWithRadicals} objects.
+ * @param kradBuffer A raw `kradfile` buffer
  * @param kanjiDic An array of converted `KANJIDIC` entries
  * @param katakanaList An array of katakana {@link Kana} objects
  * @returns An array of converted {@link DictKanjiWithRadicals} objects
  */
-export declare function convertKradFile(kradBuffer: NonSharedBuffer, kanjiDic: DictKanji[], katakanaList: Kana[]): DictKanjiWithRadicals[];
+export declare function convertKradFile(kradBuffer: Buffer<ArrayBuffer>, kanjiDic: DictKanji[], katakanaList: Kana[]): DictKanjiWithRadicals[];
 /**
  * Transforms a converted `JMdict` entry into a more readable format, by providing either its {@link id} or the {@link dictWord} object directly.
  * @param dict An array of converted `JMdict` entries

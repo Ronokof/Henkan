@@ -6,31 +6,19 @@
 
 # Interface: DictWord
 
-Defined in: [types.ts:125](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L125)
+Defined in: [types.ts:125](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L125)
 
 JMdict entry (word)
 
-Equivalent to the `entry` JMdict element
+Equivalent to the `entry` JMdict element + miscellaneous info
 
 ## Properties
-
-### hasPhrases?
-
-> `optional` **hasPhrases**: `true`
-
-Defined in: [types.ts:151](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L151)
-
-Whether or not the entry has at least one Tanaka Corpus phrase associated with it
-
-**May not always be accurate** (It may only be `true` incorrectly. If it is `undefined`, the report is 100% correct.)
-
-***
 
 ### id
 
 > `readonly` **id**: `string`
 
-Defined in: [types.ts:129](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L129)
+Defined in: [types.ts:129](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L129)
 
 The entry sequence number
 
@@ -40,7 +28,7 @@ The entry sequence number
 
 > `optional` **isCommon**: `true`
 
-Defined in: [types.ts:145](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L145)
+Defined in: [types.ts:145](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L145)
 
 Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
 
@@ -50,7 +38,7 @@ Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
 
 > `optional` **kanjiForms**: [`DictKanjiForm`](DictKanjiForm.md)[]
 
-Defined in: [types.ts:133](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L133)
+Defined in: [types.ts:133](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L133)
 
 The word's kanji forms
 
@@ -60,9 +48,19 @@ The word's kanji forms
 
 > **meanings**: [`DictMeaning`](DictMeaning.md)[]
 
-Defined in: [types.ts:141](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L141)
+Defined in: [types.ts:141](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L141)
 
 The word's meanings/senses
+
+***
+
+### phraseIDs?
+
+> `optional` **phraseIDs**: `` `${number}_${number}` ``[]
+
+Defined in: [types.ts:155](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L155)
+
+IDs of Tanaka Corpus phrases associated with the entry
 
 ***
 
@@ -70,6 +68,18 @@ The word's meanings/senses
 
 > **readings**: [`DictReading`](DictReading.md)[]
 
-Defined in: [types.ts:137](https://github.com/Ronokof/Henkan/blob/f4500fde04f63f25dbe164e82d88b3a6be2b7ee1/src/types.ts#L137)
+Defined in: [types.ts:137](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L137)
 
 The word's readings
+
+***
+
+### usuallyInKana?
+
+> `optional` **usuallyInKana**: `true`
+
+Defined in: [types.ts:151](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L151)
+
+Whether or not the word is typically written in kana alone
+
+Set to `true` only if the word is usually written in kana for all word senses.
