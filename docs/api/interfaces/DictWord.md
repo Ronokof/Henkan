@@ -6,7 +6,7 @@
 
 # Interface: DictWord
 
-Defined in: [types.ts:125](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L125)
+Defined in: [types.ts:125](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L125)
 
 JMdict entry (word)
 
@@ -18,7 +18,7 @@ Equivalent to the `entry` JMdict element + miscellaneous info
 
 > `readonly` **id**: `string`
 
-Defined in: [types.ts:129](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L129)
+Defined in: [types.ts:129](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L129)
 
 The entry sequence number
 
@@ -28,7 +28,7 @@ The entry sequence number
 
 > `optional` **isCommon**: `true`
 
-Defined in: [types.ts:145](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L145)
+Defined in: [types.ts:145](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L145)
 
 Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
 
@@ -38,7 +38,7 @@ Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
 
 > `optional` **kanjiForms**: [`DictKanjiForm`](DictKanjiForm.md)[]
 
-Defined in: [types.ts:133](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L133)
+Defined in: [types.ts:133](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L133)
 
 The word's kanji forms
 
@@ -48,7 +48,7 @@ The word's kanji forms
 
 > **meanings**: [`DictMeaning`](DictMeaning.md)[]
 
-Defined in: [types.ts:141](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L141)
+Defined in: [types.ts:141](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L141)
 
 The word's meanings/senses
 
@@ -58,7 +58,7 @@ The word's meanings/senses
 
 > `optional` **phraseIDs**: `` `${number}_${number}` ``[]
 
-Defined in: [types.ts:155](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L155)
+Defined in: [types.ts:155](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L155)
 
 IDs of Tanaka Corpus phrases associated with the entry
 
@@ -68,7 +68,7 @@ IDs of Tanaka Corpus phrases associated with the entry
 
 > **readings**: [`DictReading`](DictReading.md)[]
 
-Defined in: [types.ts:137](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L137)
+Defined in: [types.ts:137](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L137)
 
 The word's readings
 
@@ -78,7 +78,7 @@ The word's readings
 
 > `optional` **usuallyInKana**: `true`
 
-Defined in: [types.ts:151](https://github.com/Ronokof/Henkan/blob/66a536d406d853661da5c68af95123f6a590a767/src/types.ts#L151)
+Defined in: [types.ts:151](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L151)
 
 Whether or not the word is typically written in kana alone
 
