@@ -31,8 +31,8 @@ export declare function isStringArray(arg: any): arg is string[];
  */
 export declare function shuffleArray<T>(arr: T[]): T[];
 /**
- * Converts a JMdict `JMdict_e.xml`/`JMdict_e` file into an array of {@link DictWord} objects.
- * @param xmlString The raw `JMdict_e.xml`/`JMdict_e` file contents
+ * Converts a JMdict `JMdict_e` file into an array of {@link DictWord} objects.
+ * @param xmlString The raw `JMdict_e` file contents
  * @param examples An array of converted `Tanaka Corpus` examples
  * @returns An array of converted {@link DictWord} objects
  */

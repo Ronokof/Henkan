@@ -1168,7 +1168,8 @@ function convertJMdict(xmlString, examples) {
       noent: true,
       recover: false
     });
-    const dict = [];
+    let dict = [];
+    const partMatches = /* @__PURE__ */ new Set();
     xml.parseString(dictParsed, (err, result) => {
       if (err) throw err;
       if (result.JMdict && typeof result.JMdict === "object" && isValidArray(result.JMdict.entry))
@@ -1262,89 +1263,117 @@ function convertJMdict(xmlString, examples) {
               entryObj.usuallyInKana = true;
           }
           if (examples) {
-            const readings2 = new Set(
-              entryObj.readings.filter(
-                (reading) => (!reading.notes || !reading.notes.some(
-                  (note) => notSearchedForms.has(note)
-                )) && (entryObj.isCommon === void 0 || reading.commonness && reading.commonness.length > 0)
-              ).map((reading) => reading.reading)
-            );
-            const kanjiForms2 = entryObj.kanjiForms ? new Set(
-              entryObj.kanjiForms.filter(
-                (kanjiForm) => (!kanjiForm.notes || !kanjiForm.notes.some(
-                  (note) => notSearchedForms.has(note)
-                )) && (entryObj.isCommon === void 0 || kanjiForm.commonness && kanjiForm.commonness.length > 0)
-              ).map((kanjiForm) => kanjiForm.form)
-            ) : void 0;
-            const kanjiFormExamples = [];
-            const readingMatchingKanjiFormExamples = [];
-            const readingExamples = [];
-            const partParts = /* @__PURE__ */ new Set();
-            for (const example of examples)
-              for (const part of example.parts) {
-                const readingAsReadingMatch = part.reading !== void 0 && readings2.has(part.reading);
-                if (kanjiForms2 && kanjiForms2.size > 0 && kanjiForms2.has(part.baseForm)) {
-                  if (readingAsReadingMatch) {
-                    readingMatchingKanjiFormExamples.push(example);
-                    partParts.add(part.baseForm).add(part.reading);
-                  } else {
-                    kanjiFormExamples.push(example);
-                    partParts.add(part.baseForm);
-                  }
-                  break;
-                }
-                const readingAsBaseFormMatch = readings2.has(
-                  part.baseForm
-                );
-                const referenceIDMatch = part.referenceID !== void 0 && entryObj.id !== void 0 && part.referenceID === entryObj.id;
-                if (readingAsReadingMatch || readingAsBaseFormMatch || referenceIDMatch) {
-                  readingExamples.push(example);
-                  if (readingAsReadingMatch) partParts.add(part.reading);
-                  if (readingAsBaseFormMatch) partParts.add(part.baseForm);
-                  if (referenceIDMatch) partParts.add(part.referenceID);
-                  break;
-                }
-              }
-            const exampleSize = readingMatchingKanjiFormExamples.length + kanjiFormExamples.length + readingExamples.length;
-            const includeKanjiFormExamples = readingMatchingKanjiFormExamples.length < Math.max(2, Math.round(exampleSize * 0.05));
-            const includeReadingExamples = entryObj.usuallyInKana === void 0 && includeKanjiFormExamples && readingExamples.length >= Math.max(10, Math.round(exampleSize * 0.15)) || entryObj.usuallyInKana === true && readingExamples.length >= Math.max(2, Math.round(exampleSize * 0.5));
-            let wordExamples = [
-              ...readingMatchingKanjiFormExamples,
-              ...includeKanjiFormExamples ? kanjiFormExamples : [],
-              ...includeReadingExamples ? readingExamples : []
-            ];
-            const glossSpecificExamples = [];
-            const seenPhrases = /* @__PURE__ */ new Set();
-            for (let i = 0; i < entryObj.meanings.length; i++) {
-              outer: for (const example of wordExamples) {
-                if (seenPhrases.has(example.phrase)) continue;
-                for (const part of example.parts)
-                  if (part.glossNumber === i + 1 && (partParts.has(part.baseForm) || part.reading && partParts.has(part.reading) || part.referenceID && partParts.has(part.referenceID))) {
-                    glossSpecificExamples.push(example);
-                    seenPhrases.add(example.phrase);
-                    break outer;
-                  }
-              }
-              if (glossSpecificExamples.length === 5) break;
-            }
-            if (glossSpecificExamples.length === 5)
-              wordExamples = [...glossSpecificExamples];
-            else if (glossSpecificExamples.length > 0) {
-              const seenPhrases2 = new Set(
-                glossSpecificExamples.map((ex) => ex.phrase)
-              );
-              wordExamples = [
-                ...glossSpecificExamples,
-                ...wordExamples.filter((ex) => !seenPhrases2.has(ex.phrase)).slice(0, 5 - glossSpecificExamples.length)
-              ];
-            }
-            if (wordExamples.length > 0)
-              entryObj.phraseIDs = (wordExamples.length > 5 ? wordExamples.slice(0, 5) : wordExamples).map((ex) => ex.id);
+            const readings2 = entryObj.readings.filter(
+              (reading) => (!reading.notes || !reading.notes.some(
+                (note) => notSearchedForms.has(note)
+              )) && (entryObj.isCommon === void 0 || reading.commonness && reading.commonness.length > 0)
+            ).map((reading) => reading.reading);
+            const kanjiForms2 = entryObj.kanjiForms ? entryObj.kanjiForms.filter(
+              (kanjiForm) => (!kanjiForm.notes || !kanjiForm.notes.some(
+                (note) => notSearchedForms.has(note)
+              )) && (entryObj.isCommon === void 0 || kanjiForm.commonness && kanjiForm.commonness.length > 0)
+            ).map((kanjiForm) => kanjiForm.form) : void 0;
+            for (const reading of readings2) partMatches.add(reading);
+            if (kanjiForms2)
+              for (const kanjiForm of kanjiForms2) partMatches.add(kanjiForm);
+            partMatches.add(entryObj.id);
           }
           if (entryObj.id.length > 0 && entryObj.readings.length > 0 && entryObj.meanings.length > 0)
             dict.push(entryObj);
         }
     });
+    if (examples && dict.length > 0) {
+      const filteredExamples = examples.filter(
+        (ex) => {
+          const parts = ex.parts.flatMap((part) => [
+            part.baseForm,
+            ...part.reading ? [part.reading] : [],
+            ...part.referenceID ? [part.referenceID] : []
+          ]);
+          for (const part of parts) if (partMatches.has(part)) return true;
+          return false;
+        }
+      );
+      dict = dict.map((entryObj) => {
+        const readings = new Set(
+          entryObj.readings.filter(
+            (reading) => (!reading.notes || !reading.notes.some(
+              (note) => notSearchedForms.has(note)
+            )) && (entryObj.isCommon === void 0 || reading.commonness && reading.commonness.length > 0)
+          ).map((reading) => reading.reading)
+        );
+        const kanjiForms = entryObj.kanjiForms ? new Set(
+          entryObj.kanjiForms.filter(
+            (kanjiForm) => (!kanjiForm.notes || !kanjiForm.notes.some(
+              (note) => notSearchedForms.has(note)
+            )) && (entryObj.isCommon === void 0 || kanjiForm.commonness && kanjiForm.commonness.length > 0)
+          ).map((kanjiForm) => kanjiForm.form)
+        ) : void 0;
+        const kanjiFormExamples = [];
+        const readingMatchingKanjiFormExamples = [];
+        const readingExamples = [];
+        const partParts = /* @__PURE__ */ new Set();
+        for (const example of filteredExamples)
+          for (const part of example.parts) {
+            const readingAsReadingMatch = part.reading !== void 0 && readings.has(part.reading);
+            if (kanjiForms && kanjiForms.size > 0 && kanjiForms.has(part.baseForm)) {
+              if (readingAsReadingMatch) {
+                readingMatchingKanjiFormExamples.push(example);
+                partParts.add(part.baseForm).add(part.reading);
+              } else {
+                kanjiFormExamples.push(example);
+                partParts.add(part.baseForm);
+              }
+              break;
+            }
+            const readingAsBaseFormMatch = readings.has(part.baseForm);
+            const referenceIDMatch = part.referenceID !== void 0 && entryObj.id !== void 0 && part.referenceID === entryObj.id;
+            if (readingAsReadingMatch || readingAsBaseFormMatch || referenceIDMatch) {
+              readingExamples.push(example);
+              if (readingAsReadingMatch) partParts.add(part.reading);
+              if (readingAsBaseFormMatch) partParts.add(part.baseForm);
+              if (referenceIDMatch) partParts.add(part.referenceID);
+              break;
+            }
+          }
+        const exampleSize = readingMatchingKanjiFormExamples.length + kanjiFormExamples.length + readingExamples.length;
+        const includeKanjiFormExamples = readingMatchingKanjiFormExamples.length < Math.max(2, Math.round(exampleSize * 0.05));
+        const includeReadingExamples = entryObj.usuallyInKana === void 0 && includeKanjiFormExamples && readingExamples.length >= Math.max(10, Math.round(exampleSize * 0.15)) || entryObj.usuallyInKana === true && readingExamples.length >= Math.max(2, Math.round(exampleSize * 0.5));
+        let wordExamples = [
+          ...readingMatchingKanjiFormExamples,
+          ...includeKanjiFormExamples ? kanjiFormExamples : [],
+          ...includeReadingExamples ? readingExamples : []
+        ];
+        const glossSpecificExamples = [];
+        const seenPhrases = /* @__PURE__ */ new Set();
+        for (let i = 0; i < entryObj.meanings.length; i++) {
+          outer: for (const example of wordExamples) {
+            if (seenPhrases.has(example.phrase)) continue;
+            for (const part of example.parts)
+              if (part.glossNumber === i + 1 && (partParts.has(part.baseForm) || part.reading && partParts.has(part.reading) || part.referenceID && partParts.has(part.referenceID))) {
+                glossSpecificExamples.push(example);
+                seenPhrases.add(example.phrase);
+                break outer;
+              }
+          }
+          if (glossSpecificExamples.length === 5) break;
+        }
+        if (glossSpecificExamples.length === 5)
+          wordExamples = glossSpecificExamples;
+        else if (glossSpecificExamples.length > 0) {
+          const seenPhrases2 = new Set(
+            glossSpecificExamples.map((ex) => ex.phrase)
+          );
+          wordExamples = [
+            ...glossSpecificExamples,
+            ...wordExamples.filter((ex) => !seenPhrases2.has(ex.phrase)).slice(0, 5 - glossSpecificExamples.length)
+          ];
+        }
+        if (wordExamples.length > 0)
+          entryObj.phraseIDs = (wordExamples.length > 5 ? wordExamples.slice(0, 5) : wordExamples).map((ex) => ex.id);
+        return entryObj;
+      });
+    }
     return dict;
   } catch (err) {
     throw err;

@@ -6,7 +6,7 @@
 
 # Interface: Kanji
 
-Defined in: [types.ts:492](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L492)
+Defined in: [types.ts:492](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L492)
 
 Kanji information
 
@@ -22,7 +22,7 @@ Converted from [DictKanji](DictKanji.md) and extra info added
 
 > `optional` **components**: [`KanjiComponent`](KanjiComponent.md)[]
 
-Defined in: [types.ts:524](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L524)
+Defined in: [types.ts:524](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L524)
 
 The kanji radicals/components
 
@@ -32,7 +32,7 @@ The kanji radicals/components
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:388](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L388)
+Defined in: [types.ts:388](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L388)
 
 The full path of the Anki deck
 
@@ -46,7 +46,7 @@ The full path of the Anki deck
 
 > `optional` **doNotCreateNote**: `true`
 
-Defined in: [types.ts:396](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L396)
+Defined in: [types.ts:396](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L396)
 
 Whether or not this entry should be converted into an Anki note
 
@@ -60,7 +60,7 @@ Whether or not this entry should be converted into an Anki note
 
 > `optional` **frequency**: `string`
 
-Defined in: [types.ts:540](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L540)
+Defined in: [types.ts:540](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L540)
 
 #### See
 
@@ -72,7 +72,7 @@ Defined in: [types.ts:540](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a4
 
 > `optional` **fromJpdb**: `true`
 
-Defined in: [types.ts:552](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L552)
+Defined in: [types.ts:552](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L552)
 
 Whether or not this kanji object contains information **only** from `jpdb.io`
 
@@ -82,7 +82,7 @@ Whether or not this kanji object contains information **only** from `jpdb.io`
 
 > `optional` **grade**: `string`
 
-Defined in: [types.ts:536](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L536)
+Defined in: [types.ts:536](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L536)
 
 #### See
 
@@ -94,7 +94,7 @@ Defined in: [types.ts:536](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a4
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: [types.ts:380](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L380)
+Defined in: [types.ts:380](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L380)
 
 ID used for the Anki note ID
 
@@ -108,7 +108,7 @@ ID used for the Anki note ID
 
 > `readonly` **kanji**: `string`
 
-Defined in: [types.ts:496](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L496)
+Defined in: [types.ts:496](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L496)
 
 #### See
 
@@ -120,7 +120,7 @@ Defined in: [types.ts:496](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a4
 
 > `optional` **kokuji**: `true`
 
-Defined in: [types.ts:544](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L544)
+Defined in: [types.ts:544](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L544)
 
 Whether or not the kanji is kokuji
 
@@ -130,7 +130,7 @@ Whether or not the kanji is kokuji
 
 > `optional` **kunyomi**: `string`[]
 
-Defined in: [types.ts:512](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L512)
+Defined in: [types.ts:512](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L512)
 
 The kanji kunyomi readings
 
@@ -140,7 +140,7 @@ The kanji kunyomi readings
 
 > `optional` **meanings**: `string`[]
 
-Defined in: [types.ts:504](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L504)
+Defined in: [types.ts:504](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L504)
 
 #### See
 
@@ -152,7 +152,7 @@ Defined in: [types.ts:504](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a4
 
 > `optional` **mnemonic**: `string`
 
-Defined in: [types.ts:528](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L528)
+Defined in: [types.ts:528](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L528)
 
 The kanji mnemonic
 
@@ -162,7 +162,7 @@ The kanji mnemonic
 
 > `optional` **nanori**: `string`[]
 
-Defined in: [types.ts:516](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L516)
+Defined in: [types.ts:516](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L516)
 
 #### See
 
@@ -174,7 +174,7 @@ Defined in: [types.ts:516](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a4
 
 > `readonly` `optional` **noteID**: `` `kanji_${string}` ``
 
-Defined in: [types.ts:376](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L376)
+Defined in: [types.ts:376](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L376)
 
 ID used for the resulting Anki note
 
@@ -188,7 +188,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:384](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L384)
+Defined in: [types.ts:384](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L384)
 
 Anki note type name
 
@@ -202,7 +202,7 @@ Anki note type name
 
 > `optional` **onyomi**: `string`[]
 
-Defined in: [types.ts:508](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L508)
+Defined in: [types.ts:508](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L508)
 
 The kanji onyomi readings
 
@@ -212,7 +212,7 @@ The kanji onyomi readings
 
 > `optional` **source**: `string`
 
-Defined in: [types.ts:548](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L548)
+Defined in: [types.ts:548](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L548)
 
 The source (besides KANJIDIC) from which data for this kanji has been extracted
 
@@ -222,7 +222,7 @@ The source (besides KANJIDIC) from which data for this kanji has been extracted
 
 > `optional` **strokes**: `string`
 
-Defined in: [types.ts:500](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L500)
+Defined in: [types.ts:500](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L500)
 
 #### See
 
@@ -234,7 +234,7 @@ Defined in: [types.ts:500](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a4
 
 > `optional` **svg**: `string`
 
-Defined in: [types.ts:520](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L520)
+Defined in: [types.ts:520](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L520)
 
 The kanji SVG filename
 
@@ -244,7 +244,7 @@ The kanji SVG filename
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:392](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L392)
+Defined in: [types.ts:392](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L392)
 
 Tags generated based on the entry's information
 
@@ -258,6 +258,6 @@ Tags generated based on the entry's information
 
 > `optional` **words**: [`Word`](Word.md)[]
 
-Defined in: [types.ts:532](https://github.com/Ronokof/Henkan/blob/80b2addd3ec0a404258a3690da0bc4a44cf30ccf/src/types.ts#L532)
+Defined in: [types.ts:532](https://github.com/Ronokof/Henkan/blob/874e0ce148c5695af9a488b65483b45b6d79c57b/src/types.ts#L532)
 
 Words that use the kanji
