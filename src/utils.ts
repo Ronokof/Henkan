@@ -642,13 +642,14 @@ export function convertRadkFile(
       if (line.startsWith("$ ")) {
         const radical: DictRadical = {
           radical: line.charAt(2),
-          kanji: [],
           strokes: line.substring(4),
         };
 
         let j: number = i + 1;
         let kanjiLine: string | undefined = fileParsed[j];
         if (!kanjiLine) continue;
+
+        const kanjiList: DictKanji[] = [];
 
         while (kanjiLine && !kanjiLine.startsWith("$ ")) {
           const kanjis: string[] = kanjiLine.split("");
@@ -657,9 +658,8 @@ export function convertRadkFile(
             const foundKanji: DictKanji | undefined = kanjiDic.find(
               (dictKanji: DictKanji) => dictKanji.kanji === kanji,
             );
-            if (!foundKanji) throw new Error("Kanji not found");
 
-            radical.kanji.push(foundKanji);
+            if (foundKanji) kanjiList.push(foundKanji);
           }
 
           j++;
@@ -669,11 +669,9 @@ export function convertRadkFile(
           if (kanjiLine.startsWith("$ ")) i = j - 1;
         }
 
-        if (
-          radical.radical.length > 0 &&
-          radical.strokes.length > 0 &&
-          radical.kanji.length > 0
-        )
+        if (kanjiList.length > 0) radical.kanji = kanjiList;
+
+        if (radical.radical.length > 0 && radical.strokes.length > 0)
           radicals.push(radical);
       }
     }

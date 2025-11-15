@@ -6,7 +6,7 @@
 
 # Interface: Grammar
 
-Defined in: [types.ts:694](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L694)
+Defined in: [types.ts:694](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L694)
 
 Grammar point information
 
@@ -20,7 +20,7 @@ Grammar point information
 
 > `optional` **audio**: `string`
 
-Defined in: [types.ts:726](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L726)
+Defined in: [types.ts:726](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L726)
 
 The filename of an audio file for the grammar point
 
@@ -30,7 +30,7 @@ The filename of an audio file for the grammar point
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:390](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L390)
+Defined in: [types.ts:390](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L390)
 
 The full path of the Anki deck
 
@@ -44,7 +44,7 @@ The full path of the Anki deck
 
 > `optional` **doNotCreateNote**: `true`
 
-Defined in: [types.ts:398](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L398)
+Defined in: [types.ts:398](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L398)
 
 Whether or not this entry should be converted into an Anki note
 
@@ -58,7 +58,7 @@ Whether or not this entry should be converted into an Anki note
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: [types.ts:382](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L382)
+Defined in: [types.ts:382](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L382)
 
 ID used for the Anki note ID
 
@@ -72,7 +72,7 @@ ID used for the Anki note ID
 
 > `optional` **jlpt**: [`JLPT`](../type-aliases/JLPT.md)
 
-Defined in: [types.ts:718](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L718)
+Defined in: [types.ts:718](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L718)
 
 The \[post-2010 JLPT\](https://en.wikipedia.org/wiki/Japanese-Language\_Proficiency\_Test#Test\_format) level
 
@@ -82,7 +82,7 @@ The \[post-2010 JLPT\](https://en.wikipedia.org/wiki/Japanese-Language\_Proficie
 
 > **meaning**: [`GrammarMeaning`](GrammarMeaning.md)
 
-Defined in: [types.ts:702](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L702)
+Defined in: [types.ts:702](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L702)
 
 The English meaning/translation of the grammar point
 
@@ -92,7 +92,7 @@ The English meaning/translation of the grammar point
 
 > `readonly` `optional` **noteID**: `` `grammar_${string}` ``
 
-Defined in: [types.ts:378](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L378)
+Defined in: [types.ts:378](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L378)
 
 ID used for the resulting Anki note
 
@@ -106,7 +106,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:386](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L386)
+Defined in: [types.ts:386](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L386)
 
 Anki note type name
 
@@ -120,7 +120,7 @@ Anki note type name
 
 > `optional` **phrases**: [`Phrase`](Phrase.md)[]
 
-Defined in: [types.ts:714](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L714)
+Defined in: [types.ts:714](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L714)
 
 Example phrase using the grammar point
 
@@ -130,7 +130,7 @@ Example phrase using the grammar point
 
 > `readonly` **point**: `string`
 
-Defined in: [types.ts:698](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L698)
+Defined in: [types.ts:698](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L698)
 
 The most common form in which the grammar point written in
 
@@ -140,7 +140,7 @@ The most common form in which the grammar point written in
 
 > `optional` **readings**: [`Reading`](Reading.md)[]
 
-Defined in: [types.ts:706](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L706)
+Defined in: [types.ts:706](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L706)
 
 The readings of the grammar point
 
@@ -150,7 +150,7 @@ The readings of the grammar point
 
 > `optional` **source**: `string`
 
-Defined in: [types.ts:722](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L722)
+Defined in: [types.ts:722](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L722)
 
 The source from which data for this grammar point has been extracted
 
@@ -160,7 +160,7 @@ The source from which data for this grammar point has been extracted
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:394](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L394)
+Defined in: [types.ts:394](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L394)
 
 Tags generated based on the entry's information
 
@@ -174,6 +174,6 @@ Tags generated based on the entry's information
 
 > `optional` **usages**: `string`[]
 
-Defined in: [types.ts:710](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L710)
+Defined in: [types.ts:710](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L710)
 
 Ways in which the grammar point is used in Japanese

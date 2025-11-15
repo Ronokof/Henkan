@@ -1525,27 +1525,27 @@ function convertRadkFile(radkBuffer, kanjiDic) {
       if (line.startsWith("$ ")) {
         const radical = {
           radical: line.charAt(2),
-          kanji: [],
           strokes: line.substring(4)
         };
         let j = i + 1;
         let kanjiLine = fileParsed[j];
         if (!kanjiLine) continue;
+        const kanjiList = [];
         while (kanjiLine && !kanjiLine.startsWith("$ ")) {
           const kanjis = kanjiLine.split("");
           for (const kanji of kanjis) {
             const foundKanji = kanjiDic.find(
               (dictKanji) => dictKanji.kanji === kanji
             );
-            if (!foundKanji) throw new Error("Kanji not found");
-            radical.kanji.push(foundKanji);
+            if (foundKanji) kanjiList.push(foundKanji);
           }
           j++;
           kanjiLine = fileParsed[j];
           if (!kanjiLine) continue;
           if (kanjiLine.startsWith("$ ")) i = j - 1;
         }
-        if (radical.radical.length > 0 && radical.strokes.length > 0 && radical.kanji.length > 0)
+        if (kanjiList.length > 0) radical.kanji = kanjiList;
+        if (radical.radical.length > 0 && radical.strokes.length > 0)
           radicals.push(radical);
       }
     }

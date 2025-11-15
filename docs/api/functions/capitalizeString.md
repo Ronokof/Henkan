@@ -8,7 +8,7 @@
 
 > **capitalizeString**(`value`): `string`
 
-Defined in: [utils.ts:53](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/utils.ts#L53)
+Defined in: [utils.ts:53](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/utils.ts#L53)
 
 Capitalizes a string.
 

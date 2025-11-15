@@ -6,7 +6,7 @@
 
 # Interface: DictKanjiMisc
 
-Defined in: [types.ts:165](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L165)
+Defined in: [types.ts:165](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L165)
 
 Miscellaneous information about the kanji
 
@@ -18,7 +18,7 @@ Equivalent to the `misc` KANJIDIC2 element *(excluding some subelements)*
 
 > `optional` **frequency**: `string`
 
-Defined in: [types.ts:185](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L185)
+Defined in: [types.ts:185](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L185)
 
 The frequency-of-use ranking
 
@@ -30,7 +30,7 @@ A number from `1` to `2500`
 
 > `optional` **grade**: `string`
 
-Defined in: [types.ts:179](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L179)
+Defined in: [types.ts:179](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L179)
 
 The kanji grade level
 
@@ -46,7 +46,7 @@ The kanji grade level
 
 > `optional` **jlpt**: `string`
 
-Defined in: [types.ts:189](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L189)
+Defined in: [types.ts:189](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L189)
 
 The \[pre-2010 JLPT\](https://en.wikipedia.org/wiki/Japanese-Language\_Proficiency\_Test#Previous\_format\_(1984%E2%80%932009)) level
 
@@ -56,6 +56,6 @@ The \[pre-2010 JLPT\](https://en.wikipedia.org/wiki/Japanese-Language\_Proficien
 
 > `readonly` **strokeNumber**: `string`
 
-Defined in: [types.ts:169](https://github.com/Ronokof/Henkan/blob/be14eff8947ae967718945fe57bd90c10ebced4a/src/types.ts#L169)
+Defined in: [types.ts:169](https://github.com/Ronokof/Henkan/blob/80c90c83eed8648ae8f9dd394a3a2d82804ca248/src/types.ts#L169)
 
 The stroke count of the kanji, including the radical

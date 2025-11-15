@@ -268,13 +268,13 @@ export interface DictRadical {
    */
   readonly radical: string;
   /**
-   * The kanji that include the radical
-   */
-  kanji: DictKanji[];
-  /**
    * The stroke count of the radical
    */
-  strokes: string;
+  readonly strokes: string;
+  /**
+   * The kanji that include the radical
+   */
+  kanji?: DictKanji[] | undefined;
 }
 
 /**
