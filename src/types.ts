@@ -150,9 +150,11 @@ export interface DictWord {
    */
   usuallyInKana?: true | undefined;
   /**
-   * IDs of Tanaka Corpus phrases associated with the entry
+   * Whether or not the entry has at least one Tanaka Corpus phrase associated with it
+   *
+   * **May not always be accurate** (It may only be `true` incorrectly. If it is `undefined`, the report is 100% correct.)
    */
-  phraseIDs?: `${number}_${number}`[] | undefined;
+  hasPhrases?: true | undefined;
 }
 
 /**
@@ -627,7 +629,7 @@ export interface Word extends ResultEntry<"word"> {
   /**
    * The word translations/senses
    */
-  translations?: Translation[];
+  translations: Translation[];
   /**
    * The word kanji forms
    */

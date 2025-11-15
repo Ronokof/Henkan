@@ -6,7 +6,7 @@
 
 # Interface: TanakaExample
 
-Defined in: [types.ts:331](https://github.com/Ronokof/Henkan/blob/807ee4ba5ecfc97c78f9eb033912901b416bfef7/src/types.ts#L331)
+Defined in: [types.ts:333](https://github.com/Ronokof/Henkan/blob/9d6f8c36a5a74a8db04f8876da97affa6d0cbb77/src/types.ts#L333)
 
 Tanaka Corpus `examples.utf` examples
 
@@ -16,7 +16,7 @@ Tanaka Corpus `examples.utf` examples
 
 > `readonly` `optional` **furigana**: `string`
 
-Defined in: [types.ts:351](https://github.com/Ronokof/Henkan/blob/807ee4ba5ecfc97c78f9eb033912901b416bfef7/src/types.ts#L351)
+Defined in: [types.ts:353](https://github.com/Ronokof/Henkan/blob/9d6f8c36a5a74a8db04f8876da97affa6d0cbb77/src/types.ts#L353)
 
 The Japanese phrase, with furigana attached
 
@@ -26,7 +26,7 @@ The Japanese phrase, with furigana attached
 
 > `readonly` **id**: `` `${number}_${number}` ``
 
-Defined in: [types.ts:335](https://github.com/Ronokof/Henkan/blob/807ee4ba5ecfc97c78f9eb033912901b416bfef7/src/types.ts#L335)
+Defined in: [types.ts:337](https://github.com/Ronokof/Henkan/blob/9d6f8c36a5a74a8db04f8876da97affa6d0cbb77/src/types.ts#L337)
 
 The ID of the example
 
@@ -36,7 +36,7 @@ The ID of the example
 
 > `readonly` **parts**: [`ExamplePart`](ExamplePart.md)[]
 
-Defined in: [types.ts:347](https://github.com/Ronokof/Henkan/blob/807ee4ba5ecfc97c78f9eb033912901b416bfef7/src/types.ts#L347)
+Defined in: [types.ts:349](https://github.com/Ronokof/Henkan/blob/9d6f8c36a5a74a8db04f8876da97affa6d0cbb77/src/types.ts#L349)
 
 The `B` section, split into parts
 
@@ -46,7 +46,7 @@ The `B` section, split into parts
 
 > `readonly` **phrase**: `string`
 
-Defined in: [types.ts:339](https://github.com/Ronokof/Henkan/blob/807ee4ba5ecfc97c78f9eb033912901b416bfef7/src/types.ts#L339)
+Defined in: [types.ts:341](https://github.com/Ronokof/Henkan/blob/9d6f8c36a5a74a8db04f8876da97affa6d0cbb77/src/types.ts#L341)
 
 The Japanese phrase (found in the `A` section, **before** the tab)
 
@@ -56,6 +56,6 @@ The Japanese phrase (found in the `A` section, **before** the tab)
 
 > `readonly` **translation**: `string`
 
-Defined in: [types.ts:343](https://github.com/Ronokof/Henkan/blob/807ee4ba5ecfc97c78f9eb033912901b416bfef7/src/types.ts#L343)
+Defined in: [types.ts:345](https://github.com/Ronokof/Henkan/blob/9d6f8c36a5a74a8db04f8876da97affa6d0cbb77/src/types.ts#L345)
 
 The English translation of the phrase (found in the `A` section, **after** the tab)
