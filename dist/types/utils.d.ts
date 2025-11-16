@@ -51,15 +51,15 @@ export declare function convertKanjiDic(xmlString: string): DictKanji[];
  */
 export declare function convertTanakaCorpus(tanakaString: string, generateFurigana?: true): Promise<TanakaExample[]>;
 /**
- * Converts a `radkfile` file into an array of {@link DictRadical} objects.
- * @param radkBuffer A raw `radkfile` buffer
+ * Converts a `radkfile2` file (EUC-JP encoded) into an array of {@link DictRadical} objects.
+ * @param radkBuffer A `radkfile2` buffer
  * @param kanjiDic An array of converted `KANJIDIC` entries
  * @returns An array of converted {@link DictRadical} objects
  */
 export declare function convertRadkFile(radkBuffer: Buffer<ArrayBuffer>, kanjiDic: DictKanji[]): DictRadical[];
 /**
- * Converts a `kradfile` file into an array of {@link DictKanjiWithRadicals} objects.
- * @param kradBuffer A raw `kradfile` buffer
+ * Converts a `kradfile2` file (EUC-JP encoded) into an array of {@link DictKanjiWithRadicals} objects.
+ * @param kradBuffer A `kradfile2` buffer
  * @param kanjiDic An array of converted `KANJIDIC` entries
  * @param katakanaList An array of katakana {@link Kana} objects
  * @returns An array of converted {@link DictKanjiWithRadicals} objects

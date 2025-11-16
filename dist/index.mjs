@@ -1467,15 +1467,15 @@ function convertRadkFile(radkBuffer, kanjiDic) {
     const radicals = [];
     for (let i = 0; i <= fileParsed.length; i++) {
       const line = fileParsed[i];
-      if (!line) continue;
+      if (!line) throw new Error("Invalid radkfile2 buffer");
       if (line.startsWith("$ ")) {
         const radical = {
-          radical: line.charAt(2),
-          strokes: line.substring(4)
+          radical: line.charAt(2).trim(),
+          strokes: line.substring(4).trim()
         };
         let j = i + 1;
         let kanjiLine = fileParsed[j];
-        if (!kanjiLine) continue;
+        if (!kanjiLine) throw new Error("Invalid radkfile2 buffer");
         const kanjiList = [];
         while (kanjiLine && !kanjiLine.startsWith("$ ")) {
           const kanjis = kanjiLine.split("");
@@ -1484,6 +1484,7 @@ function convertRadkFile(radkBuffer, kanjiDic) {
               (dictKanji) => dictKanji.kanji === kanji
             );
             if (foundKanji) kanjiList.push(foundKanji);
+            else kanjiList.push({ kanji, readingMeaning: [] });
           }
           j++;
           kanjiLine = fileParsed[j];
@@ -1510,7 +1511,8 @@ function convertKradFile(kradBuffer, kanjiDic, katakanaList) {
       const split = line.split(" : ");
       const kanjiChar = split[0];
       const radicalsRow = split[1];
-      if (!kanjiChar || !radicalsRow) throw new Error("Invalid KRAD entry");
+      if (!kanjiChar || !radicalsRow)
+        throw new Error("Invalid kradfile2 buffer");
       const kanji = {
         ...kanjiChar && radicalsRow && kanjiChar.length === 1 && radicalsRow.length > 0 ? { kanji: kanjiChar } : { kanji: "" },
         radicals: []

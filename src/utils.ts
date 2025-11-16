@@ -619,8 +619,8 @@ export async function convertTanakaCorpus(
 }
 
 /**
- * Converts a `radkfile` file into an array of {@link DictRadical} objects.
- * @param radkBuffer A raw `radkfile` buffer
+ * Converts a `radkfile2` file (EUC-JP encoded) into an array of {@link DictRadical} objects.
+ * @param radkBuffer A `radkfile2` buffer
  * @param kanjiDic An array of converted `KANJIDIC` entries
  * @returns An array of converted {@link DictRadical} objects
  */
@@ -637,17 +637,17 @@ export function convertRadkFile(
 
     for (let i = 0; i <= fileParsed.length; i++) {
       const line: string | undefined = fileParsed[i];
-      if (!line) continue;
+      if (!line) throw new Error("Invalid radkfile2 buffer");
 
       if (line.startsWith("$ ")) {
         const radical: DictRadical = {
-          radical: line.charAt(2),
-          strokes: line.substring(4),
+          radical: line.charAt(2).trim(),
+          strokes: line.substring(4).trim(),
         };
 
         let j: number = i + 1;
         let kanjiLine: string | undefined = fileParsed[j];
-        if (!kanjiLine) continue;
+        if (!kanjiLine) throw new Error("Invalid radkfile2 buffer");
 
         const kanjiList: DictKanji[] = [];
 
@@ -660,6 +660,7 @@ export function convertRadkFile(
             );
 
             if (foundKanji) kanjiList.push(foundKanji);
+            else kanjiList.push({ kanji: kanji, readingMeaning: [] });
           }
 
           j++;
@@ -685,8 +686,8 @@ export function convertRadkFile(
 }
 
 /**
- * Converts a `kradfile` file into an array of {@link DictKanjiWithRadicals} objects.
- * @param kradBuffer A raw `kradfile` buffer
+ * Converts a `kradfile2` file (EUC-JP encoded) into an array of {@link DictKanjiWithRadicals} objects.
+ * @param kradBuffer A `kradfile2` buffer
  * @param kanjiDic An array of converted `KANJIDIC` entries
  * @param katakanaList An array of katakana {@link Kana} objects
  * @returns An array of converted {@link DictKanjiWithRadicals} objects
@@ -711,7 +712,8 @@ export function convertKradFile(
       const kanjiChar: string | undefined = split[0];
       const radicalsRow: string | undefined = split[1];
 
-      if (!kanjiChar || !radicalsRow) throw new Error("Invalid KRAD entry");
+      if (!kanjiChar || !radicalsRow)
+        throw new Error("Invalid kradfile2 buffer");
 
       const kanji: DictKanjiWithRadicals = {
         ...(kanjiChar &&
