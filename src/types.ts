@@ -328,6 +328,20 @@ export interface ExamplePart {
 }
 
 /**
+ * A pair of a word ID and a number associated with a gloss number
+ */
+export interface GlossSpecificNumber {
+  /**
+   * The entry ID
+   */
+  readonly wordId: string;
+  /**
+   * The entry's gloss number
+   */
+  readonly glossNumber: number;
+}
+
+/**
  * Tanaka Corpus `examples.utf` examples
  */
 export interface TanakaExample {
@@ -351,6 +365,10 @@ export interface TanakaExample {
    * The Japanese phrase, with furigana attached
    */
   readonly furigana?: string | undefined;
+  /**
+   * The word-gloss pair
+   */
+  glossNumber?: GlossSpecificNumber | undefined;
 }
 
 /**
@@ -614,6 +632,10 @@ export interface Phrase {
    * @see {@link TanakaExample.phrase}
    */
   readonly originalPhrase: string;
+  /**
+   * @see {@link TanakaExample.glossNumber}
+   */
+  readonly glossNumber?: GlossSpecificNumber | undefined;
 }
 
 /**

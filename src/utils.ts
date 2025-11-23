@@ -1,6 +1,7 @@
 import libxml from "libxmljs2";
 import xml from "xml2js";
 import iconv from "iconv-lite";
+import fetch from "node-fetch";
 import {
   noteMap,
   notSearchedForms,
@@ -9,12 +10,6 @@ import {
   romajiMap,
   symbolMap,
 } from "./constants";
-import {
-  PollyClient,
-  SynthesizeSpeechCommand,
-  SynthesizeSpeechCommandInput,
-  SynthesizeSpeechCommandOutput,
-} from "@aws-sdk/client-polly";
 import {
   DictKanji,
   DictKanjiForm,
@@ -308,18 +303,9 @@ export function convertJMdict(
             );
             const kanjiForms: Set<string> | undefined = entryObj.kanjiForms
               ? new Set<string>(
-                  entryObj.kanjiForms
-                    .filter(
-                      (kanjiForm: DictKanjiForm) =>
-                        (!kanjiForm.notes ||
-                          !kanjiForm.notes.some((note: string) =>
-                            notSearchedForms.has(note),
-                          )) &&
-                        (entryObj.isCommon === undefined ||
-                          (kanjiForm.commonness &&
-                            kanjiForm.commonness.length > 0)),
-                    )
-                    .map((kanjiForm: DictKanjiForm) => kanjiForm.form),
+                  entryObj.kanjiForms.map(
+                    (kanjiForm: DictKanjiForm) => kanjiForm.form,
+                  ),
                 )
               : undefined;
 
@@ -635,9 +621,9 @@ export function convertRadkFile(
       .filter((line: string) => !line.startsWith("#"));
     const radicals: DictRadical[] = [];
 
-    for (let i = 0; i <= fileParsed.length; i++) {
+    for (let i = 0; i < fileParsed.length; i++) {
       const line: string | undefined = fileParsed[i];
-      if (!line) throw new Error("Invalid radkfile2 buffer");
+      if (!line) continue;
 
       if (line.startsWith("$ ")) {
         const radical: DictRadical = {
@@ -647,7 +633,7 @@ export function convertRadkFile(
 
         let j: number = i + 1;
         let kanjiLine: string | undefined = fileParsed[j];
-        if (!kanjiLine) throw new Error("Invalid radkfile2 buffer");
+        if (!kanjiLine) continue;
 
         const kanjiList: DictKanji[] = [];
 
@@ -712,8 +698,7 @@ export function convertKradFile(
       const kanjiChar: string | undefined = split[0];
       const radicalsRow: string | undefined = split[1];
 
-      if (!kanjiChar || !radicalsRow)
-        throw new Error("Invalid kradfile2 buffer");
+      if (!kanjiChar || !radicalsRow) continue;
 
       const kanji: DictKanjiWithRadicals = {
         ...(kanjiChar &&
@@ -1014,16 +999,9 @@ export function getWord(
         );
         const kanjiForms: Set<string> | undefined = word.kanjiForms
           ? new Set<string>(
-              word.kanjiForms
-                .filter(
-                  (kanjiForm: KanjiForm) =>
-                    (!kanjiForm.notes ||
-                      !kanjiForm.notes.some((note: string) =>
-                        notSearchedForms.has(note),
-                      )) &&
-                    (word.common === undefined || kanjiForm.common === true),
-                )
-                .map((kanjiForm: KanjiForm) => kanjiForm.kanjiForm),
+              word.kanjiForms.map(
+                (kanjiForm: KanjiForm) => kanjiForm.kanjiForm,
+              ),
             )
           : undefined;
 
@@ -1036,7 +1014,9 @@ export function getWord(
         for (const example of examples)
           for (const part of example.parts) {
             const readingAsReadingMatch: boolean =
-              part.reading !== undefined && readings.has(part.reading);
+              (part.reading !== undefined && readings.has(part.reading)) ||
+              (part.inflectedForm !== undefined &&
+                readings.has(part.inflectedForm));
 
             if (
               kanjiForms &&
@@ -1060,14 +1040,9 @@ export function getWord(
               word.id !== undefined &&
               part.referenceID === word.id;
 
-            if (
-              readingAsReadingMatch ||
-              readingAsBaseFormMatch ||
-              referenceIDMatch
-            ) {
+            if (readingAsBaseFormMatch || referenceIDMatch) {
               readingExamples.push(example);
 
-              if (readingAsReadingMatch) partParts.add(part.reading!);
               if (readingAsBaseFormMatch) partParts.add(part.baseForm);
               if (referenceIDMatch) partParts.add(part.referenceID!);
 
@@ -1080,17 +1055,19 @@ export function getWord(
           kanjiFormExamples.length +
           readingExamples.length;
 
-        const includeKanjiFormExamples: boolean =
-          readingMatchingKanjiFormExamples.length <
-          Math.max(2, Math.round(exampleSize * 0.05));
+        const includeReadingThreshold: number = Math.max(
+          10,
+          Math.round(exampleSize * 0.5),
+        );
+
+        const includeKanjiFormExamples: boolean = word.kanjiForms !== undefined;
         const includeReadingExamples: boolean =
-          (word.usuallyInKana === undefined &&
-            includeKanjiFormExamples &&
-            readingExamples.length >=
-              Math.max(10, Math.round(exampleSize * 0.15))) ||
-          (word.usuallyInKana === true &&
-            readingExamples.length >=
-              Math.max(2, Math.round(exampleSize * 0.5)));
+          (readingExamples.length >= includeReadingThreshold &&
+            readingExamples.length >= readingMatchingKanjiFormExamples.length &&
+            readingExamples.length >= kanjiFormExamples.length) ||
+          (readingExamples.length >= includeReadingThreshold &&
+            word.usuallyInKana === true) ||
+          word.kanjiForms === undefined;
 
         let wordExamples: TanakaExample[] = [
           ...readingMatchingKanjiFormExamples,
@@ -1109,9 +1086,17 @@ export function getWord(
               if (
                 part.glossNumber === i + 1 &&
                 (partParts.has(part.baseForm) ||
-                  (part.reading && partParts.has(part.reading)) ||
-                  (part.referenceID && partParts.has(part.referenceID)))
+                  (includeReadingExamples &&
+                    ((part.reading && partParts.has(part.reading)) ||
+                      (part.inflectedForm &&
+                        partParts.has(part.inflectedForm)) ||
+                      (part.referenceID && partParts.has(part.referenceID)))))
               ) {
+                example.glossNumber = {
+                  wordId: word.id!,
+                  glossNumber: i + 1,
+                };
+
                 glossSpecificExamples.push(example);
                 seenPhrases.add(example.phrase);
 
@@ -1139,6 +1124,7 @@ export function getWord(
             phrase: ex.furigana ?? ex.phrase,
             translation: ex.translation,
             originalPhrase: ex.phrase,
+            ...(ex.glossNumber ? { glossNumber: ex.glossNumber } : {}),
           }));
       }
 
@@ -1576,40 +1562,72 @@ export function makeSSML(formText: string, fullReading: string): string {
 }
 
 /**
- * Synthesizes text to speech audio using {@link [Amazon Polly](https://aws.amazon.com/polly/)}.
- * @param client An Amazon Polly Client instance
+ * Synthesizes text to speech audio using {@link [TTSFree.com](https://ttsfree.com/)}.
  * @param ssmlText The text to be spoken, in SSML format
  * @param options Other speech generation settings
- * @returns A promise resolving with an audio stream buffer or with `null` if the generation failed
+ * @returns A promise resolving with a MP3 audio stream buffer
  */
 export async function synthesizeSpeech(
-  client: PollyClient,
   ssmlText: string,
-  options: Omit<SynthesizeSpeechCommandInput, "Text" | "TextType">,
-): Promise<Buffer<ArrayBuffer> | null> {
-  return await new Promise<Buffer<ArrayBuffer> | null>(
+  apiKey: string,
+  options: {
+    voiceService: "servicebin" | "servicegoo";
+    voiceID: string;
+    voiceSpeed?: "-3" | "-2" | "-1" | "0" | "1" | "2" | "3" | undefined;
+    voicePitch?:
+      | "x-high"
+      | "high"
+      | "default"
+      | "low"
+      | "x-low"
+      | number
+      | undefined;
+  },
+): Promise<Buffer<ArrayBuffer>> {
+  return await new Promise<Buffer<ArrayBuffer>>(
     async (
       resolve: (
-        value:
-          | Buffer<ArrayBuffer>
-          | null
-          | PromiseLike<Buffer<ArrayBuffer> | null>,
+        value: Buffer<ArrayBuffer> | PromiseLike<Buffer<ArrayBuffer>>,
       ) => void,
       reject: (reason?: any) => void,
     ) => {
       try {
-        const command: SynthesizeSpeechCommand = new SynthesizeSpeechCommand({
-          Text: ssmlText,
-          TextType: "ssml",
-          ...options,
+        const res = await fetch("https://ttsfree.com/api/v1/tts", {
+          method: "POST",
+          body: JSON.stringify({
+            text: ssmlText,
+            ...options,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            apikey: apiKey,
+          },
         });
-        const response: SynthesizeSpeechCommandOutput =
-          await client.send(command);
-        const stream: Buffer<ArrayBuffer> | null = response.AudioStream
-          ? Buffer.from(await response.AudioStream.transformToByteArray())
-          : null;
 
-        resolve(stream);
+        if (!res.ok)
+          throw new Error(
+            `TTS request failed:\n${res.status}: ${res.statusText}`,
+          );
+
+        const data: { status: string; mess: string; audioData: string } =
+          (await res.json()) as {
+            status: string;
+            mess: string;
+            audioData: string;
+          };
+        if (
+          data.status !== "success" ||
+          data.mess !== "success" ||
+          data.audioData.length === 0
+        )
+          throw new Error("Invalid TTS response data");
+
+        const mp3Buffer: Buffer<ArrayBuffer> = Buffer.from(
+          data.audioData,
+          "base64",
+        );
+
+        resolve(mp3Buffer);
       } catch (err: unknown) {
         reject(err);
       }
@@ -1716,7 +1734,7 @@ export function generateAnkiNote(entry: Result): string[] {
       entry.translations
         .map(
           (translationEntry: Translation, index: number) =>
-            `${index > 2 ? "<details><summary>Show translation</summary>" : ""}${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes)}${index > 2 ? "</details>" : ""}`,
+            `<span class="word word-index${entry.phrases && entry.phrases.some((phrase: Phrase, index2: number) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? " gloss-specific" : ""}">${index + 1}</span>${index > 2 ? "<details><summary>Show translation</summary>" : ""}${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes)}${index > 2 ? "</details>" : ""}`,
         )
         .join(""),
       entry.kanji
@@ -1731,12 +1749,13 @@ export function generateAnkiNote(entry: Result): string[] {
         : '<span class="word word-kanji">(no kanji)</span>',
       entry.phrases
         ? entry.phrases
-            .map((phraseEntry: Phrase) =>
-              createEntry(
-                `<span class="word word-phrase"><span class="word word-phrase-original">${phraseEntry.originalPhrase}</span><span class="word word-phrase-furigana">${phraseEntry.phrase}</span></span>`,
-                [phraseEntry.translation],
-                true,
-              ),
+            .map(
+              (phraseEntry: Phrase, index: number) =>
+                `<span class="word word-index${entry.translations.some((_translation: Translation, index2: number) => index === index2 && phraseEntry.glossNumber && phraseEntry.glossNumber.wordId === entry.id && phraseEntry.glossNumber.glossNumber === index2 + 1) ? " gloss-specific" : ""}">${index + 1}</span>${createEntry(
+                  `<span class="word word-phrase"><span class="word word-phrase-original">${phraseEntry.originalPhrase}</span><span class="word word-phrase-furigana">${phraseEntry.phrase}</span></span>`,
+                  [phraseEntry.translation],
+                  true,
+                )}`,
             )
             .join("")
         : '<span class="word word-phrase">(no phrases) (Search on dictionaries!)</span>',

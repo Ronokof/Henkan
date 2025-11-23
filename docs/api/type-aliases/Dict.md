@@ -8,6 +8,6 @@
 
 > **Dict** = [`DictWord`](../interfaces/DictWord.md)[] \| [`DictKanji`](../interfaces/DictKanji.md)[] \| [`TanakaExample`](../interfaces/TanakaExample.md)[] \| [`DictRadical`](../interfaces/DictRadical.md)[] \| [`DictKanjiWithRadicals`](../interfaces/DictKanjiWithRadicals.md)[]
 
-Defined in: [types.ts:359](https://github.com/Ronokof/Henkan/blob/17cbd9518a408e69828b76e5f6f939abe525b24c/src/types.ts#L359)
+Defined in: [types.ts:377](https://github.com/Ronokof/Henkan/blob/6facaf3dde9a0beaafc6e67b84cf19815a6bcea6/src/types.ts#L377)
 
 Any type of entry list

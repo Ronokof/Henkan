@@ -1131,9 +1131,7 @@ var noteMap = /* @__PURE__ */ new Map([
 import libxml from "libxmljs2";
 import xml from "xml2js";
 import iconv from "iconv-lite";
-import {
-  SynthesizeSpeechCommand
-} from "@aws-sdk/client-polly";
+import fetch from "node-fetch";
 var Kuroshiro = __require("kuroshiro");
 var KuromojiAnalyzer = __require("kuroshiro-analyzer-kuromoji");
 function capitalizeString(value) {
@@ -1279,11 +1277,9 @@ function convertJMdict(xmlString, examples) {
               ).map((reading) => reading.reading)
             );
             const kanjiForms2 = entryObj.kanjiForms ? new Set(
-              entryObj.kanjiForms.filter(
-                (kanjiForm) => (!kanjiForm.notes || !kanjiForm.notes.some(
-                  (note) => notSearchedForms.has(note)
-                )) && (entryObj.isCommon === void 0 || kanjiForm.commonness && kanjiForm.commonness.length > 0)
-              ).map((kanjiForm) => kanjiForm.form)
+              entryObj.kanjiForms.map(
+                (kanjiForm) => kanjiForm.form
+              )
             ) : void 0;
             let existsExample = false;
             if (kanjiForms2 && kanjiForms2.size > 0 && tanakaParts) {
@@ -1465,9 +1461,9 @@ function convertRadkFile(radkBuffer, kanjiDic) {
   try {
     const fileParsed = iconv.decode(radkBuffer, "euc-jp").split("\n").filter((line) => !line.startsWith("#"));
     const radicals = [];
-    for (let i = 0; i <= fileParsed.length; i++) {
+    for (let i = 0; i < fileParsed.length; i++) {
       const line = fileParsed[i];
-      if (!line) throw new Error("Invalid radkfile2 buffer");
+      if (!line) continue;
       if (line.startsWith("$ ")) {
         const radical = {
           radical: line.charAt(2).trim(),
@@ -1475,7 +1471,7 @@ function convertRadkFile(radkBuffer, kanjiDic) {
         };
         let j = i + 1;
         let kanjiLine = fileParsed[j];
-        if (!kanjiLine) throw new Error("Invalid radkfile2 buffer");
+        if (!kanjiLine) continue;
         const kanjiList = [];
         while (kanjiLine && !kanjiLine.startsWith("$ ")) {
           const kanjis = kanjiLine.split("");
@@ -1511,8 +1507,7 @@ function convertKradFile(kradBuffer, kanjiDic, katakanaList) {
       const split = line.split(" : ");
       const kanjiChar = split[0];
       const radicalsRow = split[1];
-      if (!kanjiChar || !radicalsRow)
-        throw new Error("Invalid kradfile2 buffer");
+      if (!kanjiChar || !radicalsRow) continue;
       const kanji = {
         ...kanjiChar && radicalsRow && kanjiChar.length === 1 && radicalsRow.length > 0 ? { kanji: kanjiChar } : { kanji: "" },
         radicals: []
@@ -1723,11 +1718,9 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
           ).map((reading) => reading.reading)
         );
         const kanjiForms = word.kanjiForms ? new Set(
-          word.kanjiForms.filter(
-            (kanjiForm) => (!kanjiForm.notes || !kanjiForm.notes.some(
-              (note) => notSearchedForms.has(note)
-            )) && (word.common === void 0 || kanjiForm.common === true)
-          ).map((kanjiForm) => kanjiForm.kanjiForm)
+          word.kanjiForms.map(
+            (kanjiForm) => kanjiForm.kanjiForm
+          )
         ) : void 0;
         const kanjiFormExamples = [];
         const readingMatchingKanjiFormExamples = [];
@@ -1735,7 +1728,7 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
         const partParts = /* @__PURE__ */ new Set();
         for (const example of examples)
           for (const part of example.parts) {
-            const readingAsReadingMatch = part.reading !== void 0 && readings.has(part.reading);
+            const readingAsReadingMatch = part.reading !== void 0 && readings.has(part.reading) || part.inflectedForm !== void 0 && readings.has(part.inflectedForm);
             if (kanjiForms && kanjiForms.size > 0 && kanjiForms.has(part.baseForm)) {
               if (readingAsReadingMatch) {
                 readingMatchingKanjiFormExamples.push(example);
@@ -1748,17 +1741,20 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
             }
             const readingAsBaseFormMatch = readings.has(part.baseForm);
             const referenceIDMatch = part.referenceID !== void 0 && word.id !== void 0 && part.referenceID === word.id;
-            if (readingAsReadingMatch || readingAsBaseFormMatch || referenceIDMatch) {
+            if (readingAsBaseFormMatch || referenceIDMatch) {
               readingExamples.push(example);
-              if (readingAsReadingMatch) partParts.add(part.reading);
               if (readingAsBaseFormMatch) partParts.add(part.baseForm);
               if (referenceIDMatch) partParts.add(part.referenceID);
               break;
             }
           }
         const exampleSize = readingMatchingKanjiFormExamples.length + kanjiFormExamples.length + readingExamples.length;
-        const includeKanjiFormExamples = readingMatchingKanjiFormExamples.length < Math.max(2, Math.round(exampleSize * 0.05));
-        const includeReadingExamples = word.usuallyInKana === void 0 && includeKanjiFormExamples && readingExamples.length >= Math.max(10, Math.round(exampleSize * 0.15)) || word.usuallyInKana === true && readingExamples.length >= Math.max(2, Math.round(exampleSize * 0.5));
+        const includeReadingThreshold = Math.max(
+          10,
+          Math.round(exampleSize * 0.5)
+        );
+        const includeKanjiFormExamples = word.kanjiForms !== void 0;
+        const includeReadingExamples = readingExamples.length >= includeReadingThreshold && readingExamples.length >= readingMatchingKanjiFormExamples.length && readingExamples.length >= kanjiFormExamples.length || readingExamples.length >= includeReadingThreshold && word.usuallyInKana === true || word.kanjiForms === void 0;
         let wordExamples = [
           ...readingMatchingKanjiFormExamples,
           ...includeKanjiFormExamples ? kanjiFormExamples : [],
@@ -1770,7 +1766,11 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
           outer: for (const example of wordExamples) {
             if (seenPhrases.has(example.phrase)) continue;
             for (const part of example.parts)
-              if (part.glossNumber === i + 1 && (partParts.has(part.baseForm) || part.reading && partParts.has(part.reading) || part.referenceID && partParts.has(part.referenceID))) {
+              if (part.glossNumber === i + 1 && (partParts.has(part.baseForm) || includeReadingExamples && (part.reading && partParts.has(part.reading) || part.inflectedForm && partParts.has(part.inflectedForm) || part.referenceID && partParts.has(part.referenceID)))) {
+                example.glossNumber = {
+                  wordId: word.id,
+                  glossNumber: i + 1
+                };
                 glossSpecificExamples.push(example);
                 seenPhrases.add(example.phrase);
                 break outer;
@@ -1789,7 +1789,8 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
           word.phrases = (wordExamples.length > 5 ? wordExamples.slice(0, 5) : wordExamples).map((ex) => ({
             phrase: ex.furigana ?? ex.phrase,
             translation: ex.translation,
-            originalPhrase: ex.phrase
+            originalPhrase: ex.phrase,
+            ...ex.glossNumber ? { glossNumber: ex.glossNumber } : {}
           }));
       }
       return word;
@@ -2067,18 +2068,34 @@ function makeSSML(formText, fullReading) {
   }
   return ssml;
 }
-async function synthesizeSpeech(client, ssmlText, options) {
+async function synthesizeSpeech(ssmlText, apiKey, options) {
   return await new Promise(
     async (resolve, reject) => {
       try {
-        const command = new SynthesizeSpeechCommand({
-          Text: ssmlText,
-          TextType: "ssml",
-          ...options
+        const res = await fetch("https://ttsfree.com/api/v1/tts", {
+          method: "POST",
+          body: JSON.stringify({
+            text: ssmlText,
+            ...options
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            apikey: apiKey
+          }
         });
-        const response = await client.send(command);
-        const stream = response.AudioStream ? Buffer.from(await response.AudioStream.transformToByteArray()) : null;
-        resolve(stream);
+        if (!res.ok)
+          throw new Error(
+            `TTS request failed:
+${res.status}: ${res.statusText}`
+          );
+        const data = await res.json();
+        if (data.status !== "success" || data.mess !== "success" || data.audioData.length === 0)
+          throw new Error("Invalid TTS response data");
+        const mp3Buffer = Buffer.from(
+          data.audioData,
+          "base64"
+        );
+        resolve(mp3Buffer);
       } catch (err) {
         reject(err);
       }
@@ -2125,7 +2142,7 @@ function generateAnkiNote(entry) {
         ).join("") : noKanjiForms
       ],
       entry.translations.map(
-        (translationEntry, index) => `${index > 2 ? "<details><summary>Show translation</summary>" : ""}${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes)}${index > 2 ? "</details>" : ""}`
+        (translationEntry, index) => `<span class="word word-index${entry.phrases && entry.phrases.some((phrase, index2) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? " gloss-specific" : ""}">${index + 1}</span>${index > 2 ? "<details><summary>Show translation</summary>" : ""}${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes)}${index > 2 ? "</details>" : ""}`
       ).join(""),
       entry.kanji ? entry.kanji.map(
         (kanjiEntry) => createEntry(
@@ -2134,11 +2151,11 @@ function generateAnkiNote(entry) {
         )
       ).join("") : '<span class="word word-kanji">(no kanji)</span>',
       entry.phrases ? entry.phrases.map(
-        (phraseEntry) => createEntry(
+        (phraseEntry, index) => `<span class="word word-index${entry.translations.some((_translation, index2) => index === index2 && phraseEntry.glossNumber && phraseEntry.glossNumber.wordId === entry.id && phraseEntry.glossNumber.glossNumber === index2 + 1) ? " gloss-specific" : ""}">${index + 1}</span>${createEntry(
           `<span class="word word-phrase"><span class="word word-phrase-original">${phraseEntry.originalPhrase}</span><span class="word word-phrase-furigana">${phraseEntry.phrase}</span></span>`,
           [phraseEntry.translation],
           true
-        )
+        )}`
       ).join("") : '<span class="word word-phrase">(no phrases) (Search on dictionaries!)</span>',
       ...entry.tags && entry.tags.length > 0 ? [
         entry.tags.map(

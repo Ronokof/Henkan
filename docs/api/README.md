@@ -18,6 +18,7 @@
 - [DictReading](interfaces/DictReading.md)
 - [DictWord](interfaces/DictWord.md)
 - [ExamplePart](interfaces/ExamplePart.md)
+- [GlossSpecificNumber](interfaces/GlossSpecificNumber.md)
 - [Grammar](interfaces/Grammar.md)
 - [GrammarMeaning](interfaces/GrammarMeaning.md)
 - [Kana](interfaces/Kana.md)

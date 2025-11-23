@@ -1,4 +1,3 @@
-import { PollyClient, SynthesizeSpeechCommandInput } from "@aws-sdk/client-polly";
 import { DictKanji, DictKanjiWithRadicals, DictRadical, DictWord, Grammar, Kana, Kanji, Radical, Result, TanakaExample, Word } from "./types";
 /**
  * Capitalizes a string.
@@ -109,13 +108,17 @@ export declare function getKanjiExtended(kanjiChar: string, info: Kanji, dict: D
  */
 export declare function makeSSML(formText: string, fullReading: string): string;
 /**
- * Synthesizes text to speech audio using {@link [Amazon Polly](https://aws.amazon.com/polly/)}.
- * @param client An Amazon Polly Client instance
+ * Synthesizes text to speech audio using {@link [TTSFree.com](https://ttsfree.com/)}.
  * @param ssmlText The text to be spoken, in SSML format
  * @param options Other speech generation settings
- * @returns A promise resolving with an audio stream buffer or with `null` if the generation failed
+ * @returns A promise resolving with a MP3 audio stream buffer
  */
-export declare function synthesizeSpeech(client: PollyClient, ssmlText: string, options: Omit<SynthesizeSpeechCommandInput, "Text" | "TextType">): Promise<Buffer<ArrayBuffer> | null>;
+export declare function synthesizeSpeech(ssmlText: string, apiKey: string, options: {
+    voiceService: "servicebin" | "servicegoo";
+    voiceID: string;
+    voiceSpeed?: "-3" | "-2" | "-1" | "0" | "1" | "2" | "3" | undefined;
+    voicePitch?: "x-high" | "high" | "default" | "low" | "x-low" | number | undefined;
+}): Promise<Buffer<ArrayBuffer>>;
 export declare function isWord(entry: Result): entry is Word;
 export declare function isRadical(entry: Result): entry is Radical;
 export declare function isKanji(entry: Result): entry is Kanji;
