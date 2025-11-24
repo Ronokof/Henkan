@@ -4,64 +4,11 @@ export const regexps: UsefulRegExps = {
   hiragana: /[\u{3040}-\u{309F}]/u,
   katakana: /[\u{30A0}-\u{30FF}]/u,
   kanji: /\p{Script=Han}+/u,
-  scriptSplit:
-    /([\p{sc=Han}]+|[\p{sc=Hiragana}]+|[\p{sc=Katakana}]+|[^\p{sc=Han}\p{sc=Hiragana}\p{sc=Katakana}]+)/u,
   regExChars: /[-\/\\^$*+?.()|[\]{}]/,
   tanakaID: /#ID=(?<id>\d+_\d+)$/,
   tanakaPart:
     /(?<base>[^()\[\]\{\}\s]+)(?:\((?<reading>[\S]+)\))?(?:\[(?<glossnum>[\S]+)\])?(?:\{(?<inflection>[\S]+)\})?/,
   tanakaReferenceID: /#(?<entryid>[\d]+)/,
-};
-
-export const romajiMap: Record<string, string> = {
-  A: "エー",
-  B: "ビー",
-  C: "シー",
-  D: "ディー",
-  E: "イー",
-  F: "エフ",
-  G: "ジー",
-  H: "エイチ",
-  I: "アイ",
-  J: "ジェー",
-  K: "ケー",
-  L: "エル",
-  M: "エム",
-  N: "エヌ",
-  O: "オー",
-  P: "ピー",
-  Q: "キュー",
-  R: "アール",
-  S: "エス",
-  T: "ティー",
-  U: "ユー",
-  V: "ブイ",
-  W: "ダブリュー",
-  X: "エックス",
-  Y: "ワイ",
-  Z: "ゼット",
-};
-
-export const numberMap: Record<string, string> = {
-  "0": "ゼロ",
-  "1": "イチ",
-  "2": "ニ",
-  "3": "サン",
-  "4": "ヨン",
-  "5": "ゴ",
-  "6": "ロク",
-  "7": "ナナ",
-  "8": "ハチ",
-  "9": "キュウ",
-};
-
-export const symbolMap: Record<string, string> = {
-  "＄": "ドル",
-  "%": "パーセント",
-  "¥": "エン",
-  "#": "シャープ",
-  "@": "アット",
-  "&": "アンド",
 };
 
 export const notSearchedForms: Set<string> = new Set<string>([

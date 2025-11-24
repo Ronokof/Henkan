@@ -2,14 +2,7 @@ import libxml from "libxmljs2";
 import xml from "xml2js";
 import iconv from "iconv-lite";
 import fetch from "node-fetch";
-import {
-  noteMap,
-  notSearchedForms,
-  numberMap,
-  regexps,
-  romajiMap,
-  symbolMap,
-} from "./constants";
+import { noteMap, notSearchedForms, regexps } from "./constants";
 import {
   DictKanji,
   DictKanjiForm,
@@ -1447,128 +1440,14 @@ export function getKanjiExtended(
   }
 }
 
-const getCharType: (
-  char: string,
-) => "kanji" | "hiragana" | "katakana" | "other" = (
-  char: string,
-): "kanji" | "hiragana" | "katakana" | "other" => {
-  if (regexps.kanji.test(char)) return "kanji";
-  if (regexps.hiragana.test(char)) return "hiragana";
-  if (regexps.katakana.test(char)) return "katakana";
-  return "other";
-};
-
-const splitByScript: (text: string) => string[] = (text: string): string[] =>
-  text.match(regexps.scriptSplit) || [];
-
-const convertToHiragana: (str: string) => string = (str: string): string =>
-  str.replace(regexps.katakana, (c: string) =>
-    String.fromCharCode(c.charCodeAt(0) - 0x60),
-  );
-
-const convertOtherToKatakana: (str: string) => string = (str: string): string =>
-  str
-    .split("")
-    .map((c: string) => {
-      if (romajiMap[c.toUpperCase()]) return romajiMap[c.toUpperCase()];
-      if (numberMap[c]) return numberMap[c];
-      if (symbolMap[c]) return symbolMap[c];
-      return c;
-    })
-    .join("");
-
-/**
- * Builds SSML text for Japanese words
- * @param formText The normal form of the word (usually kanji form)
- * @param fullReading The reading of the word (hiragana or katakana)
- * @returns The SSML text
- */
-export function makeSSML(formText: string, fullReading: string): string {
-  let ssml: string = "";
-
-  const allTypes: ("kanji" | "hiragana" | "katakana" | "other")[] = Array.from(
-    formText,
-  ).map((c: string) => getCharType(c));
-  const uniqueTypes: ("kanji" | "hiragana" | "katakana" | "other")[] =
-    Array.from(new Set(allTypes));
-
-  if (uniqueTypes.length === 1)
-    switch (uniqueTypes[0]) {
-      case "kanji":
-        ssml = `<speak><phoneme alphabet="x-amazon-yomigana" ph="${fullReading}">${formText}</phoneme></speak>`;
-
-        break;
-      case "katakana":
-        ssml = `<speak><phoneme alphabet="x-amazon-pron-kana" ph="${formText}">${formText}</phoneme></speak>`;
-
-        break;
-      case "hiragana":
-      default:
-        ssml = `<speak>${formText}</speak>`;
-    }
-  else {
-    const segments: string[] = splitByScript(formText);
-    let pureKanjiReading: string = convertToHiragana(fullReading);
-
-    segments.forEach((seg: string) => {
-      const type: "kanji" | "hiragana" | "katakana" | "other" = getCharType(
-        seg[0]!,
-      );
-
-      if (type !== "kanji") {
-        const converted: string =
-          type === "other"
-            ? convertToHiragana(convertOtherToKatakana(seg))
-            : convertToHiragana(seg);
-
-        pureKanjiReading = pureKanjiReading.replace(converted, "");
-      }
-    });
-
-    const kanjiSegments: string[] = segments.filter(
-      (seg: string) => getCharType(seg[0]!) === "kanji",
-    );
-    let readingPointer: number = 0;
-
-    const ssmlSegments: string[] = segments.map((seg: string) => {
-      const type: "kanji" | "hiragana" | "katakana" | "other" = getCharType(
-        seg[0]!,
-      );
-
-      if (type === "kanji") {
-        const expectedLength: number =
-          pureKanjiReading.length / kanjiSegments.length;
-        const allocated: string = pureKanjiReading.slice(
-          readingPointer,
-          readingPointer + Math.ceil(expectedLength),
-        );
-
-        readingPointer += allocated.length;
-
-        return `<phoneme alphabet="x-amazon-yomigana" ph="${allocated}">${seg}</phoneme>`;
-      } else if (type === "katakana")
-        return `<phoneme alphabet="x-amazon-pron-kana" ph="${seg}">${seg}</phoneme>`;
-      else if (type === "other") {
-        const katakanaReading: string = convertOtherToKatakana(seg);
-
-        return `<phoneme alphabet="x-amazon-pron-kana" ph="${katakanaReading}">${seg}</phoneme>`;
-      } else return seg;
-    });
-
-    ssml = `<speak>${ssmlSegments.join("")}</speak>`;
-  }
-
-  return ssml;
-}
-
 /**
  * Synthesizes text to speech audio using {@link [TTSFree.com](https://ttsfree.com/)}.
- * @param ssmlText The text to be spoken, in SSML format
+ * @param textOrSSML The text to be spoken or a SSML string
  * @param options Other speech generation settings
  * @returns A promise resolving with a MP3 audio stream buffer
  */
 export async function synthesizeSpeech(
-  ssmlText: string,
+  textOrSSML: string,
   apiKey: string,
   options: {
     voiceService: "servicebin" | "servicegoo";
@@ -1595,7 +1474,7 @@ export async function synthesizeSpeech(
         const res = await fetch("https://ttsfree.com/api/v1/tts", {
           method: "POST",
           body: JSON.stringify({
-            text: ssmlText,
+            text: textOrSSML,
             ...options,
           }),
           headers: {

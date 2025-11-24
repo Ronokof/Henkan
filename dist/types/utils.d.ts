@@ -101,19 +101,12 @@ export declare function getKanji(kanjiChar: string, dict: DictKanji[], jmDict?: 
  */
 export declare function getKanjiExtended(kanjiChar: string, info: Kanji, dict: DictKanji[], useJpdbWords?: true, jmDict?: DictWord[], svgList?: string[], noteTypeName?: string, deckPath?: string): Kanji;
 /**
- * Builds SSML text for Japanese words
- * @param formText The normal form of the word (usually kanji form)
- * @param fullReading The reading of the word (hiragana or katakana)
- * @returns The SSML text
- */
-export declare function makeSSML(formText: string, fullReading: string): string;
-/**
  * Synthesizes text to speech audio using {@link [TTSFree.com](https://ttsfree.com/)}.
- * @param ssmlText The text to be spoken, in SSML format
+ * @param textOrSSML The text to be spoken or a SSML string
  * @param options Other speech generation settings
  * @returns A promise resolving with a MP3 audio stream buffer
  */
-export declare function synthesizeSpeech(ssmlText: string, apiKey: string, options: {
+export declare function synthesizeSpeech(textOrSSML: string, apiKey: string, options: {
     voiceService: "servicebin" | "servicegoo";
     voiceID: string;
     voiceSpeed?: "-3" | "-2" | "-1" | "0" | "1" | "2" | "3" | undefined;

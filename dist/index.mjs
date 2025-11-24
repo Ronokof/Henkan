@@ -10,59 +10,10 @@ var regexps = {
   hiragana: /[\u{3040}-\u{309F}]/u,
   katakana: /[\u{30A0}-\u{30FF}]/u,
   kanji: new RegExp("\\p{Script=Han}+", "u"),
-  scriptSplit: /([\p{sc=Han}]+|[\p{sc=Hiragana}]+|[\p{sc=Katakana}]+|[^\p{sc=Han}\p{sc=Hiragana}\p{sc=Katakana}]+)/u,
   regExChars: /[-\/\\^$*+?.()|[\]{}]/,
   tanakaID: /#ID=(?<id>\d+_\d+)$/,
   tanakaPart: /(?<base>[^()\[\]\{\}\s]+)(?:\((?<reading>[\S]+)\))?(?:\[(?<glossnum>[\S]+)\])?(?:\{(?<inflection>[\S]+)\})?/,
   tanakaReferenceID: /#(?<entryid>[\d]+)/
-};
-var romajiMap = {
-  A: "\u30A8\u30FC",
-  B: "\u30D3\u30FC",
-  C: "\u30B7\u30FC",
-  D: "\u30C7\u30A3\u30FC",
-  E: "\u30A4\u30FC",
-  F: "\u30A8\u30D5",
-  G: "\u30B8\u30FC",
-  H: "\u30A8\u30A4\u30C1",
-  I: "\u30A2\u30A4",
-  J: "\u30B8\u30A7\u30FC",
-  K: "\u30B1\u30FC",
-  L: "\u30A8\u30EB",
-  M: "\u30A8\u30E0",
-  N: "\u30A8\u30CC",
-  O: "\u30AA\u30FC",
-  P: "\u30D4\u30FC",
-  Q: "\u30AD\u30E5\u30FC",
-  R: "\u30A2\u30FC\u30EB",
-  S: "\u30A8\u30B9",
-  T: "\u30C6\u30A3\u30FC",
-  U: "\u30E6\u30FC",
-  V: "\u30D6\u30A4",
-  W: "\u30C0\u30D6\u30EA\u30E5\u30FC",
-  X: "\u30A8\u30C3\u30AF\u30B9",
-  Y: "\u30EF\u30A4",
-  Z: "\u30BC\u30C3\u30C8"
-};
-var numberMap = {
-  "0": "\u30BC\u30ED",
-  "1": "\u30A4\u30C1",
-  "2": "\u30CB",
-  "3": "\u30B5\u30F3",
-  "4": "\u30E8\u30F3",
-  "5": "\u30B4",
-  "6": "\u30ED\u30AF",
-  "7": "\u30CA\u30CA",
-  "8": "\u30CF\u30C1",
-  "9": "\u30AD\u30E5\u30A6"
-};
-var symbolMap = {
-  "\uFF04": "\u30C9\u30EB",
-  "%": "\u30D1\u30FC\u30BB\u30F3\u30C8",
-  "\xA5": "\u30A8\u30F3",
-  "#": "\u30B7\u30E3\u30FC\u30D7",
-  "@": "\u30A2\u30C3\u30C8",
-  "&": "\u30A2\u30F3\u30C9"
 };
 var notSearchedForms = /* @__PURE__ */ new Set([
   "search-only kana form",
@@ -1994,88 +1945,14 @@ function getKanjiExtended(kanjiChar, info, dict, useJpdbWords, jmDict, svgList, 
     throw err;
   }
 }
-var getCharType = (char) => {
-  if (regexps.kanji.test(char)) return "kanji";
-  if (regexps.hiragana.test(char)) return "hiragana";
-  if (regexps.katakana.test(char)) return "katakana";
-  return "other";
-};
-var splitByScript = (text) => text.match(regexps.scriptSplit) || [];
-var convertToHiragana = (str) => str.replace(
-  regexps.katakana,
-  (c) => String.fromCharCode(c.charCodeAt(0) - 96)
-);
-var convertOtherToKatakana = (str) => str.split("").map((c) => {
-  if (romajiMap[c.toUpperCase()]) return romajiMap[c.toUpperCase()];
-  if (numberMap[c]) return numberMap[c];
-  if (symbolMap[c]) return symbolMap[c];
-  return c;
-}).join("");
-function makeSSML(formText, fullReading) {
-  let ssml = "";
-  const allTypes = Array.from(
-    formText
-  ).map((c) => getCharType(c));
-  const uniqueTypes = Array.from(new Set(allTypes));
-  if (uniqueTypes.length === 1)
-    switch (uniqueTypes[0]) {
-      case "kanji":
-        ssml = `<speak><phoneme alphabet="x-amazon-yomigana" ph="${fullReading}">${formText}</phoneme></speak>`;
-        break;
-      case "katakana":
-        ssml = `<speak><phoneme alphabet="x-amazon-pron-kana" ph="${formText}">${formText}</phoneme></speak>`;
-        break;
-      case "hiragana":
-      default:
-        ssml = `<speak>${formText}</speak>`;
-    }
-  else {
-    const segments = splitByScript(formText);
-    let pureKanjiReading = convertToHiragana(fullReading);
-    segments.forEach((seg) => {
-      const type = getCharType(
-        seg[0]
-      );
-      if (type !== "kanji") {
-        const converted = type === "other" ? convertToHiragana(convertOtherToKatakana(seg)) : convertToHiragana(seg);
-        pureKanjiReading = pureKanjiReading.replace(converted, "");
-      }
-    });
-    const kanjiSegments = segments.filter(
-      (seg) => getCharType(seg[0]) === "kanji"
-    );
-    let readingPointer = 0;
-    const ssmlSegments = segments.map((seg) => {
-      const type = getCharType(
-        seg[0]
-      );
-      if (type === "kanji") {
-        const expectedLength = pureKanjiReading.length / kanjiSegments.length;
-        const allocated = pureKanjiReading.slice(
-          readingPointer,
-          readingPointer + Math.ceil(expectedLength)
-        );
-        readingPointer += allocated.length;
-        return `<phoneme alphabet="x-amazon-yomigana" ph="${allocated}">${seg}</phoneme>`;
-      } else if (type === "katakana")
-        return `<phoneme alphabet="x-amazon-pron-kana" ph="${seg}">${seg}</phoneme>`;
-      else if (type === "other") {
-        const katakanaReading = convertOtherToKatakana(seg);
-        return `<phoneme alphabet="x-amazon-pron-kana" ph="${katakanaReading}">${seg}</phoneme>`;
-      } else return seg;
-    });
-    ssml = `<speak>${ssmlSegments.join("")}</speak>`;
-  }
-  return ssml;
-}
-async function synthesizeSpeech(ssmlText, apiKey, options) {
+async function synthesizeSpeech(textOrSSML, apiKey, options) {
   return await new Promise(
     async (resolve, reject) => {
       try {
         const res = await fetch("https://ttsfree.com/api/v1/tts", {
           method: "POST",
           body: JSON.stringify({
-            text: ssmlText,
+            text: textOrSSML,
             ...options
           }),
           headers: {
@@ -2336,14 +2213,10 @@ export {
   isValidArray,
   isValidArrayWithFirstElement,
   isWord,
-  makeSSML,
   notSearchedForms,
   noteMap,
-  numberMap,
   regexps,
-  romajiMap,
   shuffleArray,
-  symbolMap,
   synthesizeSpeech
 };
 //# sourceMappingURL=index.mjs.map

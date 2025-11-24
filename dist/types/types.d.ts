@@ -735,12 +735,6 @@ export interface UsefulRegExps {
      */
     readonly kanji: RegExp;
     /**
-     * Matches and splits Japanese expressions into different scripts
-     *
-     * Used when creating a SSML
-     */
-    readonly scriptSplit: RegExp;
-    /**
      * Matches any character that is part of the regex syntax
      */
     readonly regExChars: RegExp;

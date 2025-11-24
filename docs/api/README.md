@@ -59,6 +59,5 @@
 - [isStringArray](functions/isStringArray.md)
 - [isValidArray](functions/isValidArray.md)
 - [isValidArrayWithFirstElement](functions/isValidArrayWithFirstElement.md)
-- [makeSSML](functions/makeSSML.md)
 - [shuffleArray](functions/shuffleArray.md)
 - [synthesizeSpeech](functions/synthesizeSpeech.md)
