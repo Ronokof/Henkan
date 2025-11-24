@@ -6,7 +6,7 @@
 
 # Interface: DictKanjiReading
 
-Defined in: [types.ts:195](https://github.com/Ronokof/Henkan/blob/d46de5651d5954bd5a0060ef65e6de181f61566f/src/types.ts#L195)
+Defined in: [types.ts:195](https://github.com/Ronokof/Henkan/blob/509701feced30c3685817fc5852353b86cc93a16/src/types.ts#L195)
 
 Kanji reading information
 
@@ -16,7 +16,7 @@ Kanji reading information
 
 > `readonly` **reading**: `string`
 
-Defined in: [types.ts:199](https://github.com/Ronokof/Henkan/blob/d46de5651d5954bd5a0060ef65e6de181f61566f/src/types.ts#L199)
+Defined in: [types.ts:199](https://github.com/Ronokof/Henkan/blob/509701feced30c3685817fc5852353b86cc93a16/src/types.ts#L199)
 
 The kanji reading (hiragana or katakana)
 
@@ -26,6 +26,6 @@ The kanji reading (hiragana or katakana)
 
 > **type**: `"ja_on"` \| `"ja_kun"`
 
-Defined in: [types.ts:203](https://github.com/Ronokof/Henkan/blob/d46de5651d5954bd5a0060ef65e6de181f61566f/src/types.ts#L203)
+Defined in: [types.ts:203](https://github.com/Ronokof/Henkan/blob/509701feced30c3685817fc5852353b86cc93a16/src/types.ts#L203)
 
 The type of reading (onyomi or kunyomi)
