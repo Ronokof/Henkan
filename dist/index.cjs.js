@@ -1134,7 +1134,7 @@ var noteMap = /* @__PURE__ */ new Map([
 var import_libxmljs2 = __toESM(require("libxmljs2"));
 var import_xml2js = __toESM(require("xml2js"));
 var import_iconv_lite = __toESM(require("iconv-lite"));
-var import_node_fetch = __toESM(require("node-fetch"));
+var import_client_polly = require("@aws-sdk/client-polly");
 var Kuroshiro = require("kuroshiro");
 var KuromojiAnalyzer = require("kuroshiro-analyzer-kuromoji");
 function capitalizeString(value) {
@@ -2002,34 +2002,17 @@ function getKanjiExtended(kanjiChar, info, dict, useJpdbWords, jmDict, svgList, 
     throw err;
   }
 }
-async function synthesizeSpeech(textOrSSML, apiKey, options) {
+async function synthesizeSpeech(client, input, options) {
   return await new Promise(
     async (resolve, reject) => {
       try {
-        const res = await (0, import_node_fetch.default)("https://ttsfree.com/api/v1/tts", {
-          method: "POST",
-          body: JSON.stringify({
-            text: textOrSSML,
-            ...options
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            apikey: apiKey
-          }
+        const command = new import_client_polly.SynthesizeSpeechCommand({
+          Text: input,
+          ...options
         });
-        if (!res.ok)
-          throw new Error(
-            `TTS request failed:
-${res.status}: ${res.statusText}`
-          );
-        const data = await res.json();
-        if (data.status !== "success" || data.mess !== "success" || data.audioData.length === 0)
-          throw new Error("Invalid TTS response data");
-        const mp3Buffer = Buffer.from(
-          data.audioData,
-          "base64"
-        );
-        resolve(mp3Buffer);
+        const response = await client.send(command);
+        const stream = response.AudioStream ? Buffer.from(await response.AudioStream.transformToByteArray()) : null;
+        resolve(stream);
       } catch (err) {
         reject(err);
       }

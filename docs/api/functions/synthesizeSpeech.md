@@ -6,46 +6,34 @@
 
 # Function: synthesizeSpeech()
 
-> **synthesizeSpeech**(`textOrSSML`, `apiKey`, `options`): `Promise`\<`Buffer`\<`ArrayBuffer`\>\>
+> **synthesizeSpeech**(`client`, `input`, `options`): `Promise`\<`Buffer`\<`ArrayBuffer`\> \| `null`\>
 
-Defined in: [utils.ts:1449](https://github.com/Ronokof/Henkan/blob/509701feced30c3685817fc5852353b86cc93a16/src/utils.ts#L1449)
+Defined in: [utils.ts:1455](https://github.com/Ronokof/Henkan/blob/ac9b24079c48cb4b4a67f536f7c7bb8478ab2963/src/utils.ts#L1455)
 
-Synthesizes text to speech audio using \[TTSFree.com\](https://ttsfree.com/).
+Synthesizes text to speech audio using \[Amazon Polly\](https://aws.amazon.com/polly/).
 
 ## Parameters
 
-### textOrSSML
+### client
+
+`PollyClient`
+
+An Amazon Polly Client instance
+
+### input
 
 `string`
 
-The text to be spoken or a SSML string
-
-### apiKey
-
-`string`
+The input in SSML format or plain text (adjust `TextType` property in `options`)
 
 ### options
 
-Other speech generation settings
+`Omit`\<`SynthesizeSpeechCommandInput`, `"Text"`\>
 
-#### voiceID
-
-`string`
-
-#### voicePitch?
-
-`number` \| `"x-high"` \| `"high"` \| `"default"` \| `"low"` \| `"x-low"`
-
-#### voiceService
-
-`"servicebin"` \| `"servicegoo"`
-
-#### voiceSpeed?
-
-`"0"` \| `"1"` \| `"2"` \| `"3"` \| `"-3"` \| `"-2"` \| `"-1"`
+Speech generation settings
 
 ## Returns
 
-`Promise`\<`Buffer`\<`ArrayBuffer`\>\>
+`Promise`\<`Buffer`\<`ArrayBuffer`\> \| `null`\>
 
-A promise resolving with a MP3 audio stream buffer
+A promise resolving with an audio stream buffer or with `null` if the generation failed

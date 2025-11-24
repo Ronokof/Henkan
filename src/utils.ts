@@ -1,7 +1,12 @@
 import libxml from "libxmljs2";
 import xml from "xml2js";
 import iconv from "iconv-lite";
-import fetch from "node-fetch";
+import {
+  PollyClient,
+  SynthesizeSpeechCommand,
+  SynthesizeSpeechCommandInput,
+  SynthesizeSpeechCommandOutput,
+} from "@aws-sdk/client-polly";
 import { noteMap, notSearchedForms, regexps } from "./constants";
 import {
   DictKanji,
@@ -1441,72 +1446,39 @@ export function getKanjiExtended(
 }
 
 /**
- * Synthesizes text to speech audio using {@link [TTSFree.com](https://ttsfree.com/)}.
- * @param textOrSSML The text to be spoken or a SSML string
- * @param options Other speech generation settings
- * @returns A promise resolving with a MP3 audio stream buffer
+ * Synthesizes text to speech audio using {@link [Amazon Polly](https://aws.amazon.com/polly/)}.
+ * @param client An Amazon Polly Client instance
+ * @param input The input in SSML format or plain text (adjust `TextType` property in `options`)
+ * @param options Speech generation settings
+ * @returns A promise resolving with an audio stream buffer or with `null` if the generation failed
  */
 export async function synthesizeSpeech(
-  textOrSSML: string,
-  apiKey: string,
-  options: {
-    voiceService: "servicebin" | "servicegoo";
-    voiceID: string;
-    voiceSpeed?: "-3" | "-2" | "-1" | "0" | "1" | "2" | "3" | undefined;
-    voicePitch?:
-      | "x-high"
-      | "high"
-      | "default"
-      | "low"
-      | "x-low"
-      | number
-      | undefined;
-  },
-): Promise<Buffer<ArrayBuffer>> {
-  return await new Promise<Buffer<ArrayBuffer>>(
+  client: PollyClient,
+  input: string,
+  options: Omit<SynthesizeSpeechCommandInput, "Text">,
+): Promise<Buffer<ArrayBuffer> | null> {
+  return await new Promise<Buffer<ArrayBuffer> | null>(
     async (
       resolve: (
-        value: Buffer<ArrayBuffer> | PromiseLike<Buffer<ArrayBuffer>>,
+        value:
+          | Buffer<ArrayBuffer>
+          | null
+          | PromiseLike<Buffer<ArrayBuffer> | null>,
       ) => void,
       reject: (reason?: any) => void,
     ) => {
       try {
-        const res = await fetch("https://ttsfree.com/api/v1/tts", {
-          method: "POST",
-          body: JSON.stringify({
-            text: textOrSSML,
-            ...options,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            apikey: apiKey,
-          },
+        const command: SynthesizeSpeechCommand = new SynthesizeSpeechCommand({
+          Text: input,
+          ...options,
         });
+        const response: SynthesizeSpeechCommandOutput =
+          await client.send(command);
+        const stream: Buffer<ArrayBuffer> | null = response.AudioStream
+          ? Buffer.from(await response.AudioStream.transformToByteArray())
+          : null;
 
-        if (!res.ok)
-          throw new Error(
-            `TTS request failed:\n${res.status}: ${res.statusText}`,
-          );
-
-        const data: { status: string; mess: string; audioData: string } =
-          (await res.json()) as {
-            status: string;
-            mess: string;
-            audioData: string;
-          };
-        if (
-          data.status !== "success" ||
-          data.mess !== "success" ||
-          data.audioData.length === 0
-        )
-          throw new Error("Invalid TTS response data");
-
-        const mp3Buffer: Buffer<ArrayBuffer> = Buffer.from(
-          data.audioData,
-          "base64",
-        );
-
-        resolve(mp3Buffer);
+        resolve(stream);
       } catch (err: unknown) {
         reject(err);
       }
