@@ -8,6 +8,6 @@
 
 > **DictName** = `"JMDict"` \| `"Kanjidic"` \| `"tanaka"` \| `"radk"` \| `"krad"`
 
-Defined in: [types.ts:9](https://github.com/Ronokof/Henkan/blob/ac9b24079c48cb4b4a67f536f7c7bb8478ab2963/src/types.ts#L9)
+Defined in: [types.ts:9](https://github.com/Ronokof/Henkan/blob/b6db5e7fec28444596a47dc5b282a83bd96b58ce/src/types.ts#L9)
 
 Standardized dictionary names
