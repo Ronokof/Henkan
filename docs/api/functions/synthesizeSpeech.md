@@ -8,7 +8,7 @@
 
 > **synthesizeSpeech**(`client`, `input`, `options`): `Promise`\<`Buffer`\<`ArrayBuffer`\> \| `null`\>
 
-Defined in: [utils.ts:1455](https://github.com/Ronokof/Henkan/blob/b6db5e7fec28444596a47dc5b282a83bd96b58ce/src/utils.ts#L1455)
+Defined in: [utils.ts:1446](https://github.com/Ronokof/Henkan/blob/4ebdd5fece8a9015d24a760168c43d42bc5db252/src/utils.ts#L1446)
 
 Synthesizes text to speech audio using \[Amazon Polly\](https://aws.amazon.com/polly/).
 

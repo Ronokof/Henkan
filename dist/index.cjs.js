@@ -1722,7 +1722,7 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
             )) && (word.common === void 0 || reading.common === true)
           ).map((reading) => reading.reading)
         );
-        const kanjiForms = word.kanjiForms ? new Set(
+        const kanjiForms = word.kanjiForms && word.kanjiForms.length > 0 ? new Set(
           word.kanjiForms.map(
             (kanjiForm) => kanjiForm.kanjiForm
           )
@@ -1730,56 +1730,49 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
         const kanjiFormExamples = [];
         const readingMatchingKanjiFormExamples = [];
         const readingExamples = [];
-        const partParts = /* @__PURE__ */ new Set();
         for (const example of examples)
-          for (const part of example.parts) {
-            const readingAsReadingMatch = part.reading !== void 0 && readings.has(part.reading) || part.inflectedForm !== void 0 && readings.has(part.inflectedForm);
-            if (kanjiForms && kanjiForms.size > 0 && kanjiForms.has(part.baseForm)) {
-              if (readingAsReadingMatch) {
-                readingMatchingKanjiFormExamples.push(example);
-                partParts.add(part.baseForm).add(part.reading);
-              } else {
-                kanjiFormExamples.push(example);
-                partParts.add(part.baseForm);
-              }
+          for (let i = 0; i < example.parts.length; i++) {
+            const part = example.parts[i];
+            const readingAsReadingMatch = part.reading !== void 0 && readings.has(part.reading);
+            const readingAsInflectedFormMatch = part.inflectedForm !== void 0 && readings.has(part.inflectedForm);
+            const referenceIDMatch = part.referenceID !== void 0 && word.id !== void 0 && part.referenceID === word.id;
+            if (kanjiForms && kanjiForms.has(part.baseForm) || referenceIDMatch) {
+              if (readingAsReadingMatch || readingAsInflectedFormMatch)
+                readingMatchingKanjiFormExamples.push({
+                  ex: example,
+                  partIndex: i
+                });
+              else kanjiFormExamples.push({ ex: example, partIndex: i });
               break;
             }
             const readingAsBaseFormMatch = readings.has(part.baseForm);
-            const referenceIDMatch = part.referenceID !== void 0 && word.id !== void 0 && part.referenceID === word.id;
-            if (readingAsBaseFormMatch || referenceIDMatch) {
-              readingExamples.push(example);
-              if (readingAsBaseFormMatch) partParts.add(part.baseForm);
-              if (referenceIDMatch) partParts.add(part.referenceID);
+            if ((readingAsBaseFormMatch || referenceIDMatch) && kanjiForms === void 0) {
+              readingExamples.push({ ex: example, partIndex: i });
               break;
             }
           }
-        const exampleSize = readingMatchingKanjiFormExamples.length + kanjiFormExamples.length + readingExamples.length;
-        const includeReadingThreshold = Math.max(
-          10,
-          Math.round(exampleSize * 0.5)
-        );
         const includeKanjiFormExamples = word.kanjiForms !== void 0;
-        const includeReadingExamples = readingExamples.length >= includeReadingThreshold && readingExamples.length >= readingMatchingKanjiFormExamples.length && readingExamples.length >= kanjiFormExamples.length || readingExamples.length >= includeReadingThreshold && word.usuallyInKana === true || word.kanjiForms === void 0;
         let wordExamples = [
-          ...readingMatchingKanjiFormExamples,
-          ...includeKanjiFormExamples ? kanjiFormExamples : [],
-          ...includeReadingExamples ? readingExamples : []
+          ...includeKanjiFormExamples ? [...readingMatchingKanjiFormExamples, ...kanjiFormExamples] : [],
+          ...!includeKanjiFormExamples ? readingExamples : []
         ];
         const glossSpecificExamples = [];
         const seenPhrases = /* @__PURE__ */ new Set();
         for (let i = 0; i < word.translations.length; i++) {
           outer: for (const example of wordExamples) {
-            if (seenPhrases.has(example.phrase)) continue;
-            for (const part of example.parts)
-              if (part.glossNumber === i + 1 && (partParts.has(part.baseForm) || includeReadingExamples && (part.reading && partParts.has(part.reading) || part.inflectedForm && partParts.has(part.inflectedForm) || part.referenceID && partParts.has(part.referenceID)))) {
-                example.glossNumber = {
+            if (seenPhrases.has(example.ex.phrase)) continue;
+            for (let j = 0; j < example.ex.parts.length; i++) {
+              const part = example.ex.parts[j];
+              if (j === example.partIndex && part.glossNumber === i + 1) {
+                example.ex.glossNumber = {
                   wordId: word.id,
                   glossNumber: i + 1
                 };
                 glossSpecificExamples.push(example);
-                seenPhrases.add(example.phrase);
+                seenPhrases.add(example.ex.phrase);
                 break outer;
               }
+            }
           }
           if (glossSpecificExamples.length === 5) break;
         }
@@ -1788,16 +1781,18 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
         else if (glossSpecificExamples.length > 0)
           wordExamples = [
             ...glossSpecificExamples,
-            ...wordExamples.filter((ex) => !seenPhrases.has(ex.phrase)).slice(0, 5 - glossSpecificExamples.length)
+            ...wordExamples.filter(
+              (ex) => !seenPhrases.has(ex.ex.phrase)
+            ).slice(0, 5 - glossSpecificExamples.length)
           ];
         if (wordExamples.length > 0)
           word.phrases = (wordExamples.length > 5 ? wordExamples.slice(0, 5) : wordExamples).map((ex) => {
             var _a;
             return {
-              phrase: (_a = ex.furigana) != null ? _a : ex.phrase,
-              translation: ex.translation,
-              originalPhrase: ex.phrase,
-              ...ex.glossNumber ? { glossNumber: ex.glossNumber } : {}
+              phrase: (_a = ex.ex.furigana) != null ? _a : ex.ex.phrase,
+              translation: ex.ex.translation,
+              originalPhrase: ex.ex.phrase,
+              ...ex.ex.glossNumber ? { glossNumber: ex.ex.glossNumber } : {}
             };
           });
       }
@@ -2035,7 +2030,7 @@ function isGrammar(entry) {
   return entry.point !== void 0 && entry.meaning !== void 0;
 }
 var createNotes = (notes, phrase) => `${phrase === true ? "<details><summary>Show translation</summary>" : ""}<ul class="note-list">${notes.map((note) => `<li class="note">${note}</li>`).join("")}</ul>${phrase === true ? "</details>" : ""}`;
-var createEntry = (entry, notes, phrase) => `<div class="entry">${entry}${notes && notes.length > 0 ? createNotes(notes, phrase) : ""}</div>`;
+var createEntry = (entry, notes, phrase, glossSpecific) => `<div class="entry${glossSpecific ? " gloss-specific" : ""}">${entry}${notes && notes.length > 0 ? createNotes(notes, phrase) : ""}</div>`;
 var noKanjiForms = '<span class="word word-kanjiform">(no kanji forms)</span>';
 function generateAnkiNote(entry) {
   if (!entry.noteID) throw new Error("Invalid note ID");
@@ -2059,7 +2054,7 @@ function generateAnkiNote(entry) {
         ).join("") : noKanjiForms
       ],
       entry.translations.map(
-        (translationEntry, index) => `<span class="word word-index${entry.phrases && entry.phrases.some((phrase, index2) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? " gloss-specific" : ""}">${index + 1}</span>${index > 2 ? "<details><summary>Show translation</summary>" : ""}${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes)}${index > 2 ? "</details>" : ""}`
+        (translationEntry, index) => `${index > 2 ? "<details><summary>Show translation</summary>" : ""}${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes, void 0, entry.phrases && entry.phrases.some((phrase, index2) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? true : void 0)}${index > 2 ? "</details>" : ""}`
       ).join(""),
       entry.kanji ? entry.kanji.map(
         (kanjiEntry) => createEntry(
@@ -2068,11 +2063,14 @@ function generateAnkiNote(entry) {
         )
       ).join("") : '<span class="word word-kanji">(no kanji)</span>',
       entry.phrases ? entry.phrases.map(
-        (phraseEntry, index) => `<span class="word word-index${entry.translations.some((_translation, index2) => index === index2 && phraseEntry.glossNumber && phraseEntry.glossNumber.wordId === entry.id && phraseEntry.glossNumber.glossNumber === index2 + 1) ? " gloss-specific" : ""}">${index + 1}</span>${createEntry(
+        (phraseEntry, index) => createEntry(
           `<span class="word word-phrase"><span class="word word-phrase-original">${phraseEntry.originalPhrase}</span><span class="word word-phrase-furigana">${phraseEntry.phrase}</span></span>`,
           [phraseEntry.translation],
-          true
-        )}`
+          true,
+          entry.translations.some(
+            (_translation, index2) => index === index2 && phraseEntry.glossNumber && phraseEntry.glossNumber.wordId === entry.id && phraseEntry.glossNumber.glossNumber === index2 + 1
+          ) ? true : void 0
+        )
       ).join("") : '<span class="word word-phrase">(no phrases) (Search on dictionaries!)</span>',
       ...entry.tags && entry.tags.length > 0 ? [
         entry.tags.map(
