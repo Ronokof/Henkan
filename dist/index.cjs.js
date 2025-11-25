@@ -1761,7 +1761,7 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
         for (let i = 0; i < word.translations.length; i++) {
           outer: for (const example of wordExamples) {
             if (seenPhrases.has(example.ex.phrase)) continue;
-            for (let j = 0; j < example.ex.parts.length; i++) {
+            for (let j = 0; j < example.ex.parts.length; j++) {
               const part = example.ex.parts[j];
               if (j === example.partIndex && part.glossNumber === i + 1) {
                 example.ex.glossNumber = {

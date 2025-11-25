@@ -1073,7 +1073,7 @@ export function getWord(
           outer: for (const example of wordExamples) {
             if (seenPhrases.has(example.ex.phrase)) continue;
 
-            for (let j: number = 0; j < example.ex.parts.length; i++) {
+            for (let j: number = 0; j < example.ex.parts.length; j++) {
               const part: ExamplePart = example.ex.parts[j]!;
 
               if (j === example.partIndex && part.glossNumber === i + 1) {
