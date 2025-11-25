@@ -8,7 +8,7 @@
 
 > **isValidArrayWithFirstElement**(`arg`): `arg is any[]`
 
-Defined in: [utils.ts:64](https://github.com/Ronokof/Henkan/blob/4452f7914507d8cee23233e7ae299d42b0bd957e/src/utils.ts#L64)
+Defined in: [utils.ts:64](https://github.com/Ronokof/Henkan/blob/6fa51a1eeac7860abfeead1ce7cba88bd49d5ed5/src/utils.ts#L64)
 
 Checks if the argument is an array and has at least one element.
 
