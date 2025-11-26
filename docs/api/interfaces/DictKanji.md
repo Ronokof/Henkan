@@ -6,7 +6,7 @@
 
 # Interface: DictKanji
 
-Defined in: [types.ts:243](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L243)
+Defined in: [types.ts:243](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L243)
 
 KANJIDIC2 entry (kanji)
 
@@ -18,7 +18,7 @@ Equivalent to the `character` KANJIDIC2 element *(excluding some subelements)*
 
 > `optional` **isKokuji**: `true`
 
-Defined in: [types.ts:259](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L259)
+Defined in: [types.ts:259](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L259)
 
 Whether or not the kanji is kokuji
 
@@ -28,7 +28,7 @@ Whether or not the kanji is kokuji
 
 > `readonly` **kanji**: `string`
 
-Defined in: [types.ts:247](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L247)
+Defined in: [types.ts:247](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L247)
 
 The kanji character
 
@@ -38,7 +38,7 @@ The kanji character
 
 > `optional` **misc**: [`DictKanjiMisc`](DictKanjiMisc.md)
 
-Defined in: [types.ts:251](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L251)
+Defined in: [types.ts:251](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L251)
 
 The miscellaneous information about the kanji
 
@@ -48,6 +48,6 @@ The miscellaneous information about the kanji
 
 > **readingMeaning**: [`DictKanjiReadingMeaning`](DictKanjiReadingMeaning.md)[]
 
-Defined in: [types.ts:255](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L255)
+Defined in: [types.ts:255](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L255)
 
 The "readings-meanings" groups and nanori readings of the kanji
