@@ -6,7 +6,7 @@
 
 # Interface: DictKanjiForm
 
-Defined in: [types.ts:16](https://github.com/Ronokof/Henkan/blob/6fa51a1eeac7860abfeead1ce7cba88bd49d5ed5/src/types.ts#L16)
+Defined in: [types.ts:16](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L16)
 
 Word kanji form information
 
@@ -18,7 +18,7 @@ Equivalent to the `k_ele` JMdict element
 
 > `optional` **commonness**: `string`[]
 
-Defined in: [types.ts:32](https://github.com/Ronokof/Henkan/blob/6fa51a1eeac7860abfeead1ce7cba88bd49d5ed5/src/types.ts#L32)
+Defined in: [types.ts:32](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L32)
 
 Priority codes
 
@@ -32,7 +32,7 @@ Priority codes
 
 > `readonly` **form**: `string`
 
-Defined in: [types.ts:20](https://github.com/Ronokof/Henkan/blob/6fa51a1eeac7860abfeead1ce7cba88bd49d5ed5/src/types.ts#L20)
+Defined in: [types.ts:20](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L20)
 
 The kanji form of the word
 
@@ -42,7 +42,7 @@ The kanji form of the word
 
 > `optional` **notes**: `string`[]
 
-Defined in: [types.ts:26](https://github.com/Ronokof/Henkan/blob/6fa51a1eeac7860abfeead1ce7cba88bd49d5ed5/src/types.ts#L26)
+Defined in: [types.ts:26](https://github.com/Ronokof/Henkan/blob/e4037c84f60cd22638714fc015cb9ad541bcea68/src/types.ts#L26)
 
 Other information about the kanji form
 

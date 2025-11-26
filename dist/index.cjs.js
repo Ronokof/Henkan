@@ -1274,9 +1274,9 @@ function convertJMdict(xmlString, examples) {
           if (examples) {
             const readings2 = new Set(
               entryObj.readings.filter(
-                (reading) => (!reading.notes || !reading.notes.some(
+                (reading) => reading.notes === void 0 || !reading.notes.some(
                   (note) => notSearchedForms.has(note)
-                )) && (entryObj.isCommon === void 0 || reading.commonness && reading.commonness.length > 0)
+                ) || reading.commonness && reading.commonness.length > 0
               ).map((reading) => reading.reading)
             );
             const kanjiForms2 = entryObj.kanjiForms ? new Set(
@@ -1584,7 +1584,10 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
         ...deckPath ? { deckPath } : {},
         tags: []
       };
-      if (dictWord.isCommon === true) word.common = true;
+      if (dictWord.isCommon === true) {
+        word.common = true;
+        word.tags.push("word::common");
+      }
       if (dictWord.kanjiForms)
         word.kanjiForms = dictWord.kanjiForms.map(
           (dictKanjiForm) => ({
@@ -1635,12 +1638,16 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
           (translation) => {
             if (typeof translation === "string") return translation;
             else {
-              if (translation.type === "lit")
+              if (translation.type === "lit") {
                 translationTypes.push("Literal meaning");
-              else if (translation.type === "expl")
+                word.tags.push("word::literal_meaning");
+              } else if (translation.type === "expl") {
                 translationTypes.push("Explanation");
-              else if (translation.type === "tm")
+                word.tags.push("word::explanation");
+              } else if (translation.type === "tm") {
                 translationTypes.push("Trademark");
+                word.tags.push("word::trademark");
+              }
               return translation.translation;
             }
           }
@@ -1690,7 +1697,10 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
           notes
         };
       });
-      if (dictWord.usuallyInKana === true) word.usuallyInKana = true;
+      if (dictWord.usuallyInKana === true) {
+        word.usuallyInKana = true;
+        word.tags.push("word::usually_in_kana_for_all_senses");
+      }
       if (kanjiDic && word.kanjiForms) {
         word.kanji = [];
         for (const kanjiForm of word.kanjiForms)
@@ -1712,20 +1722,32 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
               });
             }
           }
-        if (word.kanji.length === 0) delete word.kanji;
+        if (word.kanji.length === 0) {
+          delete word.kanji;
+          word.tags.push("word::no_kanji");
+        }
       }
       if (dictWord.hasPhrases === true && examples) {
         const readings = new Set(
           word.readings.filter(
-            (reading) => (!reading.notes || !reading.notes.some(
+            (reading) => reading.notes === void 0 || !reading.notes.some(
               (note) => notSearchedForms.has(note)
-            )) && (word.common === void 0 || reading.common === true)
+            ) || reading.common === true
           ).map((reading) => reading.reading)
         );
+        const existValidKf = word.kanjiForms && word.kanjiForms.length > 0 ? word.kanjiForms.some(
+          (kf) => kf.notes === void 0 || !kf.notes.some(
+            (note) => notSearchedForms.has(note)
+          ) || kf.common === true
+        ) : void 0;
         const kanjiForms = word.kanjiForms && word.kanjiForms.length > 0 ? new Set(
-          word.kanjiForms.map(
-            (kanjiForm) => kanjiForm.kanjiForm
-          )
+          word.kanjiForms.filter((kanjiForm) => {
+            if (existValidKf === true)
+              return kanjiForm.notes === void 0 || !kanjiForm.notes.some(
+                (note) => notSearchedForms.has(note)
+              ) || kanjiForm.common === true;
+            else return true;
+          }).map((kanjiForm) => kanjiForm.kanjiForm)
         ) : void 0;
         const kanjiFormExamples = [];
         const readingMatchingKanjiFormExamples = [];
@@ -1785,7 +1807,7 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
               (ex) => !seenPhrases.has(ex.ex.phrase)
             ).slice(0, 5 - glossSpecificExamples.length)
           ];
-        if (wordExamples.length > 0)
+        if (wordExamples.length > 0) {
           word.phrases = (wordExamples.length > 5 ? wordExamples.slice(0, 5) : wordExamples).map((ex) => {
             var _a;
             return {
@@ -1795,6 +1817,10 @@ function getWord(dict, id, kanjiDic, examples, dictWord, noteTypeName, deckPath)
               ...ex.ex.glossNumber ? { glossNumber: ex.ex.glossNumber } : {}
             };
           });
+          word.tags.push("word::has_phrases");
+          if (glossSpecificExamples.length > 0)
+            word.tags.push("word::has_meaning-specific_phrases");
+        }
       }
       return word;
     } else throw new Error(`Word${id ? ` ${id}` : ""} not found`);
@@ -2036,26 +2062,50 @@ function generateAnkiNote(entry) {
   if (!entry.noteID) throw new Error("Invalid note ID");
   const fields = [];
   if (isWord(entry)) {
-    if (!entry.translations) throw new Error(`Invalid word: ${entry.noteID}`);
+    if (!entry.translations || entry.readings.length === 0)
+      throw new Error(`Invalid word: ${entry.noteID}`);
+    const firstReading = createEntry(
+      `<span class="word word-reading">${entry.readings[0].reading}${entry.readings[0].audio !== void 0 ? `<br>[sound:${entry.readings[0].audio}]` : ""}</span>`,
+      entry.readings[0].notes
+    );
+    const otherReadings = entry.readings.length > 1 ? `<details><summary>Show other readings</summary>${entry.readings.slice(1).map(
+      (readingEntry) => createEntry(
+        `<span class="word word-reading">${readingEntry.reading}${readingEntry.audio !== void 0 ? `<br>[sound:${readingEntry.audio}]` : ""}</span>`,
+        readingEntry.notes
+      )
+    ).join("")}</details>` : void 0;
+    const readingsField = [firstReading, ...otherReadings != null ? otherReadings : []].join(
+      ""
+    );
+    const firstKanjiForm = entry.kanjiForms ? createEntry(
+      `<span class="word word-kanjiform"><ruby><rb>${entry.kanjiForms[0].kanjiForm}</rb><rt>${entry.readings[0].reading}</rt></ruby></span>`,
+      entry.kanjiForms[0].notes
+    ) : void 0;
+    const otherKanjiForms = entry.kanjiForms && entry.kanjiForms.length > 1 ? `<details><summary>Show other kanji forms</summary>${entry.kanjiForms.slice(1).map((kanjiFormEntry) => {
+      const restrictedReading = entry.readings.find(
+        (r) => r.notes && r.notes.includes(
+          `Reading restricted to ${kanjiFormEntry.kanjiForm}`
+        )
+      );
+      return `${createEntry(`<span class="word word-kanjiform">${restrictedReading ? "<ruby><rb>" : ""}${kanjiFormEntry.kanjiForm}${restrictedReading ? `</rb><rt>${restrictedReading.reading}</rt></ruby>` : ""}</span>`, kanjiFormEntry.notes)}`;
+    }).join("")}</details>` : void 0;
+    const kanjiFormsField = firstKanjiForm ? [firstKanjiForm, ...otherKanjiForms != null ? otherKanjiForms : []].join("") : void 0;
+    const firstThreeTranslations = entry.translations.slice(0, 3).map(
+      (translationEntry, index) => `${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes, void 0, entry.phrases && entry.phrases.some((phrase, index2) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? true : void 0)}`
+    ).join("");
+    const otherTranslations = entry.translations.length > 3 ? `<details><summary>Show other translations</summary>${entry.translations.map(
+      (translationEntry, index) => index > 2 ? `${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes, void 0, entry.phrases && entry.phrases.some((phrase, index2) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? true : void 0)}` : "null"
+    ).filter((translation) => translation !== "null").join("")}</details>` : void 0;
+    const translationsField = [
+      firstThreeTranslations,
+      ...otherTranslations != null ? otherTranslations : []
+    ].join("");
     fields.push(
-      ...entry.kanjiForms && !entry.usuallyInKana ? [
-        entry.kanjiForms.map(
-          (kanjiFormEntry, index) => `${index > 0 ? "<details><summary>Show kanji form</summary>" : ""}${createEntry(`<span class="word word-kanjiform">${index === 0 ? "<ruby><rb>" : ""}${kanjiFormEntry.kanjiForm}${index === 0 ? `</rb><rt>${entry.readings[0].reading}</rt></ruby>` : ""}</span>`, kanjiFormEntry.notes)}${index > 0 ? "</details>" : ""}`
-        ).join(""),
-        entry.readings.map(
-          (readingEntry, index) => `${index > 0 ? "<details><summary>Show reading</summary>" : ""}${createEntry(`<span class="word word-reading">${readingEntry.reading}${readingEntry.audio !== void 0 ? `<br>[sound:${readingEntry.audio}]` : ""}</span>`, readingEntry.notes)}${index > 0 ? "</details>" : ""}`
-        ).join("")
-      ] : [
-        entry.readings.map(
-          (readingEntry, index) => `${index > 0 ? "<details><summary>Show reading</summary>" : ""}${createEntry(`<span class="word word-reading">${readingEntry.reading}${readingEntry.audio !== void 0 ? `<br>[sound:${readingEntry.audio}]` : ""}</span>`, readingEntry.notes)}${index > 0 ? "</details>" : ""}`
-        ).join(""),
-        entry.kanjiForms ? entry.kanjiForms.map(
-          (kanjiFormEntry, index) => `${index > 0 ? "<details><summary>Show kanji form</summary>" : ""}${createEntry(`<span class="word word-kanjiform">${index === 0 ? "<ruby><rb>" : ""}${kanjiFormEntry.kanjiForm}${index === 0 ? `</rb><rt>${entry.readings[0].reading}</rt></ruby>` : ""}</span>`, kanjiFormEntry.notes)}${index > 0 ? "</details>" : ""}`
-        ).join("") : noKanjiForms
+      ...entry.kanjiForms && kanjiFormsField && !entry.usuallyInKana ? [kanjiFormsField, readingsField] : [
+        readingsField,
+        entry.kanjiForms && kanjiFormsField ? kanjiFormsField : noKanjiForms
       ],
-      entry.translations.map(
-        (translationEntry, index) => `${index > 2 ? "<details><summary>Show translation</summary>" : ""}${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes, void 0, entry.phrases && entry.phrases.some((phrase, index2) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? true : void 0)}${index > 2 ? "</details>" : ""}`
-      ).join(""),
+      translationsField,
       entry.kanji ? entry.kanji.map(
         (kanjiEntry) => createEntry(
           `<span class="word word-kanji">${kanjiEntry.kanji}${kanjiEntry.meanings === void 0 ? " (no meanings)" : ""}</span>`,
