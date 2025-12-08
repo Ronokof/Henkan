@@ -53,7 +53,7 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "npm run test:coverage",
+    "test:ci": "vitest run --coverage",
     "clean": "rimraf dist",
     "build:types": "tsc -p tsconfig.types.json",
     "build:cjs": "node ./scripts/build-esbuild.cjs cjs",

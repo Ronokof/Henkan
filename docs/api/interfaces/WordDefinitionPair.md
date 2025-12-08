@@ -6,7 +6,7 @@
 
 # Interface: WordDefinitionPair
 
-Defined in: [types.ts:401](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L401)
+Defined in: [types.ts:401](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L401)
 
 A word paired with its definitions
 
@@ -16,7 +16,7 @@ A word paired with its definitions
 
 > **definitions**: [`Definition`](Definition.md)[]
 
-Defined in: [types.ts:409](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L409)
+Defined in: [types.ts:409](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L409)
 
 The word definitions
 
@@ -26,6 +26,6 @@ The word definitions
 
 > **wordID**: `string`
 
-Defined in: [types.ts:405](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L405)
+Defined in: [types.ts:405](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L405)
 
 The word's JMdict entry ID

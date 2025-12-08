@@ -6,7 +6,7 @@
 
 # Interface: Kana
 
-Defined in: [types.ts:722](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L722)
+Defined in: [types.ts:722](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L722)
 
 Kana information
 
@@ -20,7 +20,7 @@ Kana information
 
 > `optional` **audio**: `string`
 
-Defined in: [types.ts:734](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L734)
+Defined in: [types.ts:734](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L734)
 
 The filename of an audio file for the kana reading
 
@@ -30,7 +30,7 @@ The filename of an audio file for the kana reading
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:446](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L446)
+Defined in: [types.ts:446](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L446)
 
 The full path of the Anki deck
 
@@ -44,7 +44,7 @@ The full path of the Anki deck
 
 > `optional` **doNotCreateNote**: `true`
 
-Defined in: [types.ts:454](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L454)
+Defined in: [types.ts:454](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L454)
 
 Whether or not this entry should be converted into an Anki note
 
@@ -58,7 +58,7 @@ Whether or not this entry should be converted into an Anki note
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: [types.ts:438](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L438)
+Defined in: [types.ts:438](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L438)
 
 ID used for the Anki note ID
 
@@ -72,7 +72,7 @@ ID used for the Anki note ID
 
 > `readonly` **kana**: `string`
 
-Defined in: [types.ts:726](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L726)
+Defined in: [types.ts:726](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L726)
 
 The kana character
 
@@ -82,7 +82,7 @@ The kana character
 
 > `readonly` `optional` **noteID**: `` `kana_${string}` ``
 
-Defined in: [types.ts:434](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L434)
+Defined in: [types.ts:434](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L434)
 
 ID used for the resulting Anki note
 
@@ -96,7 +96,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:442](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L442)
+Defined in: [types.ts:442](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L442)
 
 Anki note type name
 
@@ -110,7 +110,7 @@ Anki note type name
 
 > **reading**: `string`
 
-Defined in: [types.ts:730](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L730)
+Defined in: [types.ts:730](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L730)
 
 The romaji reading of the kana
 
@@ -120,7 +120,7 @@ The romaji reading of the kana
 
 > `optional` **svg**: `string`
 
-Defined in: [types.ts:738](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L738)
+Defined in: [types.ts:738](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L738)
 
 The kana SVG filename
 
@@ -130,7 +130,7 @@ The kana SVG filename
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:450](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L450)
+Defined in: [types.ts:450](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L450)
 
 Tags generated based on the entry's information
 

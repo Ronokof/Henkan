@@ -6,7 +6,7 @@
 
 # Interface: TanakaExample
 
-Defined in: [types.ts:353](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L353)
+Defined in: [types.ts:353](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L353)
 
 Tanaka Corpus `examples.utf` examples
 
@@ -16,7 +16,7 @@ Tanaka Corpus `examples.utf` examples
 
 > `readonly` `optional` **furigana**: `string`
 
-Defined in: [types.ts:373](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L373)
+Defined in: [types.ts:373](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L373)
 
 The Japanese phrase, with furigana attached
 
@@ -26,7 +26,7 @@ The Japanese phrase, with furigana attached
 
 > `optional` **glossNumber**: [`GlossSpecificNumber`](GlossSpecificNumber.md)
 
-Defined in: [types.ts:377](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L377)
+Defined in: [types.ts:377](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L377)
 
 The word-gloss pair
 
@@ -36,7 +36,7 @@ The word-gloss pair
 
 > `readonly` **id**: `` `${number}_${number}` ``
 
-Defined in: [types.ts:357](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L357)
+Defined in: [types.ts:357](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L357)
 
 The ID of the example
 
@@ -46,7 +46,7 @@ The ID of the example
 
 > `readonly` **parts**: [`ExamplePart`](ExamplePart.md)[]
 
-Defined in: [types.ts:369](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L369)
+Defined in: [types.ts:369](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L369)
 
 The `B` section, split into parts
 
@@ -56,7 +56,7 @@ The `B` section, split into parts
 
 > `readonly` **phrase**: `string`
 
-Defined in: [types.ts:361](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L361)
+Defined in: [types.ts:361](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L361)
 
 The Japanese phrase (found in the `A` section, **before** the tab)
 
@@ -66,6 +66,6 @@ The Japanese phrase (found in the `A` section, **before** the tab)
 
 > `readonly` **translation**: `string`
 
-Defined in: [types.ts:365](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L365)
+Defined in: [types.ts:365](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L365)
 
 The English translation of the phrase (found in the `A` section, **after** the tab)

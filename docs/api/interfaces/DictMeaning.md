@@ -6,7 +6,7 @@
 
 # Interface: DictMeaning
 
-Defined in: [types.ts:75](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L75)
+Defined in: [types.ts:75](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L75)
 
 Word meaning/sense information
 
@@ -18,7 +18,7 @@ Equivalent to the `sense` JMdict element
 
 > `optional` **antonyms**: `string`[]
 
-Defined in: [types.ts:101](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L101)
+Defined in: [types.ts:101](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L101)
 
 References to antonyms of the word *(when used with this meaning)*
 
@@ -28,7 +28,7 @@ References to antonyms of the word *(when used with this meaning)*
 
 > `optional` **dialects**: `string`[]
 
-Defined in: [types.ts:123](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L123)
+Defined in: [types.ts:123](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L123)
 
 Regional dialects the meaning is restricted to
 
@@ -42,7 +42,7 @@ Regional dialects the meaning is restricted to
 
 > `optional` **fields**: `string`[]
 
-Defined in: [types.ts:107](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L107)
+Defined in: [types.ts:107](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L107)
 
 Field of application of the word *(when used with this meaning)*
 
@@ -56,7 +56,7 @@ Field of application of the word *(when used with this meaning)*
 
 > `optional` **info**: `string`[]
 
-Defined in: [types.ts:111](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L111)
+Defined in: [types.ts:111](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L111)
 
 Additional information about the meaning
 
@@ -66,7 +66,7 @@ Additional information about the meaning
 
 > `optional` **kanjiFormRestrictions**: `string`[]
 
-Defined in: [types.ts:93](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L93)
+Defined in: [types.ts:93](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L93)
 
 Kanji forms the meaning is restricted to
 
@@ -76,7 +76,7 @@ Kanji forms the meaning is restricted to
 
 > `optional` **misc**: `string`[]
 
-Defined in: [types.ts:117](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L117)
+Defined in: [types.ts:117](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L117)
 
 Other relevant information about the meaning
 
@@ -90,7 +90,7 @@ Other relevant information about the meaning
 
 > `optional` **partOfSpeech**: `string`[]
 
-Defined in: [types.ts:81](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L81)
+Defined in: [types.ts:81](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L81)
 
 Part of speech information
 
@@ -104,7 +104,7 @@ Part of speech information
 
 > `optional` **readingRestrictions**: `string`[]
 
-Defined in: [types.ts:97](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L97)
+Defined in: [types.ts:97](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L97)
 
 Readings the meaning is restricted to
 
@@ -114,7 +114,7 @@ Readings the meaning is restricted to
 
 > `optional` **references**: `string`[]
 
-Defined in: [types.ts:89](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L89)
+Defined in: [types.ts:89](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L89)
 
 Cross-references to other similar/related words *(when used with this meaning)*
 
@@ -124,6 +124,6 @@ Cross-references to other similar/related words *(when used with this meaning)*
 
 > `optional` **translations**: [`DictTranslation`](../type-aliases/DictTranslation.md)[]
 
-Defined in: [types.ts:85](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L85)
+Defined in: [types.ts:85](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/types.ts#L85)
 
 Word glosses
