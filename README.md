@@ -4,7 +4,7 @@ A Node.JS library that helps you convert any dictionary from [EDRDG](https://www
 
 > The library is used for the [Full Japanese Study Deck](https://ankiweb.net/shared/info/1407096987), so some features might be tailored specifically to the deck.
 
-[![npm](https://img.shields.io/npm/v/henkan.svg)](https://www.npmjs.com/package/henkan) [![license](https://img.shields.io/github/license/Ronokof/Henkan)]()
+[![npm](https://img.shields.io/npm/v/henkan.svg)](https://www.npmjs.com/package/henkan) [![license](https://img.shields.io/github/license/Ronokof/Henkan)](https://github.com/Ronokof/Henkan/blob/main/LICENSE.md) ![CI](https://github.com/Ronokof/Henkan/actions/workflows/ci.yml/badge.svg) [![codecov](https://codecov.io/gh/Ronokof/Henkan/branch/main/graph/badge.svg)](https://codecov.io/gh/Ronokof/Henkan)
 
 ---
 
