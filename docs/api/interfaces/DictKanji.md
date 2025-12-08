@@ -6,7 +6,7 @@
 
 # Interface: DictKanji
 
-Defined in: [types.ts:243](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L243)
+Defined in: [types.ts:249](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L249)
 
 KANJIDIC2 entry (kanji)
 
@@ -18,7 +18,7 @@ Equivalent to the `character` KANJIDIC2 element *(excluding some subelements)*
 
 > `optional` **isKokuji**: `true`
 
-Defined in: [types.ts:259](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L259)
+Defined in: [types.ts:265](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L265)
 
 Whether or not the kanji is kokuji
 
@@ -28,7 +28,7 @@ Whether or not the kanji is kokuji
 
 > `readonly` **kanji**: `string`
 
-Defined in: [types.ts:247](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L247)
+Defined in: [types.ts:253](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L253)
 
 The kanji character
 
@@ -38,16 +38,16 @@ The kanji character
 
 > `optional` **misc**: [`DictKanjiMisc`](DictKanjiMisc.md)
 
-Defined in: [types.ts:251](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L251)
+Defined in: [types.ts:257](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L257)
 
 The miscellaneous information about the kanji
 
 ***
 
-### readingMeaning
+### readingMeaning?
 
-> **readingMeaning**: [`DictKanjiReadingMeaning`](DictKanjiReadingMeaning.md)[]
+> `optional` **readingMeaning**: [`DictKanjiReadingMeaning`](DictKanjiReadingMeaning.md)[]
 
-Defined in: [types.ts:255](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L255)
+Defined in: [types.ts:261](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L261)
 
 The "readings-meanings" groups and nanori readings of the kanji

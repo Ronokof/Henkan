@@ -6,9 +6,9 @@
 
 # Function: getWord()
 
-> **getWord**(`dict?`, `id?`, `kanjiDic?`, `examples?`, `dictWord?`, `noteTypeName?`, `deckPath?`): [`Word`](../interfaces/Word.md)
+> **getWord**(`dict?`, `id?`, `kanjiDic?`, `examples?`, `definitions?`, `dictWord?`, `noteTypeName?`, `deckPath?`): [`Word`](../interfaces/Word.md)
 
-Defined in: [utils.ts:801](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/utils.ts#L801)
+Defined in: [utils.ts:1263](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/utils.ts#L1263)
 
 Transforms a converted `JMdict` entry into a more readable format, by providing either its [id](#getword) or the [dictWord](#getword) object directly.
 
@@ -37,6 +37,12 @@ An array of converted `KANJIDIC` entries
 [`TanakaExample`](../interfaces/TanakaExample.md)[]
 
 An array of converted `Tanaka Corpus` examples
+
+### definitions?
+
+[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
+
+An array of `ja.wiktionary.org` word definitions
 
 ### dictWord?
 

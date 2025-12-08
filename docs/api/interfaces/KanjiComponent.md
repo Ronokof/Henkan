@@ -6,7 +6,7 @@
 
 # Interface: KanjiComponent
 
-Defined in: [types.ts:496](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L496)
+Defined in: [types.ts:534](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L534)
 
 Kanji component information
 
@@ -16,7 +16,7 @@ Kanji component information
 
 > `readonly` **component**: `string`
 
-Defined in: [types.ts:500](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L500)
+Defined in: [types.ts:538](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L538)
 
 The component character
 
@@ -26,6 +26,6 @@ The component character
 
 > `optional` **meaning**: `string`
 
-Defined in: [types.ts:504](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/types.ts#L504)
+Defined in: [types.ts:542](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/types.ts#L542)
 
 The meaning of the component

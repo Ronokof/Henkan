@@ -1,3 +1,7 @@
+const eslintPrettier = require('eslint-plugin-prettier');
+const eslintParser = require('@typescript-eslint/parser');
+const eslintPlugin = require('@typescript-eslint/eslint-plugin')
+
 module.exports = [
   {
     ignores: ['dist/**', 'node_modules/**']
@@ -9,7 +13,7 @@ module.exports = [
       sourceType: 'module'
     },
     plugins: {
-      prettier: require('eslint-plugin-prettier')
+      prettier: eslintPrettier
     },
     rules: {
       'prettier/prettier': 'error',
@@ -17,9 +21,9 @@ module.exports = [
     }
   },
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
     languageOptions: {
-      parser: require('@typescript-eslint/parser'),
+      parser: eslintParser,
       parserOptions: {
         project: ['./tsconfig.json'],
         tsconfigRootDir: __dirname,
@@ -28,8 +32,32 @@ module.exports = [
       }
     },
     plugins: {
-      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
-      prettier: require('eslint-plugin-prettier')
+      '@typescript-eslint': eslintPlugin,
+      prettier: eslintPrettier
+    },
+    rules: {
+      'prettier/prettier': 'error',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }
+      ]
+    }
+  },
+  {
+    files: ['test/**/*.ts', 'test/**/*.tsx'],
+    languageOptions: {
+      parser: eslintParser,
+      parserOptions: {
+        project: ['./test/tsconfig.json'],
+        tsconfigRootDir: __dirname,
+        ecmaVersion: 'latest',
+        sourceType: 'module'
+      }
+    },
+    plugins: {
+      '@typescript-eslint': eslintPlugin,
+      prettier: eslintPrettier
     },
     rules: {
       'prettier/prettier': 'error',

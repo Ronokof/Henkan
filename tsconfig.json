@@ -34,7 +34,8 @@
         "declarationMap": true,
         "preserveConstEnums": true,
         "outDir": "dist",
-        
+        "sourceMap": true,
+        "inlineSources": true,
 
         // JavaScript support
         "allowJs": false,

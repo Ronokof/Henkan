@@ -6,25 +6,19 @@
 
 # Function: getKanjiExtended()
 
-> **getKanjiExtended**(`kanjiChar`, `info`, `dict`, `useJpdbWords?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md)
+> **getKanjiExtended**(`info`, `dict`, `kanjiChar?`, `dictKanji?`, `useWords?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md)
 
-Defined in: [utils.ts:1415](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/utils.ts#L1415)
+Defined in: [utils.ts:1922](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/utils.ts#L1922)
 
 Same as [getKanji](getKanji.md), but with possible extra info.
 
 ## Parameters
 
-### kanjiChar
-
-`string`
-
-The kanji character
-
 ### info
 
 [`Kanji`](../interfaces/Kanji.md)
 
-Additional info from `jpdb.io` for the kanji (mnemonic, components, words)
+Additional info for the kanji (mnemonic, components, words)
 
 ### dict
 
@@ -32,11 +26,23 @@ Additional info from `jpdb.io` for the kanji (mnemonic, components, words)
 
 An array of converted `KANJIDIC` entries
 
-### useJpdbWords?
+### kanjiChar?
+
+`string`
+
+The kanji character
+
+### dictKanji?
+
+[`DictKanji`](../interfaces/DictKanji.md)
+
+A [DictKanji](../interfaces/DictKanji.md) object
+
+### useWords?
 
 `true`
 
-Whether or not to use the `jpdb.io` provided words (if present) instead of other words from `JMdict`
+Whether or not to use the words provided in the `info` object (if present) instead of other words from `JMdict`
 
 ### jmDict?
 

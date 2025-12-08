@@ -6,6 +6,7 @@
 
 ## Interfaces
 
+- [Definition](interfaces/Definition.md)
 - [DictKanji](interfaces/DictKanji.md)
 - [DictKanjiForm](interfaces/DictKanjiForm.md)
 - [DictKanjiMisc](interfaces/DictKanjiMisc.md)
@@ -34,11 +35,13 @@
 - [Translation](interfaces/Translation.md)
 - [UsefulRegExps](interfaces/UsefulRegExps.md)
 - [Word](interfaces/Word.md)
+- [WordDefinitionPair](interfaces/WordDefinitionPair.md)
 
 ## Type Aliases
 
 - [Dict](type-aliases/Dict.md)
 - [DictName](type-aliases/DictName.md)
+- [DictTranslation](type-aliases/DictTranslation.md)
 - [EntryType](type-aliases/EntryType.md)
 - [JLPT](type-aliases/JLPT.md)
 - [Result](type-aliases/Result.md)
@@ -46,6 +49,7 @@
 ## Functions
 
 - [capitalizeString](functions/capitalizeString.md)
+- [convertJawiktionary](functions/convertJawiktionary.md)
 - [convertJMdict](functions/convertJMdict.md)
 - [convertKanjiDic](functions/convertKanjiDic.md)
 - [convertKradFile](functions/convertKradFile.md)
@@ -56,6 +60,7 @@
 - [getKanji](functions/getKanji.md)
 - [getKanjiExtended](functions/getKanjiExtended.md)
 - [getWord](functions/getWord.md)
+- [getWordDefinitions](functions/getWordDefinitions.md)
 - [isStringArray](functions/isStringArray.md)
 - [isValidArray](functions/isValidArray.md)
 - [isValidArrayWithFirstElement](functions/isValidArrayWithFirstElement.md)

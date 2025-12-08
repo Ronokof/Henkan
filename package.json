@@ -1,6 +1,6 @@
 {
   "name": "henkan",
-  "version": "0.9.3",
+  "version": "1.0.0",
   "description": "A Node.JS library that helps you convert any dictionary from EDRDG, transform their entries into more user-friendly schemas and create Anki notes from them.",
   "keywords": [
     "fjsd",
@@ -50,31 +50,38 @@
     "SECURITY.md"
   ],
   "scripts": {
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
+    "test:ci": "npm run test:coverage",
     "clean": "rimraf dist",
     "build:types": "tsc -p tsconfig.types.json",
     "build:cjs": "node ./scripts/build-esbuild.cjs cjs",
     "build:esm": "node ./scripts/build-esbuild.cjs esm",
     "build": "npm run clean && npm run build:types && npm run build:esm && npm run build:cjs",
-    "lint": "eslint 'src/**/*.{ts,tsx}' --fix",
+    "lint": "eslint 'src/**/*.{ts,tsx}' --fix && eslint 'test/**/*.{ts,tsx}' --fix",
     "prepare": "npm run lint && npm run build && npm run docs:api",
     "docs:api": "typedoc --plugin typedoc-plugin-markdown --out docs/api src/index.ts --readme none --excludePrivate --excludeProtected --excludeNotDocumented --hideGenerator"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
     "@types/xml2js": "^0.4.14",
-    "@typescript-eslint/eslint-plugin": "^8.48.0",
-    "@typescript-eslint/parser": "^8.48.0",
-    "esbuild": "^0.27.0",
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/parser": "^8.49.0",
+    "@vitest/coverage-v8": "^4.0.15",
+    "esbuild": "^0.27.1",
     "eslint": "^9.39.1",
     "eslint-plugin-prettier": "^5.5.4",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.4",
     "rimraf": "^6.1.2",
-    "typedoc": "^0.28.14",
+    "typedoc": "^0.28.15",
     "typedoc-plugin-markdown": "^4.9.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15"
   },
   "dependencies": {
-    "@aws-sdk/client-polly": "^3.940.0",
+    "@aws-sdk/client-polly": "^3.946.0",
+    "fflate": "^0.8.2",
     "iconv-lite": "^0.7.0",
     "kuroshiro": "^1.2.0",
     "kuroshiro-analyzer-kuromoji": "^1.1.0",

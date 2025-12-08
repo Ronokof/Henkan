@@ -6,25 +6,31 @@
 
 # Function: getKanji()
 
-> **getKanji**(`kanjiChar`, `dict`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md)
+> **getKanji**(`dict`, `kanjiChar?`, `dictKanji?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md)
 
-Defined in: [utils.ts:1176](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/utils.ts#L1176)
+Defined in: [utils.ts:1667](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/utils.ts#L1667)
 
 Transforms a converted `KANJIDIC` entry into a more readable format
 
 ## Parameters
-
-### kanjiChar
-
-`string`
-
-The kanji character
 
 ### dict
 
 [`DictKanji`](../interfaces/DictKanji.md)[]
 
 An array of converted `KANJIDIC` entries
+
+### kanjiChar?
+
+`string`
+
+The kanji character
+
+### dictKanji?
+
+[`DictKanji`](../interfaces/DictKanji.md)
+
+A [DictKanji](../interfaces/DictKanji.md) object
 
 ### jmDict?
 

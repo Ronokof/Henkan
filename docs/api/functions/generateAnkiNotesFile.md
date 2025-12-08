@@ -6,9 +6,9 @@
 
 # Function: generateAnkiNotesFile()
 
-> **generateAnkiNotesFile**(`list`): `string` \| `undefined`
+> **generateAnkiNotesFile**(`list`): `string`
 
-Defined in: [utils.ts:1929](https://github.com/Ronokof/Henkan/blob/023926521f50f475b03a207d5b9f30d7c4f14c62/src/utils.ts#L1929)
+Defined in: [utils.ts:2445](https://github.com/Ronokof/Henkan/blob/eb6cab9071cf58e880e98e4acb64a0e899f6eaec/src/utils.ts#L2445)
 
 Generates an Anki notes file with each entry’s info organized into fields, either in HTML or plain text.
 
@@ -22,6 +22,6 @@ An array containing any type of transformed entries ([Word](../interfaces/Word.m
 
 ## Returns
 
-`string` \| `undefined`
+`string`
 
-The resulting Anki notes file's content or `undefined` if `list` is empty
+The resulting Anki notes file's content

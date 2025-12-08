@@ -59,6 +59,14 @@ export interface DictReading {
    */
   kanjiFormRestrictions?: string[] | undefined;
 }
+
+/**
+ * A JMdict sense translation
+ */
+export type DictTranslation =
+  | string
+  | { translation: string; type: "lit" | "expl" | "tm" };
+
 /**
  * Word meaning/sense information
  *
@@ -74,9 +82,7 @@ export interface DictMeaning {
   /**
    * Word glosses
    */
-  translations?:
-    | (string | { translation: string; type: "lit" | "expl" | "tm" })[]
-    | undefined;
+  translations?: DictTranslation[] | undefined;
   /**
    * Cross-references to other similar/related words *(when used with this meaning)*
    */
@@ -252,7 +258,7 @@ export interface DictKanji {
   /**
    * The "readings-meanings" groups and nanori readings of the kanji
    */
-  readingMeaning: DictKanjiReadingMeaning[];
+  readingMeaning?: DictKanjiReadingMeaning[] | undefined;
   /**
    * Whether or not the kanji is kokuji
    */
@@ -369,6 +375,38 @@ export interface TanakaExample {
    * The word-gloss pair
    */
   glossNumber?: GlossSpecificNumber | undefined;
+}
+
+/**
+ * A word definition
+ */
+export interface Definition {
+  /**
+   * The definition
+   */
+  definition: string;
+  /**
+   * The definition with furigana attached
+   */
+  furigana?: string | undefined;
+  /**
+   * Whether or not the definition is associated with other words
+   */
+  mayNotBeAccurate?: true | undefined;
+}
+
+/**
+ * A word paired with its definitions
+ */
+export interface WordDefinitionPair {
+  /**
+   * The word's JMdict entry ID
+   */
+  wordID: string;
+  /**
+   * The word definitions
+   */
+  definitions: Definition[];
 }
 
 /**
@@ -664,6 +702,10 @@ export interface Word extends ResultEntry<"word"> {
    * Phrases associated to the word
    */
   phrases?: Phrase[] | undefined;
+  /**
+   * Japanese definitions associated with the word
+   */
+  definitions?: Definition[] | undefined;
   /**
    * @see {@link DictWord.isCommon}
    */

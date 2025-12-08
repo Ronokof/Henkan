@@ -1,0 +1,925 @@
+[
+	{
+		"kana": "ア",
+		"reading": "a",
+		"audio": "a8f7f30d-ad32-475c-a3bb-7b921209d50f.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017152",
+		"svg": "030a2.svg",
+		"noteID": "kana_ア",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "イ",
+		"reading": "i",
+		"audio": "2c108057-31e7-4703-ba56-7a2fc793ec5e.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017153",
+		"svg": "030a4.svg",
+		"noteID": "kana_イ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ウ",
+		"reading": "u",
+		"audio": "729e0dc6-305f-40e8-b202-812fb12112d6.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017154",
+		"svg": "030a6.svg",
+		"noteID": "kana_ウ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "エ",
+		"reading": "e",
+		"audio": "c7ff2905-90e2-4963-963e-ea2b17c0ef8c.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017155",
+		"svg": "030a8.svg",
+		"noteID": "kana_エ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "オ",
+		"reading": "o",
+		"audio": "9073265c-9245-4078-aef6-c2e8a07a976b.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017156",
+		"svg": "030aa.svg",
+		"noteID": "kana_オ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "カ",
+		"reading": "ka",
+		"audio": "6819a472-08cd-4c1e-8a34-97d9993ed91b.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017157",
+		"svg": "030ab.svg",
+		"noteID": "kana_カ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "キ",
+		"reading": "ki",
+		"audio": "052f0e89-298e-4bbb-9e1d-5d1dc8193e08.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017158",
+		"svg": "030ad.svg",
+		"noteID": "kana_キ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ク",
+		"reading": "ku",
+		"audio": "6b2f3a85-0e27-4fac-8e12-3000a4d53c89.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017159",
+		"svg": "030af.svg",
+		"noteID": "kana_ク",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ケ",
+		"reading": "ke",
+		"audio": "e8fa0517-986b-464d-8309-98d7c5f8e717.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017160",
+		"svg": "030b1.svg",
+		"noteID": "kana_ケ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "コ",
+		"reading": "ko",
+		"audio": "3664b352-3282-40ca-9760-b71e0abb49dd.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017161",
+		"svg": "030b3.svg",
+		"noteID": "kana_コ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "サ",
+		"reading": "sa",
+		"audio": "4b774ff1-8d46-4464-a178-90582eed2eaa.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017162",
+		"svg": "030b5.svg",
+		"noteID": "kana_サ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "シ",
+		"reading": "shi",
+		"audio": "0e7a421f-d91d-46bb-9fae-5c0910e51a87.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017163",
+		"svg": "030b7.svg",
+		"noteID": "kana_シ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ス",
+		"reading": "su",
+		"audio": "57459541-7db1-4fb2-87e8-398b2593c563.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017164",
+		"svg": "030b9.svg",
+		"noteID": "kana_ス",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "セ",
+		"reading": "se",
+		"audio": "0200e630-c772-4a30-aa68-3bab53f0a706.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017165",
+		"svg": "030bb.svg",
+		"noteID": "kana_セ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ソ",
+		"reading": "so",
+		"audio": "007afb95-9a8d-451a-a894-2880f034aeda.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017166",
+		"svg": "030bd.svg",
+		"noteID": "kana_ソ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "タ",
+		"reading": "ta",
+		"audio": "0e9d4753-ef5a-4508-ad03-a1648a93ba9e.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017167",
+		"svg": "030bf.svg",
+		"noteID": "kana_タ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "チ",
+		"reading": "chi",
+		"audio": "3655b8bf-acdc-4221-b640-928323fb4e06.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017168",
+		"svg": "030c1.svg",
+		"noteID": "kana_チ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ツ",
+		"reading": "tsu",
+		"audio": "0b53ece8-b413-455a-b2c8-6502fd5e838f.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017169",
+		"svg": "030c4.svg",
+		"noteID": "kana_ツ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "テ",
+		"reading": "te",
+		"audio": "96bac8ad-58e5-4109-956a-2a652ba267e8.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017170",
+		"svg": "030c6.svg",
+		"noteID": "kana_テ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ト",
+		"reading": "to",
+		"audio": "f72fd8ea-06be-4097-87c5-7e844d9ec19f.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017171",
+		"svg": "030c8.svg",
+		"noteID": "kana_ト",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ナ",
+		"reading": "na",
+		"audio": "e95e3441-8ca0-4250-b2da-82cad474b3dd.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017172",
+		"svg": "030ca.svg",
+		"noteID": "kana_ナ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ニ",
+		"reading": "ni",
+		"audio": "81ed2245-2c76-456b-996a-239d6a71b10f.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017173",
+		"svg": "030cb.svg",
+		"noteID": "kana_ニ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ヌ",
+		"reading": "nu",
+		"audio": "3bd03cb8-a675-4037-871d-191a204ae101.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017174",
+		"svg": "030cc.svg",
+		"noteID": "kana_ヌ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ネ",
+		"reading": "ne",
+		"audio": "924b251e-7a61-4e4b-b334-a0e66eeb3f4e.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017175",
+		"svg": "030cd.svg",
+		"noteID": "kana_ネ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ノ",
+		"reading": "no",
+		"audio": "ed155d32-db61-4a2a-948c-fbde0c1b5ac3.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017176",
+		"svg": "030ce.svg",
+		"noteID": "kana_ノ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ハ",
+		"reading": "ha",
+		"audio": "6672b6ed-f74b-4ebf-a283-7cfd61637b6e.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017177",
+		"svg": "030cf.svg",
+		"noteID": "kana_ハ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ヒ",
+		"reading": "hi",
+		"audio": "c2c06c22-2083-48a8-bdbf-92070bdee881.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017178",
+		"svg": "030d2.svg",
+		"noteID": "kana_ヒ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "フ",
+		"reading": "fu",
+		"audio": "fa78a86e-9e64-4259-ac66-e1669900a57c.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017179",
+		"svg": "030d5.svg",
+		"noteID": "kana_フ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ヘ",
+		"reading": "he",
+		"audio": "f0eb26cb-cc32-4ba3-8583-63c862109649.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017180",
+		"svg": "030d8.svg",
+		"noteID": "kana_ヘ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ホ",
+		"reading": "ho",
+		"audio": "a59d9b09-3634-4fd5-9292-f18519fcbd4b.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017181",
+		"svg": "030db.svg",
+		"noteID": "kana_ホ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "マ",
+		"reading": "ma",
+		"audio": "24424be5-c54f-4746-883f-c46f3378c696.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017182",
+		"svg": "030de.svg",
+		"noteID": "kana_マ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ミ",
+		"reading": "mi",
+		"audio": "c650717b-7c3b-4878-922b-5e66fc5f2282.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017183",
+		"svg": "030df.svg",
+		"noteID": "kana_ミ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ム",
+		"reading": "mu",
+		"audio": "fd0c0d46-b351-4b54-97e1-f979a12548d5.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017184",
+		"svg": "030e0.svg",
+		"noteID": "kana_ム",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "メ",
+		"reading": "me",
+		"audio": "7c8fef83-11be-4fde-a67f-e5301066648a.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017185",
+		"svg": "030e1.svg",
+		"noteID": "kana_メ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "モ",
+		"reading": "mo",
+		"audio": "417e5e05-d884-495e-9988-10b7179b1c86.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017186",
+		"svg": "030e2.svg",
+		"noteID": "kana_モ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ヤ",
+		"reading": "ya",
+		"audio": "4c459b50-e3ac-4e1c-a2ce-e8cd071c5318.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017187",
+		"svg": "030e4.svg",
+		"noteID": "kana_ヤ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ユ",
+		"reading": "yu",
+		"audio": "58c8eeef-b4f3-4e24-978f-f191084e5d30.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017188",
+		"svg": "030e6.svg",
+		"noteID": "kana_ユ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ヨ",
+		"reading": "yo",
+		"audio": "10b29ffe-536a-4dbb-8b94-29bc6b16dcb7.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017189",
+		"svg": "030e8.svg",
+		"noteID": "kana_ヨ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ラ",
+		"reading": "ra",
+		"audio": "33730e04-5e46-46f2-85f9-4f19162be39f.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017190",
+		"svg": "030e9.svg",
+		"noteID": "kana_ラ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "リ",
+		"reading": "ri",
+		"audio": "4d935e2a-25d1-47d9-927e-7c984196a44b.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017191",
+		"svg": "030ea.svg",
+		"noteID": "kana_リ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ル",
+		"reading": "ru",
+		"audio": "39c8b07d-e30c-4b53-96b6-20d408fa57e3.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017192",
+		"svg": "030eb.svg",
+		"noteID": "kana_ル",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "レ",
+		"reading": "re",
+		"audio": "88283877-587f-47cc-85b8-b963f5aed2eb.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017193",
+		"svg": "030ec.svg",
+		"noteID": "kana_レ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ロ",
+		"reading": "ro",
+		"audio": "ec9e1ffe-1556-4369-8e4c-1a04bb5519b6.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017194",
+		"svg": "030ed.svg",
+		"noteID": "kana_ロ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ワ",
+		"reading": "wa",
+		"audio": "8f432cfd-8d2b-40dd-994b-636cd8f8f5b4.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017195",
+		"svg": "030ef.svg",
+		"noteID": "kana_ワ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ヲ",
+		"reading": "o/wo",
+		"audio": "322455b3-c51c-4d37-a074-7f98cb3bdb44.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017196",
+		"svg": "030f2.svg",
+		"noteID": "kana_ヲ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ン",
+		"reading": "n",
+		"audio": "7a98e860-070a-4d02-ad43-b24006baf05b.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017197",
+		"svg": "030f3.svg",
+		"noteID": "kana_ン",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ガ",
+		"reading": "ga",
+		"audio": "6c12d2e1-8c68-4223-aa90-aed5b7a63b79.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017198",
+		"svg": "030ac.svg",
+		"noteID": "kana_ガ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ギ",
+		"reading": "gi",
+		"audio": "1b057195-1472-45b2-844d-3662e1656de3.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017199",
+		"svg": "030ae.svg",
+		"noteID": "kana_ギ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "グ",
+		"reading": "gu",
+		"audio": "b6b9ccfe-a37e-419e-a031-6dd348215960.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017200",
+		"svg": "030b0.svg",
+		"noteID": "kana_グ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ゲ",
+		"reading": "ge",
+		"audio": "2612a8b6-7876-474b-a50d-53af9740617a.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017201",
+		"svg": "030b2.svg",
+		"noteID": "kana_ゲ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ゴ",
+		"reading": "go",
+		"audio": "1945676a-6df1-4cb3-9494-1ff7ce3eb392.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017202",
+		"svg": "030b4.svg",
+		"noteID": "kana_ゴ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ザ",
+		"reading": "za",
+		"audio": "5ef69c48-5bd9-4517-90f2-097c6179e04b.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017203",
+		"svg": "030b6.svg",
+		"noteID": "kana_ザ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ジ",
+		"reading": "ji",
+		"audio": "7d897601-5231-422a-ac7c-678e2e3c72f2.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017204",
+		"svg": "030b8.svg",
+		"noteID": "kana_ジ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ズ",
+		"reading": "zu",
+		"audio": "6d69df01-1c0b-494c-acd5-78883b2262c6.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017205",
+		"svg": "030ba.svg",
+		"noteID": "kana_ズ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ゼ",
+		"reading": "ze",
+		"audio": "e00631ee-afff-45d1-98ee-72112ff4fbbb.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017206",
+		"svg": "030bc.svg",
+		"noteID": "kana_ゼ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ゾ",
+		"reading": "zo",
+		"audio": "a112f49a-6e4d-4b39-931e-716d218d4933.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017207",
+		"svg": "030be.svg",
+		"noteID": "kana_ゾ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ダ",
+		"reading": "da",
+		"audio": "411b6e91-120d-4b0a-ab74-d0870a2b912c.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017208",
+		"svg": "030c0.svg",
+		"noteID": "kana_ダ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ヂ",
+		"reading": "ji",
+		"audio": "4e5d669c-7db6-43f7-a742-645a4296c79b.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017209",
+		"svg": "030c2.svg",
+		"noteID": "kana_ヂ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ヅ",
+		"reading": "zu",
+		"audio": "4481b900-05c9-4e43-9bd4-5cf8a46e6de1.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017210",
+		"svg": "030c5.svg",
+		"noteID": "kana_ヅ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "デ",
+		"reading": "de",
+		"audio": "d69d76af-38fe-4565-ac89-a9afa3d724f4.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017211",
+		"svg": "030c7.svg",
+		"noteID": "kana_デ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ド",
+		"reading": "do",
+		"audio": "14d528e7-e87c-4912-b5c5-973b514dcfed.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017212",
+		"svg": "030c9.svg",
+		"noteID": "kana_ド",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "バ",
+		"reading": "ba",
+		"audio": "dd175014-520a-4452-b9a8-6cc034caf8ac.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017213",
+		"svg": "030d0.svg",
+		"noteID": "kana_バ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ビ",
+		"reading": "bi",
+		"audio": "aec56009-7d92-4d43-bc2d-17af7a9c313e.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017214",
+		"svg": "030d3.svg",
+		"noteID": "kana_ビ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ブ",
+		"reading": "bu",
+		"audio": "422b9dd6-a10c-4257-a905-400ffd1357dd.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017215",
+		"svg": "030d6.svg",
+		"noteID": "kana_ブ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ベ",
+		"reading": "be",
+		"audio": "d877c88c-8698-49d1-bc5f-51ddc0761d36.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017216",
+		"svg": "030d9.svg",
+		"noteID": "kana_ベ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ボ",
+		"reading": "bo",
+		"audio": "24593c9b-b9a6-45c4-a28e-38011943d0cb.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017217",
+		"svg": "030dc.svg",
+		"noteID": "kana_ボ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "パ",
+		"reading": "pa",
+		"audio": "e96975de-0a97-4a4c-92ef-c5e5e505a576.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017218",
+		"svg": "030d1.svg",
+		"noteID": "kana_パ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ピ",
+		"reading": "pi",
+		"audio": "7ad58c2c-4a10-464e-9446-a047b2921afe.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017219",
+		"svg": "030d4.svg",
+		"noteID": "kana_ピ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "プ",
+		"reading": "pu",
+		"audio": "fd1d47dd-60f6-48d2-b0b1-9f8e524aaa1e.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017220",
+		"svg": "030d7.svg",
+		"noteID": "kana_プ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ペ",
+		"reading": "pe",
+		"audio": "eded73e1-2356-4ff4-870b-3f79a3722266.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017221",
+		"svg": "030da.svg",
+		"noteID": "kana_ペ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	},
+	{
+		"kana": "ポ",
+		"reading": "po",
+		"audio": "341f85f8-3352-4054-bed4-b7cc3b6bb1cd.mp3",
+		"tags": [
+			"katakana"
+		],
+		"id": "84017222",
+		"svg": "030dd.svg",
+		"noteID": "kana_ポ",
+		"noteTypeName": "Kana",
+		"deckPath": "Full Japanese Study Deck [JLPT N5~N1 vocab/kanji + common vocab and kanji + grammar]::0. Kana::Katakana"
+	}
+]
