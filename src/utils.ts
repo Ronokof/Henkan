@@ -2202,11 +2202,11 @@ export function generateAnkiNote(entry: Result): string[] {
         ? entry.definitions
             .map((definitionEntry: Definition) =>
               createEntry(
-                `<span class="word word-definition>"<span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
+                `<span class="word word-definition${definitionEntry.mayNotBeAccurate === true ? " mnba" : ""}>"<span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
               ),
             )
             .join("")
-        : '<span class="word word-definition">(no definitions) (Search on ja.wiktionary.org)</span>',
+        : '<span class="word word-definition">(no definitions)</span>',
       entry.kanji
         ? entry.kanji
             .map((kanjiEntry: Kanji) =>
