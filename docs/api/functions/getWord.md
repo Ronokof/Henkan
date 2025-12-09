@@ -8,7 +8,7 @@
 
 > **getWord**(`dict?`, `id?`, `kanjiDic?`, `examples?`, `definitions?`, `dictWord?`, `noteTypeName?`, `deckPath?`): [`Word`](../interfaces/Word.md)
 
-Defined in: [utils.ts:1263](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/utils.ts#L1263)
+Defined in: [utils.ts:1263](https://github.com/Ronokof/Henkan/blob/ce374b7e2b0828c4af4955d9fe995f8c548c2fd2/src/utils.ts#L1263)
 
 Transforms a converted `JMdict` entry into a more readable format, by providing either its [id](#getword) or the [dictWord](#getword) object directly.
 

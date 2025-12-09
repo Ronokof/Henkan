@@ -410,14 +410,15 @@ export interface WordDefinitionPair {
 }
 
 /**
- * Any type of entry list
+ * Types of converted dictionary entries
  */
 export type Dict =
   | DictWord[]
   | DictKanji[]
   | TanakaExample[]
   | DictRadical[]
-  | DictKanjiWithRadicals[];
+  | DictKanjiWithRadicals[]
+  | WordDefinitionPair[];
 
 /**
  * Names of entry types used for the Anki note IDs

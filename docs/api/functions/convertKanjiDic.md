@@ -8,7 +8,7 @@
 
 > **convertKanjiDic**(`xmlString`): [`DictKanji`](../interfaces/DictKanji.md)[]
 
-Defined in: [utils.ts:356](https://github.com/Ronokof/Henkan/blob/01eea6ba990a37c11289111ee9cd2cf881caaa60/src/utils.ts#L356)
+Defined in: [utils.ts:356](https://github.com/Ronokof/Henkan/blob/ce374b7e2b0828c4af4955d9fe995f8c548c2fd2/src/utils.ts#L356)
 
 Converts a KANJIDIC `kanjidic2.xml` file into an array of [DictKanji](../interfaces/DictKanji.md) objects.
 
