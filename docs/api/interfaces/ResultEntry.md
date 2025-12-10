@@ -6,7 +6,7 @@
 
 # Interface: ResultEntry\<EntryType\>
 
-Defined in: [types.ts:431](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L431)
+Defined in: [types.ts:431](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L431)
 
 Basic Anki note information
 
@@ -30,7 +30,7 @@ Basic Anki note information
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:447](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L447)
+Defined in: [types.ts:447](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L447)
 
 The full path of the Anki deck
 
@@ -40,7 +40,7 @@ The full path of the Anki deck
 
 > `optional` **doNotCreateNote**: `true`
 
-Defined in: [types.ts:455](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L455)
+Defined in: [types.ts:455](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L455)
 
 Whether or not this entry should be converted into an Anki note
 
@@ -50,7 +50,7 @@ Whether or not this entry should be converted into an Anki note
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: [types.ts:439](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L439)
+Defined in: [types.ts:439](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L439)
 
 ID used for the Anki note ID
 
@@ -60,7 +60,7 @@ ID used for the Anki note ID
 
 > `readonly` `optional` **noteID**: `` `${EntryType}_${string}` ``
 
-Defined in: [types.ts:435](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L435)
+Defined in: [types.ts:435](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L435)
 
 ID used for the resulting Anki note
 
@@ -70,7 +70,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:443](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L443)
+Defined in: [types.ts:443](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L443)
 
 Anki note type name
 
@@ -80,6 +80,6 @@ Anki note type name
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:451](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L451)
+Defined in: [types.ts:451](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L451)
 
 Tags generated based on the entry's information

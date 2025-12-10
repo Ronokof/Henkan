@@ -8,11 +8,11 @@
 
 > **convertJawiktionary**(`stream`): `Promise`\<`any`[]\>
 
-Defined in: [utils.ts:777](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/utils.ts#L777)
+Defined in: [utils.ts:779](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L779)
 
 Converts and filters a `ja.wiktionary.org` JSONL dump
 
-The dump file needs to be converted from a `jawiktionary-latest-pages-articles.xml.bz2` file from [https://dumps.wikimedia.org/jawiktionary/latest/](https://dumps.wikimedia.org/jawiktionary/latest/) using \[wiktextract\](https://github.com/tatuylonen/wiktextract).
+The dump file needs to be converted from a `jawiktionary-latest-pages-articles.xml.bz2` file from [https://dumps.wikimedia.org/jawiktionary/latest/](https://dumps.wikimedia.org/jawiktionary/latest/) using [wiktextract](https://github.com/tatuylonen/wiktextract).
 
 ## Parameters
 

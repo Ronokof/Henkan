@@ -61,6 +61,9 @@ function checkTransformedEntry(
     dictEntry.misc && transformedEntry.grade === dictEntry.misc.grade,
   ).toBeTruthy();
   expect(
+    dictEntry.misc && transformedEntry.jlpt === dictEntry.misc.jlpt,
+  ).toBeTruthy();
+  expect(
     transformedEntry.strokes !== undefined &&
       transformedEntry.strokes.length > 0 &&
       Number.isSafeInteger(Number.parseInt(transformedEntry.strokes)) &&

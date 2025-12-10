@@ -22,6 +22,7 @@ import {
   DictWord,
   ExamplePart,
   Grammar,
+  JLPT,
   Kana,
   Kanji,
   KanjiComponent,
@@ -414,9 +415,10 @@ export function convertKanjiDic(xmlString: string): DictKanji[] {
               kanjiObj.misc.frequency = misc.freq[0];
             if (
               isValidArrayWithFirstElement(misc.jlpt) &&
-              typeof misc.jlpt[0] === "string"
+              typeof misc.jlpt[0] === "string" &&
+              ["5", "4", "3", "2", "1"].includes(misc.jlpt[0])
             )
-              kanjiObj.misc.jlpt = misc.jlpt[0];
+              kanjiObj.misc.jlpt = `N${misc.jlpt[0]}` as JLPT;
           }
 
           if (isValidArray(entry.reading_meaning))
@@ -770,7 +772,7 @@ export function convertKradFile(
 /**
  * Converts and filters a `ja.wiktionary.org` JSONL dump
  *
- * The dump file needs to be converted from a `jawiktionary-latest-pages-articles.xml.bz2` file from {@link https://dumps.wikimedia.org/jawiktionary/latest/} using {@link [wiktextract](https://github.com/tatuylonen/wiktextract)}.
+ * The dump file needs to be converted from a `jawiktionary-latest-pages-articles.xml.bz2` file from {@link https://dumps.wikimedia.org/jawiktionary/latest/} using {@link https://github.com/tatuylonen/wiktextract | wiktextract}.
  * @param stream The stream of a JSONL dump file
  * @returns An array containing only Japanese entries
  */
@@ -909,9 +911,9 @@ export async function getWordDefinitions(
       const entriesWithFormTitlesGlobal: any[] = [];
       const entriesWithFormsGlobal: any[] = [];
 
-      const validFormOfEntries: Set<any> = new Set<any>();
-      const validGlossesEntries: Set<any> = new Set<any>();
-      const validFormsEntries: Set<any> = new Set<any>();
+      const validFormOfEntries: Set<string> = new Set<string>();
+      const validGlossesEntries: Set<string> = new Set<any>();
+      const validFormsEntries: Set<string> = new Set<string>();
 
       for (const entry of entries) {
         let valid: boolean = false;
@@ -1687,6 +1689,9 @@ export function getKanji(
         ...(dictKanji.misc && dictKanji.misc.frequency
           ? { frequency: dictKanji.misc.frequency }
           : {}),
+        ...(dictKanji.misc && dictKanji.misc.jlpt
+          ? { jlpt: dictKanji.misc.jlpt }
+          : {}),
         noteID: `kanji_${dictKanji.kanji}`,
         ...(noteTypeName ? { noteTypeName: noteTypeName } : {}),
         ...(deckPath ? { deckPath: deckPath } : {}),
@@ -1890,10 +1895,15 @@ export function getKanji(
       }
 
       kanji.tags.push(
+        `kanji::strokes::${kanji.strokes ?? "unknown"}`,
+        ...(kanji.frequency ? [`kanji::frequency::${kanji.frequency}`] : []),
+        ...(kanji.grade ? [`kanji::grade::${kanji.grade}`] : []),
+        ...(kanji.jlpt
+          ? [`kanji::pre-2010_jlpt::${kanji.jlpt.toLowerCase()}`]
+          : []),
         `kanji::onyomi::${kanji.onyomi?.length ?? 0}`,
         `kanji::kunyomi::${kanji.kunyomi?.length ?? 0}`,
         `kanji::nanori::${kanji.nanori?.length ?? 0}`,
-        `kanji::strokes::${kanji.strokes ?? "unknown"}`,
         `kanji::words::${kanji.words?.length ?? 0}`,
         ...(kanji.svg ? ["kanji::has_svg"] : []),
       );
@@ -1983,7 +1993,7 @@ export function getKanjiExtended(
 }
 
 /**
- * Synthesizes text to speech audio using {@link [Amazon Polly](https://aws.amazon.com/polly/)}.
+ * Synthesizes text to speech audio using {@link https://aws.amazon.com/polly/ | Amazon Polly}.
  * @param client An Amazon Polly Client instance
  * @param input The input in SSML format or plain text (adjust `TextType` property in `options`)
  * @param options Speech generation settings

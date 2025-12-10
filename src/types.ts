@@ -176,11 +176,11 @@ export interface DictKanjiMisc {
   /**
    * The kanji grade level
    *
-   * 1-6 -> {@link [Kyōiku kanji](https://en.wikipedia.org/wiki/Ky%C5%8Diku_kanji)}
+   * 1-6 -> {@link https://en.wikipedia.org/wiki/Ky%C5%8Diku_kanji | Kyōiku kanji}
    *
-   * 7-8 -> {@link [Jōyō kanji](https://en.wikipedia.org/wiki/J%C5%8Dy%C5%8D_kanji)} (excluding Kyōiku kanji)
+   * 7-8 -> {@link https://en.wikipedia.org/wiki/J%C5%8Dy%C5%8D_kanji | Jōyō kanji} (excluding Kyōiku kanji)
    *
-   * 9-10 -> {@link [Jinmeiyō kanji](https://en.wikipedia.org/wiki/Jinmeiy%C5%8D_kanji)}
+   * 9-10 -> {@link https://en.wikipedia.org/wiki/Jinmeiy%C5%8D_kanji | Jinmeiyō kanji}
    */
   grade?: string | undefined;
   /**
@@ -190,9 +190,9 @@ export interface DictKanjiMisc {
    */
   frequency?: string | undefined;
   /**
-   * The {@link [pre-2010 JLPT](https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_Test#Previous_format_(1984%E2%80%932009))} level
+   * The {@link https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_Test#Previous_format_(1984%E2%80%932009) | pre-2010 JLPT} level
    */
-  jlpt?: string | undefined;
+  jlpt?: JLPT | undefined;
 }
 
 /**
@@ -598,6 +598,10 @@ export interface Kanji extends ResultEntry<"kanji"> {
    */
   frequency?: string | undefined;
   /**
+   * @see {@link DictKanjiMisc.jlpt}
+   */
+  jlpt?: JLPT | undefined;
+  /**
    * Whether or not the kanji is kokuji
    */
   kokuji?: true | undefined;
@@ -778,7 +782,7 @@ export interface Grammar extends ResultEntry<"grammar"> {
    */
   phrases?: Phrase[] | undefined;
   /**
-   * The {@link [post-2010 JLPT](https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_Test#Test_format)} level
+   * The {@link https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_Test#Test_format | post-2010 JLPT} level
    */
   jlpt?: JLPT | undefined;
   /**

@@ -6,7 +6,7 @@
 
 # Interface: ExamplePart
 
-Defined in: [types.ts:305](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L305)
+Defined in: [types.ts:305](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L305)
 
 A word/part from the `B` section of a Tanaka Corpus `examples.utf` entry
 
@@ -16,7 +16,7 @@ A word/part from the `B` section of a Tanaka Corpus `examples.utf` entry
 
 > **baseForm**: `string`
 
-Defined in: [types.ts:309](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L309)
+Defined in: [types.ts:309](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L309)
 
 The common form in which the word is found in JMdict
 
@@ -26,7 +26,7 @@ The common form in which the word is found in JMdict
 
 > `optional` **edited**: `true`
 
-Defined in: [types.ts:333](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L333)
+Defined in: [types.ts:333](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L333)
 
 Whether or not the word is part of an entry that has been edited and adapted
 
@@ -40,7 +40,7 @@ Whether or not the word is part of an entry that has been edited and adapted
 
 > `optional` **glossNumber**: `number`
 
-Defined in: [types.ts:317](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L317)
+Defined in: [types.ts:317](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L317)
 
 The JMdict sense number corresponding to the word’s usage in the phrase
 
@@ -50,7 +50,7 @@ The JMdict sense number corresponding to the word’s usage in the phrase
 
 > `optional` **inflectedForm**: `string`
 
-Defined in: [types.ts:321](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L321)
+Defined in: [types.ts:321](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L321)
 
 The actual form in which the word is used in the phrase
 
@@ -60,7 +60,7 @@ The actual form in which the word is used in the phrase
 
 > `optional` **reading**: `string`
 
-Defined in: [types.ts:313](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L313)
+Defined in: [types.ts:313](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L313)
 
 The reading (in kana) of the word
 
@@ -70,6 +70,6 @@ The reading (in kana) of the word
 
 > `optional` **referenceID**: `string`
 
-Defined in: [types.ts:325](https://github.com/Ronokof/Henkan/blob/e0f685c675998bfb93cbe454a3fe16d279853c5a/src/types.ts#L325)
+Defined in: [types.ts:325](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L325)
 
 A sequence number that references a JMdict entry associated with the word

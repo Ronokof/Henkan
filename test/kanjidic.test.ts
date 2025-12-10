@@ -62,8 +62,9 @@ describe("KANJIDIC conversion", () => {
           kanji.misc.grade.length > 0 &&
           Number.isSafeInteger(Number.parseInt(kanji.misc.grade)) &&
           kanji.misc.jlpt !== undefined &&
-          kanji.misc.jlpt.length > 0 &&
-          Number.isSafeInteger(Number.parseInt(kanji.misc.jlpt)),
+          kanji.misc.jlpt.length === 2 &&
+          kanji.misc.jlpt.charAt(0) === "N" &&
+          ["5", "4", "3", "2", "1"].includes(kanji.misc.jlpt.charAt(1)),
       ),
     ).toBeTruthy();
 
