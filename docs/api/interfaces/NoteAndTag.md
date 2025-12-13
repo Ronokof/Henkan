@@ -6,7 +6,7 @@
 
 # Interface: NoteAndTag
 
-Defined in: [types.ts:461](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L461)
+Defined in: [types.ts:529](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L529)
 
 A pair of a "kanji form"/"reading"/"sense" note and its associated tag
 
@@ -16,7 +16,7 @@ A pair of a "kanji form"/"reading"/"sense" note and its associated tag
 
 > `readonly` `optional` **note**: `string`
 
-Defined in: [types.ts:465](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L465)
+Defined in: [types.ts:533](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L533)
 
 The note
 
@@ -26,6 +26,6 @@ The note
 
 > `readonly` `optional` **tag**: `string`
 
-Defined in: [types.ts:469](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L469)
+Defined in: [types.ts:537](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L537)
 
 The tag

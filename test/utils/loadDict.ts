@@ -18,7 +18,6 @@ type DictNames =
   | "radkfile2"
   | "kradfile2"
   | "raw-wiktextract-data"
-  | "word_defs.json"
   | "katakana.json"
   | "svg_list";
 type DictTypes =
@@ -111,13 +110,6 @@ export default async (dict: DictNames) => {
         "katakana.json",
         JSON.parse(
           readFileSync(path.resolve("./test/files/katakana.json"), "utf-8"),
-        ),
-      );
-    else if (dict === "word_defs.json")
-      dicts.set(
-        "word_defs.json",
-        JSON.parse(
-          readFileSync(path.resolve("./test/files/word_defs.json"), "utf-8"),
         ),
       );
   }

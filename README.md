@@ -36,6 +36,7 @@ pnpm add henkan
  - JMdict, KANJIDIC, Tanaka Corpus, RADK and KRAD conversion
  - User-friendly schemas for dictionary entries
  - Anki note generation
+ - "Japanese definition"-"JMdict entry" pairing (using `ja.wiktionary.org` dumps)
  - Other useful tools (Amazon Polly audio generation, Japanese RegExps, array checking etc.)
 
 ---

@@ -8,7 +8,7 @@
 
 > **convertTanakaCorpus**(`tanakaString`, `generateFurigana?`): `Promise`\<[`TanakaExample`](../interfaces/TanakaExample.md)[]\>
 
-Defined in: [utils.ts:499](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L499)
+Defined in: [utils.ts:501](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L501)
 
 Converts a Tanaka Corpus `examples.utf` file into an array of [TanakaExample](../interfaces/TanakaExample.md) objects.
 

@@ -1,4 +1,4 @@
-import { UsefulRegExps } from "./types";
+import { POS, UsefulRegExps } from "./types";
 
 export const regexps: UsefulRegExps = {
   hiragana: /[\u{3040}-\u{309F}]/u,
@@ -29,9 +29,12 @@ export const notSearchedForms: Set<string> = new Set<string>([
   "Out-dated kanji or kanji usage",
 ]);
 
-export const noteMap: Map<string, readonly [string, string]> = new Map<
+export const noteMap: Map<
   string,
-  readonly [string, string]
+  readonly [string, string] | readonly [string, string, POS | POS[]]
+> = new Map<
+  string,
+  readonly [string, string] | readonly [string, string, POS | POS[]]
 >([
   ["brazilian", ["dialect::brazilian", "Dialect: Brazilian"]],
   ["hokkaido-ben", ["dialect::hokkaido-ben", "Dialect: Hokkaidō-ben"]],
@@ -47,22 +50,25 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
   ["tsugaru-ben", ["dialect::tsugaru-ben", "Dialect: Tsugaru-ben"]],
   ["aichi dialect", ["dialect::aichi", "Dialect: Aichi"]],
   ["tochigi dialect", ["dialect::tochigi", "Dialect: Tochigi"]],
-  ["adjective (keiyoushi)", ["adjective::i", "い-adjective"]],
-  ["'taru' adjective", ["adjective::taru", "たる-adjective"]],
-  ["noun (common) (futsuumeishi)", ["common_noun", "Common noun"]],
+  ["adjective (keiyoushi)", ["adjective::i", "い-adjective", "形容詞"]],
+  ["'taru' adjective", ["adjective::taru", "たる-adjective", "形容動詞"]],
+  [
+    "noun (common) (futsuumeishi)",
+    ["common_noun", "Common noun", ["名詞", "造語成分"]],
+  ],
   [
     "pre-noun adjectival (rentaishi)",
-    ["pre-noun_adjectival", "Pre-noun adjectival"],
+    ["pre-noun_adjectival", "Pre-noun adjectival", "連体詞"],
   ],
   [
     "noun or verb acting prenominally",
     ["noun_or_verb_acting_prenominally", "Noun or verb acting prenominally"],
   ],
-  ["pronoun", ["pronoun", "Pronoun"]],
-  ["adverb (fukushi)", ["adverb", "Adverb"]],
+  ["pronoun", ["pronoun", "Pronoun", ["代名詞", "人称代名詞"]]],
+  ["adverb (fukushi)", ["adverb", "Adverb", "副詞"]],
   [
     "adverb taking the 'to' particle",
-    ["takes::to", "Adverb taking the 'と' particle"],
+    ["takes::to", "Adverb taking the 'と' particle", "副詞"],
   ],
   [
     "onomatopoeic or mimetic word",
@@ -70,80 +76,100 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
   ],
   [
     "nouns which may take the genitive case particle 'no'",
-    ["takes::no", "May take the 'の' particle"],
+    ["takes::no", "May take the 'の' particle", ["名詞", "造語成分"]],
   ],
   [
     "noun or participle which takes the aux. verb suru",
-    ["takes::suru", "Takes the aux. verb 'する'"],
+    ["takes::suru", "Takes the aux. verb 'する'", "動詞"],
   ],
-  ["suru verb - irregular", ["suru_verb", "Irregular する-verb"]],
-  ["suru verb - special class", ["suru_verb", "Special する-verb"]],
-  ["ichidan verb", ["ichidan_verb", "Ichidan verb"]],
+  ["suru verb - irregular", ["suru_verb", "Irregular する-verb", "動詞"]],
+  ["suru verb - special class", ["suru_verb", "Special する-verb", "動詞"]],
+  ["ichidan verb", ["ichidan_verb", "Ichidan verb", "動詞"]],
   [
     "godan verb with 'ku' ending",
-    ["godan::ku::verb", "Godan verb with 'く' ending"],
+    ["godan::ku::verb", "Godan verb with 'く' ending", "動詞"],
   ],
   [
     "godan verb with 'gu' ending",
-    ["godan::gu::verb", "Godan verb with 'ぐ' ending"],
+    ["godan::gu::verb", "Godan verb with 'ぐ' ending", "動詞"],
   ],
   [
     "godan verb with 'u' ending",
-    ["godan::u::verb", "Godan verb with 'う' ending"],
+    ["godan::u::verb", "Godan verb with 'う' ending", "動詞"],
   ],
   [
     "godan verb with 'tsu' ending",
-    ["godan::tsu::verb", "Godan verb with 'つ' ending"],
+    ["godan::tsu::verb", "Godan verb with 'つ' ending", "動詞"],
   ],
   [
     "godan verb with 'ru' ending",
-    ["godan::ru::verb", "Godan verb with 'る' ending"],
+    ["godan::ru::verb", "Godan verb with 'る' ending", "動詞"],
   ],
   [
     "godan verb with 'nu' ending",
-    ["godan::nu::verb", "Godan verb with 'ぬ' ending"],
+    ["godan::nu::verb", "Godan verb with 'ぬ' ending", "動詞"],
   ],
   [
     "godan verb with 'mu' ending",
-    ["godan::mu::verb", "Godan verb with 'む' ending"],
+    ["godan::mu::verb", "Godan verb with 'む' ending", "動詞"],
   ],
   [
     "godan verb with 'bu' ending",
-    ["godan::bu::verb", "Godan verb with 'ぶ' ending"],
+    ["godan::bu::verb", "Godan verb with 'ぶ' ending", "動詞"],
   ],
   [
     "godan verb with 'su' ending",
-    ["godan::su::verb", "Godan verb with 'す' ending"],
+    ["godan::su::verb", "Godan verb with 'す' ending", "動詞"],
   ],
   [
     "godan verb with 'u' ending (special class)",
-    ["godan::u::irregular_verb", "Irregular godan verb with 'う' ending"],
+    [
+      "godan::u::irregular_verb",
+      "Irregular godan verb with 'う' ending",
+      "動詞",
+    ],
   ],
   [
     "godan verb with 'ru' ending (irregular verb)",
-    ["godan::ru::irregular_verb", "Irregular godan verb with 'る' ending"],
+    [
+      "godan::ru::irregular_verb",
+      "Irregular godan verb with 'る' ending",
+      "動詞",
+    ],
   ],
   [
     "godan verb - -aru special class",
-    ["godan::aru::irregular_verb", "Irregular godan verb with '-ある' ending"],
+    [
+      "godan::aru::irregular_verb",
+      "Irregular godan verb with '-ある' ending",
+      "動詞",
+    ],
   ],
   [
     "godan verb - iku/yuku special class",
     [
       "godan::iku_yuku::irregular_verb",
       "Irregular godan verb with 'いく' or 'ゆく' ending",
+      "動詞",
     ],
   ],
   [
     "irregular nu verb",
-    ["godan::nu::irregular_verb", "Irregular godan verb with 'ぬ' ending"],
+    [
+      "godan::nu::irregular_verb",
+      "Irregular godan verb with 'ぬ' ending",
+      "動詞",
+    ],
   ],
-  ["kuru verb - special class", ["kuru_verb", "Special 'くる' verb"]],
-  ["transitive verb", ["transitive_verb", "Transitive verb"]],
-  ["intransitive verb", ["intransitive_verb", "Intransitive verb"]],
-  ["auxiliary verb", ["auxiliary_verb", "Auxiliary verb"]],
-  ["auxiliary adjective", ["adjective::auxiliary", "Auxiliary adjective"]],
-  ["auxiliary", ["auxiliary", "Auxiliary"]],
+  ["kuru verb - special class", ["kuru_verb", "Special 'くる' verb", "動詞"]],
+  ["transitive verb", ["transitive_verb", "Transitive verb", "動詞"]],
+  ["intransitive verb", ["intransitive_verb", "Intransitive verb", "動詞"]],
+  ["auxiliary verb", ["auxiliary_verb", "Auxiliary verb", ["動詞", "助動詞"]]],
+  [
+    "auxiliary adjective",
+    ["adjective::auxiliary", "Auxiliary adjective", ["助詞", "助動詞"]],
+  ],
+  ["auxiliary", ["auxiliary", "Auxiliary", ["助詞", "助動詞"]]],
   ["after a verb", ["after::verb", "After a verb"]],
   [
     "after the -te form of a verb",
@@ -239,19 +265,52 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
   ],
   ["before an adjective", ["before::adjective", "Before an adjective"]],
   ["after a noun", ["after::noun", "After a noun"]],
-  ["prefix", ["prefix", "Prefix"]],
-  ["noun, used as a prefix", ["prefix_noun", "Noun, used as a prefix"]],
-  ["suffix", ["suffix", "Suffix"]],
-  ["noun, used as a suffix", ["suffix_noun", "Noun, used as a suffix"]],
-  ["counter", ["counter", "Counter"]],
-  ["numeric", ["numeric", "Numeric"]],
-  ["particle", ["particle", "Particle"]],
-  ["conjunction", ["conjunction", "Conjunction"]],
-  ["expression", ["expression", "Expression"]],
-  ["idiomatic expression", ["idiomatic_expression", "Idiomatic expression"]],
-  ["interjection (kandoushi)", ["interjection", "Interjection"]],
-  ["proverb", ["proverb", "Proverb"]],
-  ["yojijukugo", ["yojijukugo", "Yojijukugo"]],
+  ["prefix", ["prefix", "Prefix", ["接頭語", "接頭辞"]]],
+  [
+    "noun, used as a prefix",
+    [
+      "prefix_noun",
+      "Noun, used as a prefix",
+      ["名詞", "造語成分", "接頭語", "接頭辞"],
+    ],
+  ],
+  ["suffix", ["suffix", "Suffix", ["接尾語", "接尾辞"]]],
+  [
+    "noun, used as a suffix",
+    [
+      "suffix_noun",
+      "Noun, used as a suffix",
+      ["名詞", "造語成分", "接尾語", "接尾辞"],
+    ],
+  ],
+  ["counter", ["counter", "Counter", "助数詞"]],
+  ["numeric", ["numeric", "Numeric", "数詞"]],
+  ["particle", ["particle", "Particle", ["助詞", "接続助詞"]]],
+  ["conjunction", ["conjunction", "Conjunction", "接続詞"]],
+  [
+    "expression",
+    ["expression", "Expression", ["成語", "成句", "慣用句", "動詞句"]],
+  ],
+  [
+    "idiomatic expression",
+    [
+      "idiomatic_expression",
+      "Idiomatic expression",
+      ["成語", "成句", "慣用句", "動詞句"],
+    ],
+  ],
+  [
+    "interjection (kandoushi)",
+    ["interjection", "Interjection", ["感動詞", "間投詞"]],
+  ],
+  [
+    "proverb",
+    ["proverb", "Proverb", ["成語", "成句", "慣用句", "動詞句", "ことわざ"]],
+  ],
+  [
+    "yojijukugo",
+    ["yojijukugo", "Yojijukugo", ["成語", "成句", "慣用句", "動詞句"]],
+  ],
   ["archaism", ["archaism", "Archaism"]],
   ["obsolete term", ["obsolete", "Obsolete"]],
   ["dated term", ["dated", "Dated"]],
@@ -264,7 +323,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
   ["derogatory", ["derogatory", "Derogatory"]],
   ["sensitive", ["sensitive", "Sensitive"]],
   ["euphemistic", ["euphemistic", "Euphemistic"]],
-  ["abbreviation", ["abbreviation", "Abbreviation"]],
+  ["abbreviation", ["abbreviation", "Abbreviation", ["略語", "頭字語"]]],
   ["male term or language", ["male_language", "Male language"]],
   ["female term or language", ["female_language", "Female language"]],
   [
@@ -448,7 +507,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
   ],
   [
     "adjective (keiyoushi) - yoi/ii class",
-    ["adjective::yoi/ii", "い-adjective - よい/いい class"],
+    ["adjective::yoi/ii", "い-adjective - よい/いい class", "形容詞"],
   ],
   [
     "'kari' adjective (archaic)",
@@ -457,11 +516,15 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
   ["'ku' adjective (archaic)", ["adjective::ku", "'く' adjective (archaic)"]],
   [
     "adjectival nouns or quasi-adjectives (keiyodoshi)",
-    ["na-adjective", "な-adjective"],
+    ["na-adjective", "な-adjective", "形容動詞"],
   ],
   [
     "archaic/formal form of na-adjective",
-    ["na-adjective_archaic_or_formal", "archaic/formal form of な-adjective"],
+    [
+      "na-adjective_archaic_or_formal",
+      "archaic/formal form of な-adjective",
+      "形容動詞",
+    ],
   ],
   [
     "'shiku' adjective (archaic)",
@@ -470,26 +533,31 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
   ["copula", ["copula", "Copula"]],
   [
     "expressions (phrases, clauses, etc.)",
-    ["expression", "Expression (phrase, clause, etc.)"],
+    [
+      "expression",
+      "Expression (phrase, clause, etc.)",
+      ["成語", "成句", "慣用句", "動詞句"],
+    ],
   ],
   ["adverbial noun (fukushitekimeishi)", ["adverbial_noun", "Adverbial noun"]],
   ["proper noun", ["proper_noun", "Proper noun"]],
   ["noun (temporal) (jisoumeishi)", ["temporal_noun", "Temporal noun"]],
   ["unclassified", ["unclassified", "Unclassified"]],
-  ["verb unspecified", ["unspecified_verb", "Unspecified verb"]],
+  ["verb unspecified", ["unspecified_verb", "Unspecified verb", "動詞"]],
   [
     "ichidan verb - kureru special class",
-    ["ichidan_verb::kureru", "Ichidan verb - くれる special class"],
+    ["ichidan_verb::kureru", "Ichidan verb - くれる special class", "動詞"],
   ],
   [
     "nidan verb with 'u' ending (archaic)",
-    ["nidan_verb::u", "Nidan verb with 'う' ending (archaic)"],
+    ["nidan_verb::u", "Nidan verb with 'う' ending (archaic)", "動詞"],
   ],
   [
     "nidan verb (upper class) with 'bu' ending (archaic)",
     [
       "nidan_verb::bu::upper_class",
       "Nidan verb (upper class) with 'ぶ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -497,6 +565,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::bu::lower_class",
       "Nidan verb (lower class) with 'ぶ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -504,6 +573,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::dzu::upper_class",
       "Nidan verb (upper class) with 'づ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -511,6 +581,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::dzu::lower_class",
       "Nidan verb (lower class) with 'づ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -518,6 +589,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::gu::upper_class",
       "Nidan verb (upper class) with 'ぐ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -525,6 +597,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::gu::lower_class",
       "Nidan verb (lower class) with 'ぐ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -532,6 +605,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::hu/fu::upper_class",
       "Nidan verb (upper class) with 'ふ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -539,6 +613,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::hu/fu::lower_class",
       "Nidan verb (lower class) with 'ふ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -546,6 +621,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::ku::upper_class",
       "Nidan verb (upper class) with 'く' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -553,6 +629,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::ku::lower_class",
       "Nidan verb (lower class) with 'く' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -560,6 +637,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::mu::upper_class",
       "Nidan verb (upper class) with 'む' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -567,6 +645,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::mu::lower_class",
       "Nidan verb (lower class) with 'む' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -574,6 +653,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::nu::lower_class",
       "Nidan verb (lower class) with 'ぬ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -581,6 +661,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::ru::upper_class",
       "Nidan verb (upper class) with 'る' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -588,6 +669,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::ru::lower_class",
       "Nidan verb (lower class) with 'る' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -595,6 +677,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::su::lower_class",
       "Nidan verb (lower class) with 'す' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -602,6 +685,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::tsu::upper_class",
       "Nidan verb (upper class) with 'つ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -609,6 +693,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::tsu::lower_class",
       "Nidan verb (lower class) with 'つ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -616,6 +701,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::u_with_we_conjugation::lower_class",
       "Nidan verb (lower class) with 'う' ending and 'ゑ' conjugation (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -623,6 +709,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::yu::upper_class",
       "Nidan verb (upper class) with 'ゆ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -630,6 +717,7 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::yu::lower_class",
       "Nidan verb (lower class) with 'ゆ' ending (archaic)",
+      "動詞",
     ],
   ],
   [
@@ -637,49 +725,51 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "nidan_verb::zu::lower_class",
       "Nidan verb (lower class) with 'ず' ending (archaic)",
+      "動詞",
     ],
   ],
   [
     "yodan verb with 'bu' ending (archaic)",
-    ["yodan_verb::bu", "Yodan verb with 'ぶ' ending (archaic)"],
+    ["yodan_verb::bu", "Yodan verb with 'ぶ' ending (archaic)", "動詞"],
   ],
   [
     "yodan verb with 'gu' ending (archaic)",
-    ["yodan_verb::gu", "Yodan verb with 'ぐ' ending (archaic)"],
+    ["yodan_verb::gu", "Yodan verb with 'ぐ' ending (archaic)", "動詞"],
   ],
   [
     "yodan verb with 'hu/fu' ending (archaic)",
-    ["yodan_verb::hu/fu", "Yodan verb with 'ふ' ending (archaic)"],
+    ["yodan_verb::hu/fu", "Yodan verb with 'ふ' ending (archaic)", "動詞"],
   ],
   [
     "yodan verb with 'ku' ending (archaic)",
-    ["yodan_verb::ku", "Yodan verb with 'く' ending (archaic)"],
+    ["yodan_verb::ku", "Yodan verb with 'く' ending (archaic)", "動詞"],
   ],
   [
     "yodan verb with 'mu' ending (archaic)",
-    ["yodan_verb::mu", "Yodan verb with 'む' ending (archaic)"],
+    ["yodan_verb::mu", "Yodan verb with 'む' ending (archaic)", "動詞"],
   ],
   [
     "yodan verb with 'nu' ending (archaic)",
-    ["yodan_verb::nu", "Yodan verb with 'ぬ' ending (archaic)"],
+    ["yodan_verb::nu", "Yodan verb with 'ぬ' ending (archaic)", "動詞"],
   ],
   [
     "yodan verb with 'ru' ending (archaic)",
-    ["yodan_verb::ru", "Yodan verb with 'る' ending (archaic)"],
+    ["yodan_verb::ru", "Yodan verb with 'る' ending (archaic)", "動詞"],
   ],
   [
     "yodan verb with 'su' ending (archaic)",
-    ["yodan_verb::su", "Yodan verb with 'す' ending (archaic)"],
+    ["yodan_verb::su", "Yodan verb with 'す' ending (archaic)", "動詞"],
   ],
   [
     "yodan verb with 'tsu' ending (archaic)",
-    ["yodan_verb::tsu", "Yodan verb with 'つ' ending (archaic)"],
+    ["yodan_verb::tsu", "Yodan verb with 'つ' ending (archaic)", "動詞"],
   ],
   [
     "godan verb - uru old class verb (old form of eru)",
     [
       "godan::uru::irregular_verb",
       "Godan verb - 'うる' old class verb (old form of える)",
+      "動詞",
     ],
   ],
   [
@@ -687,18 +777,20 @@ export const noteMap: Map<string, readonly [string, string]> = new Map<
     [
       "irregular_ru_verb_plain_form_ending_with_ri",
       "irregular 'る' verb, plain form ends with '-り'",
+      "動詞",
     ],
   ],
   [
     "su verb - precursor to the modern suru",
-    ["su_verb", "'す' verb - precursor to the modern する"],
+    ["su_verb", "'す' verb - precursor to the modern する", "動詞"],
   ],
-  ["suru verb - included", ["suru_verb", "'する' verb - included"]],
+  ["suru verb - included", ["suru_verb", "'する' verb - included", "動詞"]],
   [
     "ichidan verb - zuru verb (alternative form of -jiru verbs)",
     [
       "ichidan_verb::zuru",
       "Ichidan verb - 'ずる' verb (alternative form of '-じる' verbs)",
+      "動詞",
     ],
   ],
   ["agriculture", ["agriculture", "Agriculture term"]],

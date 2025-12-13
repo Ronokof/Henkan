@@ -6,7 +6,7 @@
 
 # Interface: Kana
 
-Defined in: [types.ts:727](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L727)
+Defined in: [types.ts:795](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L795)
 
 Kana information
 
@@ -20,7 +20,7 @@ Kana information
 
 > `optional` **audio**: `string`
 
-Defined in: [types.ts:739](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L739)
+Defined in: [types.ts:807](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L807)
 
 The filename of an audio file for the kana reading
 
@@ -30,7 +30,7 @@ The filename of an audio file for the kana reading
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:447](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L447)
+Defined in: [types.ts:515](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L515)
 
 The full path of the Anki deck
 
@@ -44,7 +44,7 @@ The full path of the Anki deck
 
 > `optional` **doNotCreateNote**: `true`
 
-Defined in: [types.ts:455](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L455)
+Defined in: [types.ts:523](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L523)
 
 Whether or not this entry should be converted into an Anki note
 
@@ -58,7 +58,7 @@ Whether or not this entry should be converted into an Anki note
 
 > `readonly` `optional` **id**: `string`
 
-Defined in: [types.ts:439](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L439)
+Defined in: [types.ts:507](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L507)
 
 ID used for the Anki note ID
 
@@ -72,7 +72,7 @@ ID used for the Anki note ID
 
 > `readonly` **kana**: `string`
 
-Defined in: [types.ts:731](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L731)
+Defined in: [types.ts:799](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L799)
 
 The kana character
 
@@ -82,7 +82,7 @@ The kana character
 
 > `readonly` `optional` **noteID**: `` `kana_${string}` ``
 
-Defined in: [types.ts:435](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L435)
+Defined in: [types.ts:503](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L503)
 
 ID used for the resulting Anki note
 
@@ -96,7 +96,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:443](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L443)
+Defined in: [types.ts:511](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L511)
 
 Anki note type name
 
@@ -110,7 +110,7 @@ Anki note type name
 
 > **reading**: `string`
 
-Defined in: [types.ts:735](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L735)
+Defined in: [types.ts:803](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L803)
 
 The romaji reading of the kana
 
@@ -120,7 +120,7 @@ The romaji reading of the kana
 
 > `optional` **svg**: `string`
 
-Defined in: [types.ts:743](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L743)
+Defined in: [types.ts:811](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L811)
 
 The kana SVG filename
 
@@ -130,7 +130,7 @@ The kana SVG filename
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:451](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L451)
+Defined in: [types.ts:519](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L519)
 
 Tags generated based on the entry's information
 

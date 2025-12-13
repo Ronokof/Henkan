@@ -22,6 +22,7 @@
 - [GlossSpecificNumber](interfaces/GlossSpecificNumber.md)
 - [Grammar](interfaces/Grammar.md)
 - [GrammarMeaning](interfaces/GrammarMeaning.md)
+- [JaWiktionaryEntry](interfaces/JaWiktionaryEntry.md)
 - [Kana](interfaces/Kana.md)
 - [Kanji](interfaces/Kanji.md)
 - [KanjiComponent](interfaces/KanjiComponent.md)
@@ -44,6 +45,7 @@
 - [DictTranslation](type-aliases/DictTranslation.md)
 - [EntryType](type-aliases/EntryType.md)
 - [JLPT](type-aliases/JLPT.md)
+- [POS](type-aliases/POS.md)
 - [Result](type-aliases/Result.md)
 
 ## Functions

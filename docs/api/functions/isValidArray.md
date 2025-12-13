@@ -8,7 +8,7 @@
 
 > **isValidArray**(`arg`): `arg is any[]`
 
-Defined in: [utils.ts:60](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L60)
+Defined in: [utils.ts:62](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L62)
 
 Checks if the argument is an array.
 

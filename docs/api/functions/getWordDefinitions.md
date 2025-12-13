@@ -6,15 +6,15 @@
 
 # Function: getWordDefinitions()
 
-> **getWordDefinitions**(`entries`, `jmDict`, `kanjiDic`, `generateFurigana?`): `Promise`\<[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]\>
+> **getWordDefinitions**(`entryList`, `jmDict`, `generateFurigana?`): `Promise`\<[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]\>
 
-Defined in: [utils.ts:861](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L861)
+Defined in: [utils.ts:911](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L911)
 
 Pairs Japanese definitions with JMdict word entries
 
 ## Parameters
 
-### entries
+### entryList
 
 `any`[]
 
@@ -25,12 +25,6 @@ An array containing `ja.wiktionary.org` Japanese entries (converted using [conve
 [`DictWord`](../interfaces/DictWord.md)[]
 
 An array of converted `JMdict` entries
-
-### kanjiDic
-
-[`DictKanji`](../interfaces/DictKanji.md)[]
-
-An array of converted `KANJIDIC` entries
 
 ### generateFurigana?
 

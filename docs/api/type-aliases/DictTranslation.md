@@ -8,6 +8,6 @@
 
 > **DictTranslation** = `string` \| \{ `translation`: `string`; `type`: `"lit"` \| `"expl"` \| `"tm"`; \}
 
-Defined in: [types.ts:66](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L66)
+Defined in: [types.ts:107](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L107)
 
 A JMdict sense translation

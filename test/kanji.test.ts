@@ -22,6 +22,7 @@ import {
   getKanji,
   getKanjiExtended,
   isKanji,
+  shuffleArray,
 } from "../src/utils";
 import { regexps } from "../src/constants";
 
@@ -215,18 +216,20 @@ beforeAll(async () => {
 
   const kanjiChars: Set<string> = new Set<string>();
 
-  convertedKanjiDic = convertKanjiDic(kanjidic).filter(
-    (kanji: DictKanji) =>
-      kanji.isKokuji === true ||
-      (kanji.misc &&
-        (kanji.misc.frequency !== undefined ||
-          kanji.misc.grade !== undefined ||
-          kanji.misc.jlpt !== undefined) &&
-        ((kanji.readingMeaning &&
-          kanji.readingMeaning.some(
-            (rm: DictKanjiReadingMeaning) => rm.nanori !== undefined,
-          )) ||
-          kanji.readingMeaning === undefined)),
+  convertedKanjiDic = shuffleArray<DictKanji>(
+    convertKanjiDic(kanjidic).filter(
+      (kanji: DictKanji) =>
+        kanji.isKokuji === true ||
+        (kanji.misc &&
+          (kanji.misc.frequency !== undefined ||
+            kanji.misc.grade !== undefined ||
+            kanji.misc.jlpt !== undefined) &&
+          ((kanji.readingMeaning &&
+            kanji.readingMeaning.some(
+              (rm: DictKanjiReadingMeaning) => rm.nanori !== undefined,
+            )) ||
+            kanji.readingMeaning === undefined)),
+    ),
   );
 
   for (const kanji of convertedKanjiDic)

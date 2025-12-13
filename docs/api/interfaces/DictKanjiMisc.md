@@ -6,7 +6,7 @@
 
 # Interface: DictKanjiMisc
 
-Defined in: [types.ts:171](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L171)
+Defined in: [types.ts:212](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L212)
 
 Miscellaneous information about the kanji
 
@@ -18,7 +18,7 @@ Equivalent to the `misc` KANJIDIC2 element *(excluding some subelements)*
 
 > `optional` **frequency**: `string`
 
-Defined in: [types.ts:191](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L191)
+Defined in: [types.ts:232](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L232)
 
 The frequency-of-use ranking
 
@@ -30,7 +30,7 @@ A number from `1` to `2500`
 
 > `optional` **grade**: `string`
 
-Defined in: [types.ts:185](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L185)
+Defined in: [types.ts:226](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L226)
 
 The kanji grade level
 
@@ -46,7 +46,7 @@ The kanji grade level
 
 > `optional` **jlpt**: [`JLPT`](../type-aliases/JLPT.md)
 
-Defined in: [types.ts:195](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L195)
+Defined in: [types.ts:236](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L236)
 
 The [pre-2010 JLPT](https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_Test#Previous_format_(1984%E2%80%932009)) level
 
@@ -56,6 +56,6 @@ The [pre-2010 JLPT](https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_
 
 > `readonly` **strokeNumber**: `string`
 
-Defined in: [types.ts:175](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L175)
+Defined in: [types.ts:216](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L216)
 
 The stroke count of the kanji, including the radical
