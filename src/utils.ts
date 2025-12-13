@@ -1661,7 +1661,7 @@ export function getWord(
   id?: string,
   kanjiDic?: DictKanji[],
   examples?: TanakaExample[],
-  definitions?: WordDefinitionPair[],
+  definitions?: WordDefinitionPair[] | Map<string, Definition[]>,
   dictWord?: DictWord,
   noteTypeName?: string,
   deckPath?: string,
@@ -2035,11 +2035,13 @@ export function getWord(
       }
 
       if (definitions) {
-        const pair: WordDefinitionPair | undefined = definitions.find(
-          (wdp: WordDefinitionPair) => wdp.wordID === word.id!,
-        );
+        const defs: Definition[] | undefined = Array.isArray(definitions)
+          ? definitions.find(
+              (wdp: WordDefinitionPair) => wdp.wordID === word.id!,
+            )?.definitions
+          : definitions.get(word.id!);
 
-        if (pair) word.definitions = pair.definitions;
+        if (defs) word.definitions = defs;
       }
 
       return word;
@@ -2606,7 +2608,7 @@ export function generateAnkiNote(entry: Result): string[] {
         ? entry.definitions
             .map((definitionEntry: Definition) =>
               createEntry(
-                `<span class="word word-definition${definitionEntry.mayNotBeAccurate === true ? " mnba" : ""}>"<span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
+                `<span class="word word-definition${definitionEntry.mayNotBeAccurate === true ? " mnba" : ""}"><span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
               ),
             )
             .join("")

@@ -8,7 +8,7 @@
 
 > **getKanjiExtended**(`info`, `dict`, `kanjiChar?`, `dictKanji?`, `useWords?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md)
 
-Defined in: [utils.ts:2326](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2326)
+Defined in: [utils.ts:2328](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2328)
 
 Same as [getKanji](getKanji.md), but with possible extra info.
 

@@ -40,9 +40,9 @@ An array of converted `Tanaka Corpus` examples
 
 ### definitions?
 
-[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
-
 An array of `ja.wiktionary.org` word definitions
+
+[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[] | `Map`\<`string`, [`Definition`](../interfaces/Definition.md)[]\>
 
 ### dictWord?
 
