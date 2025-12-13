@@ -14,15 +14,19 @@ import {
   WordDefinitionPair,
 } from "../src/types";
 import {
+  convertJawiktionary,
   convertJMdict,
   convertKanjiDic,
   convertTanakaCorpus,
   generateAnkiNote,
   generateAnkiNotesFile,
   getWord,
+  getWordDefinitions,
   isWord,
 } from "../src/utils";
 import { regexps } from "../src/constants";
+import { createReadStream, promises } from "fs";
+import path from "path";
 
 function checkTransformedEntry(
   transformedEntry: Word,
@@ -86,12 +90,20 @@ let convertedKanjiDic: DictKanji[];
 let convertedTanakaCorpus: TanakaExample[];
 let wordDefs: WordDefinitionPair[];
 
+const jawiktionaryTemp: string = path.resolve(
+  `./test/files/jawiktionary_${crypto.randomUUID()}.jsonl`,
+);
+
 beforeAll(async () => {
   const jmdict: string = (await loadDict("JMdict_e")) as string;
   const kanjidic: string = (await loadDict("kanjidic2.xml")) as string;
   const examples: string = (await loadDict("examples.utf")) as string;
-  wordDefs = (await loadDict("word_defs.json")) as WordDefinitionPair[];
   convertedTanakaCorpus = await convertTanakaCorpus(examples);
+  const jaWiktionary: Buffer<ArrayBuffer> = (await loadDict(
+    "raw-wiktextract-data",
+  )) as Buffer<ArrayBuffer>;
+
+  await promises.writeFile(jawiktionaryTemp, jaWiktionary, "utf-8");
 
   const kanjiChars: Set<string> = new Set<string>();
 
@@ -210,15 +222,23 @@ beforeAll(async () => {
 
     return false;
   });
+
+  wordDefs = await getWordDefinitions(
+    await convertJawiktionary(createReadStream(jawiktionaryTemp, "utf-8")),
+    convertedJMdict,
+    true,
+  );
 });
 
-afterAll(() => {
+afterAll(async () => {
   convertedJMdictWithKanji.length = 0;
   convertedJMdictWithExamples.length = 0;
   convertedJMdictWithKanjiAndExamples.length = 0;
   convertedKanjiDic.length = 0;
   convertedTanakaCorpus.length = 0;
   wordDefs.length = 0;
+
+  await promises.rm(jawiktionaryTemp, { force: true });
 });
 
 describe("DictWord transformation to Word", () => {
