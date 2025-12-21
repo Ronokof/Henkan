@@ -24,7 +24,7 @@ The kanji character or a [DictKanji](../interfaces/DictKanji.md) object
 
 readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 
-An array of converted `KANJIDIC` entries
+An array of converted `KANJIDIC` entries (not needed if [kanji](#getkanji) is a [DictKanji](../interfaces/DictKanji.md) object)
 
 ### jmDict?
 

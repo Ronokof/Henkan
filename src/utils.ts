@@ -1600,7 +1600,7 @@ const wordAddNoteArray: (
 /**
  * Transforms a converted `JMdict` entry into a more readable format, by providing either its JMdict entry ID or the {@link DictWord} object directly.
  * @param word The ID of the `JMdict` entry or a {@link DictWord} object
- * @param dict An array of converted `JMdict` entries
+ * @param dict An array of converted `JMdict` entries (not needed if {@link word} is a {@link DictWord} object)
  * @param kanjiDic An array or an ID-kanji map of converted `KANJIDIC` entries
  * @param examples An array of converted `Tanaka Corpus` examples
  * @param definitions An array or ID-definitions map of `ja.wiktionary.org` word definitions
@@ -2009,7 +2009,7 @@ export function getWord(
 /**
  * Transforms a converted `KANJIDIC` entry into a more readable format
  * @param kanji The kanji character or a {@link DictKanji} object
- * @param dict An array of converted `KANJIDIC` entries
+ * @param dict An array of converted `KANJIDIC` entries (not needed if {@link kanji} is a {@link DictKanji} object)
  * @param jmDict An array or a kanji-words map of converted `JMdict` entries
  * @param svgList An array of SVG file names
  * @param noteTypeName The Anki note type name

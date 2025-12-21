@@ -56,14 +56,14 @@ const dictContent = fs.readFileSync(dictPath, 'utf-8');
 
 const dictWords = convertJMdict(dictContent);
 
-const jmDict = undefined, id = undefined, kanjiDic = undefined, tanakaCorpus = undefined;
+const jmDict = undefined, kanjiDic = undefined, tanakaCorpus = undefined, definitions = undefined;
 
 const noteTypeName = 'Word';
 const deckName = 'Japanese::Vocabulary::No kanji form words';
 
 const noKanjiFormWords = dictWords
     .filter(word => word.kanjiForms === undefined)
-    .map(word => getWord(jmDict, id, kanjiDic, tanakaCorpus, word, noteTypeName, deckName));
+    .map(word => getWord(word, jmDict, kanjiDic, tanakaCorpus, definitions, noteTypeName, deckName));
 
 const ankiNotesFile = generateAnkiNotesFile(noKanjiFormWords);
 

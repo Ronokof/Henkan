@@ -24,7 +24,7 @@ The ID of the `JMdict` entry or a [DictWord](../interfaces/DictWord.md) object
 
 readonly [`DictWord`](../interfaces/DictWord.md)[]
 
-An array of converted `JMdict` entries
+An array of converted `JMdict` entries (not needed if [word](#getword) is a [DictWord](../interfaces/DictWord.md) object)
 
 ### kanjiDic?
 
