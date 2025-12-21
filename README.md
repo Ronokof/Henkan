@@ -37,7 +37,7 @@ pnpm add henkan
  - User-friendly schemas for dictionary entries
  - Anki note generation
  - "Japanese definition"-"JMdict entry" pairing (using `ja.wiktionary.org` dumps)
- - Other useful tools (Amazon Polly audio generation, Japanese RegExps, array checking etc.)
+ - Other useful tools (Japanese RegExps, array checking etc.)
 
 ---
 

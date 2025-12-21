@@ -1,32 +1,17 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import loadDict from "./utils/loadDict";
+import { describe, it, expect, beforeAll, inject } from "vitest";
 import { DictKanji, DictKanjiWithRadicals, Kana } from "../src/types";
 import { convertKanjiDic, convertKradFile } from "../src/utils";
 
 let convertedKanjiDic: DictKanji[];
-let kradfile2: Buffer<ArrayBuffer>;
-let katakanaList: Kana[];
 
-beforeAll(async () => {
-  kradfile2 = (await loadDict("kradfile2")) as Buffer<ArrayBuffer>;
-  katakanaList = (await loadDict("katakana.json")) as Kana[];
-
-  const kanjidic: string = (await loadDict("kanjidic2.xml")) as string;
-  convertedKanjiDic = convertKanjiDic(kanjidic);
-});
-
-afterAll(() => {
-  convertedKanjiDic.length = 0;
-  kradfile2 = Buffer.alloc(0);
-  katakanaList.length = 0;
-});
+beforeAll(() => (convertedKanjiDic = convertKanjiDic(inject("kanjidic2.xml"))));
 
 describe("kradfile2 conversion", () =>
   it("conversion", () => {
     const convertedKradfile2: DictKanjiWithRadicals[] = convertKradFile(
-      kradfile2,
+      inject("kradfile2"),
       convertedKanjiDic,
-      katakanaList,
+      inject("katakana.json"),
     );
 
     expect(
@@ -46,6 +31,18 @@ describe("kradfile2 conversion", () =>
                 rad.readingMeaning != undefined &&
                 rad.readingMeaning.length > 0,
             )),
+      ),
+    ).toBeTruthy();
+
+    expect(
+      convertedKradfile2.some((kanji: DictKanjiWithRadicals) =>
+        kanji.radicals.some(
+          (radical: string | DictKanji) =>
+            typeof radical === "object" &&
+            inject("katakana.json").some(
+              (kana: Kana) => kana.kana === radical.kanji,
+            ),
+        ),
       ),
     ).toBeTruthy();
   }));

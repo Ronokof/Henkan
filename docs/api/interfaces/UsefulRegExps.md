@@ -6,7 +6,7 @@
 
 # Interface: UsefulRegExps
 
-Defined in: [types.ts:874](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L874)
+Defined in: [types.ts:935](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L935)
 
 Some useful regular expressions
 
@@ -16,7 +16,7 @@ Some useful regular expressions
 
 > `readonly` **hiragana**: `RegExp`
 
-Defined in: [types.ts:878](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L878)
+Defined in: [types.ts:939](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L939)
 
 Matches any *hiragana* character(s)
 
@@ -26,7 +26,7 @@ Matches any *hiragana* character(s)
 
 > `readonly` **kanji**: `RegExp`
 
-Defined in: [types.ts:886](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L886)
+Defined in: [types.ts:947](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L947)
 
 Matches any *kanji* character(s)
 
@@ -36,7 +36,7 @@ Matches any *kanji* character(s)
 
 > `readonly` **katakana**: `RegExp`
 
-Defined in: [types.ts:882](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L882)
+Defined in: [types.ts:943](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L943)
 
 Matches any *katakana* character(s)
 
@@ -46,7 +46,7 @@ Matches any *katakana* character(s)
 
 > `readonly` **regExChars**: `RegExp`
 
-Defined in: [types.ts:890](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L890)
+Defined in: [types.ts:951](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L951)
 
 Matches any character that is part of the regex syntax
 
@@ -56,7 +56,7 @@ Matches any character that is part of the regex syntax
 
 > `readonly` **tanakaID**: `RegExp`
 
-Defined in: [types.ts:894](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L894)
+Defined in: [types.ts:955](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L955)
 
 Matches the `#ID=` part in a Tanaka Corpus `examples.utf` file
 
@@ -66,7 +66,7 @@ Matches the `#ID=` part in a Tanaka Corpus `examples.utf` file
 
 > `readonly` **tanakaPart**: `RegExp`
 
-Defined in: [types.ts:898](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L898)
+Defined in: [types.ts:959](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L959)
 
 Matches and splits a part found in the `B` section of a Tanaka Corpus `examples.utf` file
 
@@ -76,6 +76,6 @@ Matches and splits a part found in the `B` section of a Tanaka Corpus `examples.
 
 > `readonly` **tanakaReferenceID**: `RegExp`
 
-Defined in: [types.ts:902](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L902)
+Defined in: [types.ts:963](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L963)
 
 Matches the reference ID element of a Tanaka example part

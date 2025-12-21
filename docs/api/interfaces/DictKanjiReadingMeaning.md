@@ -14,9 +14,9 @@ Equivalent to the `reading_meaning` KANJIDIC2 element
 
 ## Properties
 
-### groups
+### groups?
 
-> **groups**: [`DictKanjiReadingMeaningGroup`](DictKanjiReadingMeaningGroup.md)[]
+> `optional` **groups**: [`DictKanjiReadingMeaningGroup`](DictKanjiReadingMeaningGroup.md)[]
 
 Defined in: [types.ts:278](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L278)
 

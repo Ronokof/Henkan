@@ -28,7 +28,7 @@ Whether or not the entry has at least one Tanaka Corpus phrase associated with i
 
 ### id
 
-> `readonly` **id**: `string`
+> `readonly` **id**: `` `${number}` ``
 
 Defined in: [types.ts:176](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L176)
 

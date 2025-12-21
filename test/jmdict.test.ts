@@ -1,5 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import loadDict from "./utils/loadDict";
+import { describe, it, expect, beforeAll, inject } from "vitest";
 import { DictWord, TanakaExample } from "../src/types";
 import { convertJMdict, convertTanakaCorpus } from "../src/utils";
 
@@ -30,31 +29,23 @@ function checkDict(arr: DictWord[], checkPhrases?: true | undefined): void {
     expect(arr.some((word: DictWord) => word.hasPhrases === true)).toBeTruthy();
 }
 
-let jmdict: string;
-let examples: string;
+let convertedTanakaCorpus: TanakaExample[];
 
-beforeAll(async () => {
-  jmdict = (await loadDict("JMdict_e")) as string;
-  examples = (await loadDict("examples.utf")) as string;
-});
-
-afterAll(() => {
-  jmdict = "";
-  examples = "";
-});
+beforeAll(
+  async () =>
+    (convertedTanakaCorpus = await convertTanakaCorpus(inject("examples.utf"))),
+);
 
 describe("JMdict conversion", () => {
   it("conversion without Tanaka examples", () => {
-    const convertedJMdict: DictWord[] = convertJMdict(jmdict);
+    const convertedJMdict: DictWord[] = convertJMdict(inject("JMdict_e"));
 
     checkDict(convertedJMdict);
   });
 
-  it("conversion with Tanaka examples", async () => {
-    const convertedTanakaCorpus: TanakaExample[] =
-      await convertTanakaCorpus(examples);
+  it("conversion with Tanaka examples", () => {
     const convertedJMdictWithExamples: DictWord[] = convertJMdict(
-      jmdict,
+      inject("JMdict_e"),
       convertedTanakaCorpus,
     );
 

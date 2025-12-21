@@ -12,9 +12,9 @@ A pair of a "kanji form"/"reading"/"sense" note and its associated tag
 
 ## Properties
 
-### note?
+### note
 
-> `readonly` `optional` **note**: `string`
+> `readonly` **note**: `string`
 
 Defined in: [types.ts:533](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L533)
 

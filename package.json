@@ -1,6 +1,6 @@
 {
   "name": "henkan",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "A Node.JS library that helps you convert any dictionary from EDRDG, transform their entries into more user-friendly schemas and create Anki notes from them.",
   "keywords": [
     "fjsd",
@@ -52,24 +52,24 @@
   "scripts": {
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run --coverage",
     "clean": "rimraf dist",
     "build:types": "tsc -p tsconfig.types.json",
     "build:cjs": "node ./scripts/build-esbuild.cjs cjs",
     "build:esm": "node ./scripts/build-esbuild.cjs esm",
     "build": "npm run clean && npm run build:types && npm run build:esm && npm run build:cjs",
-    "lint": "eslint 'src/**/*.{ts,tsx}' --fix && eslint 'test/**/*.{ts,tsx}' --fix",
+    "lint": "eslint src --ext .ts,.tsx --fix --fix-type problem,suggestion,layout && eslint test --ext .ts,.tsx --fix --fix-type problem,suggestion,layout",
     "prepare": "npm run lint && npm run build && npm run docs:api",
-    "docs:api": "typedoc --plugin typedoc-plugin-markdown --out docs/api src/index.ts --readme none --excludePrivate --excludeProtected --excludeNotDocumented --hideGenerator --sourceLinkTemplate \"https://github.com/Ronokof/Henkan/blob/{gitRevision}/{path}#L{line}\" --gitRevision main"
+    "docs:api": "typedoc --plugin typedoc-plugin-markdown --out docs/api src/index.ts --readme none --excludePrivate --excludeProtected --excludeNotDocumented --hideGenerator --sourceLinkTemplate \"https://github.com/Ronokof/Henkan/blob/{gitRevision}/{path}#L{line}\" --gitRevision main",
+    "sync-node-types": "node ./scripts/sync-node-types.cjs"
   },
   "devDependencies": {
-    "@types/node": "^25.0.1",
+    "@types/node": "^24.10.4",
     "@types/xml2js": "^0.4.14",
-    "@typescript-eslint/eslint-plugin": "^8.49.0",
-    "@typescript-eslint/parser": "^8.49.0",
-    "@vitest/coverage-v8": "^4.0.15",
-    "esbuild": "^0.27.1",
+    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/parser": "^8.50.0",
+    "@vitest/coverage-v8": "^4.0.16",
+    "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.7.4",
@@ -77,10 +77,9 @@
     "typedoc": "^0.28.15",
     "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.16"
   },
   "dependencies": {
-    "@aws-sdk/client-polly": "^3.948.0",
     "fflate": "^0.8.2",
     "iconv-lite": "^0.7.1",
     "kuroshiro": "^1.2.0",
@@ -89,6 +88,6 @@
     "xml2js": "^0.6.2"
   },
   "engines": {
-    "node": ">=22.17.0"
+    "node": ">=24.12.0"
   }
 }

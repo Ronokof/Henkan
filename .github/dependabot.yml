@@ -11,6 +11,7 @@ updates:
         update-types: ["minor","patch"]
       major:
         patterns: ["*"]
+        dependency-type: "production"
         update-types: ["major"]
   - package-ecosystem: "github-actions"
     directory: "/"

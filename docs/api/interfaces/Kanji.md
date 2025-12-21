@@ -56,6 +56,16 @@ Whether or not this entry should be converted into an Anki note
 
 ***
 
+### externalInfo?
+
+> `optional` **externalInfo**: `true`
+
+Defined in: [types.ts:683](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L683)
+
+Whether or not this kanji object contains information extracted from [source](#source)
+
+***
+
 ### frequency?
 
 > `optional` **frequency**: `string`
@@ -65,16 +75,6 @@ Defined in: [types.ts:667](https://github.com/Ronokof/Henkan/blob/main/src/types
 #### See
 
 [DictKanjiMisc.frequency](DictKanjiMisc.md#frequency)
-
-***
-
-### fromJpdb?
-
-> `optional` **fromJpdb**: `true`
-
-Defined in: [types.ts:683](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L683)
-
-Whether or not this kanji object contains information **only** from `jpdb.io`
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: [types.ts:663](https://github.com/Ronokof/Henkan/blob/main/src/types
 
 ### id?
 
-> `readonly` `optional` **id**: `string`
+> `optional` **id**: `` `${number}` ``
 
 Defined in: [types.ts:507](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L507)
 
@@ -184,7 +184,7 @@ Defined in: [types.ts:643](https://github.com/Ronokof/Henkan/blob/main/src/types
 
 ### noteID?
 
-> `readonly` `optional` **noteID**: `` `kanji_${string}` ``
+> `optional` **noteID**: `string`
 
 Defined in: [types.ts:503](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L503)
 

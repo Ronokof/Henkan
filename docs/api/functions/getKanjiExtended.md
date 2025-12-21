@@ -6,9 +6,9 @@
 
 # Function: getKanjiExtended()
 
-> **getKanjiExtended**(`info`, `dict`, `kanjiChar?`, `dictKanji?`, `useWords?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md)
+> **getKanjiExtended**(`info`, `kanji`, `dict?`, `useWords?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`, `sourceURL?`): [`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
-Defined in: [utils.ts:2328](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2328)
+Defined in: [utils.ts:2187](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2187)
 
 Same as [getKanji](getKanji.md), but with possible extra info.
 
@@ -20,23 +20,17 @@ Same as [getKanji](getKanji.md), but with possible extra info.
 
 Additional info for the kanji (mnemonic, components, words)
 
-### dict
+### kanji
 
-[`DictKanji`](../interfaces/DictKanji.md)[]
+The kanji character or a [DictKanji](../interfaces/DictKanji.md) object
+
+`string` | [`DictKanji`](../interfaces/DictKanji.md)
+
+### dict?
+
+readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 
 An array of converted `KANJIDIC` entries
-
-### kanjiChar?
-
-`string`
-
-The kanji character
-
-### dictKanji?
-
-[`DictKanji`](../interfaces/DictKanji.md)
-
-A [DictKanji](../interfaces/DictKanji.md) object
 
 ### useWords?
 
@@ -46,13 +40,13 @@ Whether or not to use the words provided in the `info` object (if present) inste
 
 ### jmDict?
 
-[`DictWord`](../interfaces/DictWord.md)[]
+An array or a kanji-words map of converted `JMdict` entries
 
-An array of converted `JMdict` entries
+readonly [`DictWord`](../interfaces/DictWord.md)[] | `Map`\<`string`, readonly [`DictWord`](../interfaces/DictWord.md)[]\>
 
 ### svgList?
 
-`string`[]
+readonly `string`[]
 
 An array of SVG file names
 
@@ -68,8 +62,14 @@ The Anki note type name
 
 The full Anki deck path
 
+### sourceURL?
+
+`string`
+
+A link leading to the source of [info](#getkanjiextended)
+
 ## Returns
 
-[`Kanji`](../interfaces/Kanji.md)
+[`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
 The transformed [Kanji](../interfaces/Kanji.md) object

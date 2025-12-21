@@ -56,7 +56,7 @@ Whether or not this entry should be converted into an Anki note
 
 ### id?
 
-> `readonly` `optional` **id**: `string`
+> `optional` **id**: `` `${number}` ``
 
 Defined in: [types.ts:507](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L507)
 
@@ -90,7 +90,7 @@ The English meaning/translation of the grammar point
 
 ### noteID?
 
-> `readonly` `optional` **noteID**: `` `grammar_${string}` ``
+> `optional` **noteID**: `string`
 
 Defined in: [types.ts:503](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L503)
 

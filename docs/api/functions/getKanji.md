@@ -6,41 +6,35 @@
 
 # Function: getKanji()
 
-> **getKanji**(`dict`, `kanjiChar?`, `dictKanji?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md)
+> **getKanji**(`kanji`, `dict?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
-Defined in: [utils.ts:2065](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2065)
+Defined in: [utils.ts:2019](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2019)
 
 Transforms a converted `KANJIDIC` entry into a more readable format
 
 ## Parameters
 
-### dict
+### kanji
 
-[`DictKanji`](../interfaces/DictKanji.md)[]
+The kanji character or a [DictKanji](../interfaces/DictKanji.md) object
+
+`string` | [`DictKanji`](../interfaces/DictKanji.md)
+
+### dict?
+
+readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 
 An array of converted `KANJIDIC` entries
 
-### kanjiChar?
-
-`string`
-
-The kanji character
-
-### dictKanji?
-
-[`DictKanji`](../interfaces/DictKanji.md)
-
-A [DictKanji](../interfaces/DictKanji.md) object
-
 ### jmDict?
 
-[`DictWord`](../interfaces/DictWord.md)[]
+An array or a kanji-words map of converted `JMdict` entries
 
-An array of converted `JMdict` entries
+readonly [`DictWord`](../interfaces/DictWord.md)[] | `Map`\<`string`, readonly [`DictWord`](../interfaces/DictWord.md)[]\>
 
 ### svgList?
 
-`string`[]
+readonly `string`[]
 
 An array of SVG file names
 
@@ -58,6 +52,6 @@ The full Anki deck path
 
 ## Returns
 
-[`Kanji`](../interfaces/Kanji.md)
+[`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
-The transformed [Kanji](../interfaces/Kanji.md) object
+The transformed [Kanji](../interfaces/Kanji.md) object or `undefined` if entry is not found

@@ -14,7 +14,7 @@ Tanaka Corpus `examples.utf` examples
 
 ### furigana?
 
-> `readonly` `optional` **furigana**: `string`
+> `optional` **furigana**: `string`
 
 Defined in: [types.ts:414](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L414)
 

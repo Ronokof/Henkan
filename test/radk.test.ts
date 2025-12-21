@@ -1,27 +1,15 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import loadDict from "./utils/loadDict";
+import { describe, it, expect, beforeAll, inject } from "vitest";
 import { DictKanji, DictRadical } from "../src/types";
 import { convertKanjiDic, convertRadkFile } from "../src/utils";
 
-let radkfile2: Buffer<ArrayBuffer>;
 let convertedKanjiDic: DictKanji[];
 
-beforeAll(async () => {
-  radkfile2 = (await loadDict("radkfile2")) as Buffer<ArrayBuffer>;
-  const kanjidic: string = (await loadDict("kanjidic2.xml")) as string;
-
-  convertedKanjiDic = convertKanjiDic(kanjidic);
-});
-
-afterAll(() => {
-  radkfile2 = Buffer.alloc(0);
-  convertedKanjiDic.length = 0;
-});
+beforeAll(() => (convertedKanjiDic = convertKanjiDic(inject("kanjidic2.xml"))));
 
 describe("radkfile2 conversion", () => {
   it("conversion", () => {
     const convertedRadkfile2: DictRadical[] = convertRadkFile(
-      radkfile2,
+      inject("radkfile2"),
       convertedKanjiDic,
     );
 

@@ -1,5 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import loadDict from "./utils/loadDict";
+import { describe, it, expect, inject } from "vitest";
 import {
   DictKanji,
   DictKanjiReadingMeaning,
@@ -8,14 +7,11 @@ import {
 import { convertKanjiDic } from "../src/utils";
 import { regexps } from "../src/constants";
 
-let kanjidic: string;
-
-beforeAll(async () => (kanjidic = (await loadDict("kanjidic2.xml")) as string));
-afterAll(() => (kanjidic = ""));
-
 describe("KANJIDIC conversion", () => {
   it("conversion", () => {
-    const convertedKanjidic: DictKanji[] = convertKanjiDic(kanjidic);
+    const convertedKanjidic: DictKanji[] = convertKanjiDic(
+      inject("kanjidic2.xml"),
+    );
 
     expect(
       convertedKanjidic.every(
@@ -38,6 +34,7 @@ describe("KANJIDIC conversion", () => {
             (rm: DictKanjiReadingMeaning) =>
               rm.nanori !== undefined &&
               rm.nanori.length > 0 &&
+              rm.groups !== undefined &&
               rm.groups.some(
                 (group: DictKanjiReadingMeaningGroup) =>
                   group.meanings != undefined &&

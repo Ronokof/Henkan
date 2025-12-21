@@ -44,19 +44,19 @@ Whether or not this entry should be converted into an Anki note
 
 ***
 
-### fromJpdb?
+### externalInfo?
 
-> `optional` **fromJpdb**: `true`
+> `optional` **externalInfo**: `true`
 
 Defined in: [types.ts:725](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L725)
 
-Whether or not this radical/component object contains information **only** from `jpdb.io`
+Whether or not this radical/component object contains information extracted from [sources](#sources)
 
 ***
 
 ### id?
 
-> `readonly` `optional` **id**: `string`
+> `optional` **id**: `` `${number}` ``
 
 Defined in: [types.ts:507](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L507)
 
@@ -100,7 +100,7 @@ The radical/component mnemonic
 
 ### noteID?
 
-> `readonly` `optional` **noteID**: `` `radical_${string}` ``
+> `optional` **noteID**: `string`
 
 Defined in: [types.ts:503](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L503)
 

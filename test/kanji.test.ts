@@ -1,8 +1,6 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import loadDict from "./utils/loadDict";
+import { describe, it, expect, beforeAll, afterAll, inject } from "vitest";
 import {
   DictKanji,
-  DictKanjiForm,
   DictKanjiReading,
   DictKanjiReadingMeaning,
   DictKanjiReadingMeaningGroup,
@@ -33,6 +31,8 @@ function checkTransformedEntry(
   deckPath: string,
   checkWords?: true | undefined,
   kanjiInfo?: Kanji,
+  sourceURL?: string,
+  ignoreExtraInfo?: true | undefined,
 ): void {
   expect(isKanji(transformedEntry)).toBeTruthy();
   expect(
@@ -56,13 +56,16 @@ function checkTransformedEntry(
   ).toBeTruthy();
 
   expect(
-    dictEntry.misc && transformedEntry.frequency == dictEntry.misc.frequency,
+    dictEntry.misc !== undefined &&
+      transformedEntry.frequency == dictEntry.misc.frequency,
   ).toBeTruthy();
   expect(
-    dictEntry.misc && transformedEntry.grade === dictEntry.misc.grade,
+    dictEntry.misc !== undefined &&
+      transformedEntry.grade === dictEntry.misc.grade,
   ).toBeTruthy();
   expect(
-    dictEntry.misc && transformedEntry.jlpt === dictEntry.misc.jlpt,
+    dictEntry.misc !== undefined &&
+      transformedEntry.jlpt === dictEntry.misc.jlpt,
   ).toBeTruthy();
   expect(
     transformedEntry.strokes !== undefined &&
@@ -72,7 +75,10 @@ function checkTransformedEntry(
       transformedEntry.strokes === dictEntry.misc.strokeNumber,
   ).toBeTruthy();
 
-  if (dictEntry.readingMeaning && dictEntry.readingMeaning.length > 0)
+  if (
+    dictEntry.readingMeaning !== undefined &&
+    dictEntry.readingMeaning.length > 0
+  )
     expect(
       dictEntry.readingMeaning.some((rm: DictKanjiReadingMeaning) => {
         let nanori: boolean = false;
@@ -83,37 +89,41 @@ function checkTransformedEntry(
         else if (transformedEntry.nanori === undefined) nanori = true;
 
         groups =
-          (rm.groups.length === 0 &&
+          ((rm.groups === undefined || rm.groups.length === 0) &&
             transformedEntry.meanings === undefined &&
             transformedEntry.onyomi === undefined &&
             transformedEntry.kunyomi === undefined) ||
-          rm.groups.some(
-            (group: DictKanjiReadingMeaningGroup) =>
-              ((transformedEntry.onyomi !== undefined ||
-                transformedEntry.kunyomi !== undefined) &&
-                group.readings.some(
-                  (kr: DictKanjiReading) =>
-                    (transformedEntry.onyomi &&
-                      kr.type === "ja_on" &&
-                      transformedEntry.onyomi.some(
-                        (on: string) => on === kr.reading,
-                      )) ||
-                    (transformedEntry.kunyomi &&
-                      kr.type === "ja_kun" &&
-                      transformedEntry.kunyomi.some(
-                        (kun: string) => kun === kr.reading,
-                      )),
-                )) ||
-              (transformedEntry.meanings !== undefined &&
-                group.meanings.some(
-                  (meaning: string) =>
-                    transformedEntry.meanings &&
-                    ((dictEntry.isKokuji === true && meaning === "(kokuji)") ||
-                      transformedEntry.meanings.some(
-                        (m: string) => m === meaning,
-                      )),
-                )),
-          );
+          (rm.groups !== undefined &&
+            rm.groups.some(
+              (group: DictKanjiReadingMeaningGroup) =>
+                ((transformedEntry.onyomi !== undefined ||
+                  transformedEntry.kunyomi !== undefined) &&
+                  group.readings !== undefined &&
+                  group.readings.some(
+                    (kr: DictKanjiReading) =>
+                      (transformedEntry.onyomi &&
+                        kr.type === "ja_on" &&
+                        transformedEntry.onyomi.some(
+                          (on: string) => on === kr.reading,
+                        )) ||
+                      (transformedEntry.kunyomi &&
+                        kr.type === "ja_kun" &&
+                        transformedEntry.kunyomi.some(
+                          (kun: string) => kun === kr.reading,
+                        )),
+                  )) ||
+                (transformedEntry.meanings !== undefined &&
+                  group.meanings !== undefined &&
+                  group.meanings.some(
+                    (meaning: string) =>
+                      transformedEntry.meanings &&
+                      ((dictEntry.isKokuji === true &&
+                        meaning === "(kokuji)") ||
+                        transformedEntry.meanings.some(
+                          (m: string) => m === meaning,
+                        )),
+                  )),
+            ));
 
         return nanori && groups;
       }),
@@ -143,9 +153,9 @@ function checkTransformedEntry(
       ),
     ).toBeTruthy();
 
-  if (kanjiInfo) {
+  if (kanjiInfo && ignoreExtraInfo === undefined) {
     expect(
-      transformedEntry.components &&
+      transformedEntry.components !== undefined &&
         transformedEntry.components.every(
           (component: KanjiComponent) =>
             kanjiInfo.components &&
@@ -158,7 +168,7 @@ function checkTransformedEntry(
     ).toBeTruthy();
     expect(transformedEntry.mnemonic === kanjiInfo.mnemonic).toBeTruthy();
     expect(
-      transformedEntry.words &&
+      transformedEntry.words !== undefined &&
         transformedEntry.words.every(
           (word: Word) =>
             kanjiInfo.words &&
@@ -185,12 +195,10 @@ function checkTransformedEntry(
             ),
         ),
     ).toBeTruthy();
-    expect(
-      transformedEntry.source === `https://jpdb.io/kanji/${dictEntry.kanji}`,
-    ).toBeTruthy();
+    expect(transformedEntry.source === sourceURL).toBeTruthy();
 
     expect(
-      transformedEntry.tags &&
+      transformedEntry.tags !== undefined &&
         [
           `kanji::components::${transformedEntry.components!.length}`,
           "kanji::has_mnemonic",
@@ -206,61 +214,48 @@ function checkTransformedEntry(
 
 let convertedJMdict: DictWord[];
 let convertedKanjiDic: DictKanji[];
-let convertedKanjiDicWithWords: DictKanji[];
-let svgList: string[];
+let svgList: readonly string[];
+let kanjiWordsMap: Map<string, DictWord[]>;
+let randomKanjiWithWords: string;
 
 beforeAll(async () => {
-  const kanjidic: string = (await loadDict("kanjidic2.xml")) as string;
-  const jmdict: string = (await loadDict("JMdict_e")) as string;
-  svgList = (await loadDict("svg_list")) as string[];
+  svgList = inject("svg_list");
 
-  const kanjiChars: Set<string> = new Set<string>();
+  const kanjiChars: Map<string, number> = new Map<string, number>();
 
   convertedKanjiDic = shuffleArray<DictKanji>(
-    convertKanjiDic(kanjidic).filter(
-      (kanji: DictKanji) =>
-        kanji.isKokuji === true ||
-        (kanji.misc &&
-          (kanji.misc.frequency !== undefined ||
-            kanji.misc.grade !== undefined ||
-            kanji.misc.jlpt !== undefined) &&
-          ((kanji.readingMeaning &&
-            kanji.readingMeaning.some(
-              (rm: DictKanjiReadingMeaning) => rm.nanori !== undefined,
-            )) ||
-            kanji.readingMeaning === undefined)),
-    ),
+    convertKanjiDic(inject("kanjidic2.xml")),
   );
 
-  for (const kanji of convertedKanjiDic)
-    if (!kanjiChars.has(kanji.kanji)) kanjiChars.add(kanji.kanji);
+  convertedJMdict = shuffleArray<DictWord>(convertJMdict(inject("JMdict_e")));
 
-  const kanjiWithWords: Set<string> = new Set<string>();
+  kanjiWordsMap = new Map<string, DictWord[]>();
 
-  convertedJMdict = convertJMdict(jmdict).filter(
-    (word: DictWord) =>
-      word.kanjiForms &&
-      word.kanjiForms.some((kf: DictKanjiForm) =>
-        kf.form.split("").some((char: string) => {
+  for (let i: number = 0; i < convertedKanjiDic.length; i++) {
+    const kanji: DictKanji | undefined = convertedKanjiDic[i];
+    if (!kanji) continue;
+
+    kanjiChars.set(kanji.kanji, i);
+  }
+
+  randomKanjiWithWords = "";
+
+  for (const word of convertedJMdict) {
+    if (word.kanjiForms)
+      for (let i: number = 0; i < word.kanjiForms.length; i++) {
+        for (const char of word.kanjiForms[i]!.form.split(""))
           if (kanjiChars.has(char)) {
-            kanjiWithWords.add(char);
-            return true;
-          } else return false;
-        }),
-      ),
-  );
+            if (!kanjiWordsMap.has(char)) kanjiWordsMap.set(char, [word]);
+            else kanjiWordsMap.get(char)!.push(word);
 
-  convertedKanjiDicWithWords = convertedKanjiDic
-    .filter((kanji: DictKanji) => kanjiWithWords.has(kanji.kanji))
-    .slice(0, 101);
+            if (i === 0 && randomKanjiWithWords === "")
+              randomKanjiWithWords = char;
+          }
+      }
+  }
 });
 
-afterAll(() => {
-  convertedJMdict.length = 0;
-  convertedKanjiDic.length = 0;
-  convertedKanjiDicWithWords.length = 0;
-  svgList.length = 0;
-});
+afterAll(() => kanjiWordsMap.clear());
 
 describe("DictKanji transformation to Kanji", () => {
   it("transformation without words or extra info", () => {
@@ -270,19 +265,22 @@ describe("DictKanji transformation to Kanji", () => {
       const noteTypeName: string = crypto.randomUUID();
       const deckPath: string = crypto.randomUUID();
 
-      const transformedEntry: Kanji = getKanji(
-        convertedKanjiDic,
-        undefined,
+      const transformedEntry: Kanji | undefined = getKanji(
         entry,
+        undefined,
         undefined,
         svgList,
         noteTypeName,
         deckPath,
       );
 
-      checkTransformedEntry(transformedEntry, entry, noteTypeName, deckPath);
+      expect(transformedEntry).toBeDefined();
 
-      entries.push(transformedEntry);
+      if (transformedEntry) {
+        checkTransformedEntry(transformedEntry, entry, noteTypeName, deckPath);
+
+        entries.push(transformedEntry);
+      }
     }
 
     expect(generateAnkiNotesFile(entries).split("\n").length).toBe(
@@ -293,51 +291,75 @@ describe("DictKanji transformation to Kanji", () => {
   it("transformation with extra info", () => {
     const entries: Kanji[] = [];
 
-    for (const entry of convertedKanjiDicWithWords) {
+    const randomIndex: number = Math.floor(
+      Math.random() * convertedKanjiDic.length,
+    );
+
+    for (let i: number = 0; i < convertedKanjiDic.length; i++) {
+      const entry: DictKanji = convertedKanjiDic[i]!;
+
       const noteTypeName: string = crypto.randomUUID();
       const deckPath: string = crypto.randomUUID();
+      const sourceURL: string = crypto.randomUUID();
 
       const kanjiInfo: Kanji = {
         kanji: entry.kanji,
-        components: [
-          { component: crypto.randomUUID(), meaning: crypto.randomUUID() },
-          { component: crypto.randomUUID() },
-        ],
-        mnemonic: crypto.randomUUID(),
-        words: [
-          {
-            kanjiForms: [
-              { kanjiForm: `${entry.kanji}-${crypto.randomUUID()}` },
-            ],
-            readings: [{ reading: crypto.randomUUID() }],
-            translations: [{ translation: crypto.randomUUID() }],
-          },
-        ],
-        fromJpdb: true,
+        ...(i !== randomIndex
+          ? {
+              components: [
+                {
+                  component: crypto.randomUUID(),
+                  meaning: crypto.randomUUID(),
+                },
+                { component: crypto.randomUUID() },
+              ],
+            }
+          : {}),
+        ...(i !== randomIndex ? { mnemonic: crypto.randomUUID() } : {}),
+        ...(i !== randomIndex
+          ? {
+              words: [
+                {
+                  kanjiForms: [
+                    { kanjiForm: `${entry.kanji}-${crypto.randomUUID()}` },
+                  ],
+                  readings: [{ reading: crypto.randomUUID() }],
+                  translations: [{ translation: crypto.randomUUID() }],
+                },
+              ],
+            }
+          : {}),
+        ...(i !== randomIndex ? { externalInfo: true } : {}),
       };
 
-      const transformedEntry: Kanji = getKanjiExtended(
+      const transformedEntry: Kanji | undefined = getKanjiExtended(
         kanjiInfo,
-        convertedKanjiDicWithWords,
-        undefined,
         entry,
+        undefined,
         true,
-        convertedJMdict,
+        undefined,
         svgList,
         noteTypeName,
         deckPath,
+        sourceURL,
       );
 
-      checkTransformedEntry(
-        transformedEntry,
-        entry,
-        noteTypeName,
-        deckPath,
-        true,
-        kanjiInfo,
-      );
+      expect(transformedEntry).toBeDefined();
 
-      entries.push(transformedEntry);
+      if (transformedEntry) {
+        checkTransformedEntry(
+          transformedEntry,
+          entry,
+          noteTypeName,
+          deckPath,
+          true,
+          kanjiInfo,
+          sourceURL,
+          i !== randomIndex ? undefined : true,
+        );
+
+        entries.push(transformedEntry);
+      }
     }
 
     expect(generateAnkiNotesFile(entries).split("\n").length).toBe(
@@ -348,33 +370,151 @@ describe("DictKanji transformation to Kanji", () => {
   it("transformation with words", () => {
     const entries: Kanji[] = [];
 
-    for (const entry of convertedKanjiDicWithWords) {
+    for (let i: number = 0; i < convertedKanjiDic.length; i++) {
+      const entry: DictKanji = convertedKanjiDic[i]!;
+
       const noteTypeName: string = crypto.randomUUID();
       const deckPath: string = crypto.randomUUID();
 
-      const transformedEntry: Kanji = getKanji(
-        convertedKanjiDic,
-        undefined,
+      const transformedEntry: Kanji | undefined = getKanji(
         entry,
-        convertedJMdict,
+        undefined,
+        entry.kanji !== randomKanjiWithWords ? kanjiWordsMap : convertedJMdict,
         svgList,
         noteTypeName,
         deckPath,
       );
 
-      checkTransformedEntry(
-        transformedEntry,
-        entry,
-        noteTypeName,
-        deckPath,
-        true,
-      );
+      expect(transformedEntry).toBeDefined();
 
-      entries.push(transformedEntry);
+      if (transformedEntry) {
+        checkTransformedEntry(
+          transformedEntry,
+          entry,
+          noteTypeName,
+          deckPath,
+          true,
+        );
+
+        entries.push(transformedEntry);
+      }
     }
 
     expect(generateAnkiNotesFile(entries).split("\n").length).toBe(
       entries.length + 7,
     );
+
+    const randomIndex: number = Math.floor(Math.random() * entries.length);
+
+    const noteID: string = entries[randomIndex]!.noteID!;
+    const noteTypeName: string = entries[randomIndex]!.noteTypeName!;
+    const deckPath: string = entries[randomIndex]!.deckPath!;
+
+    entries[randomIndex]!.noteID = undefined;
+
+    try {
+      expect(
+        generateAnkiNotesFile(entries, {
+          guid: true,
+          noteType: true,
+          deckPath: true,
+        }),
+      ).toThrowError("Invalid result list");
+    } catch {}
+
+    entries[randomIndex]!.noteID = noteID;
+    entries[randomIndex]!.noteTypeName = undefined;
+
+    try {
+      expect(
+        generateAnkiNotesFile(entries, {
+          guid: true,
+          noteType: true,
+          deckPath: true,
+        }),
+      ).toThrowError("Invalid result list");
+    } catch {}
+
+    entries[randomIndex]!.noteTypeName = noteTypeName;
+    entries[randomIndex]!.deckPath = undefined;
+
+    try {
+      expect(
+        generateAnkiNotesFile(entries, {
+          guid: true,
+          noteType: true,
+          deckPath: true,
+        }),
+      ).toThrowError("Invalid result list");
+    } catch {}
+
+    entries[randomIndex]!.deckPath = deckPath;
+    entries[randomIndex]!.noteID = undefined;
+
+    try {
+      expect(generateAnkiNotesFile(entries)).toThrowError(
+        "Invalid result list",
+      );
+    } catch {}
+
+    entries[randomIndex]!.noteID = noteID;
+    entries[randomIndex]!.noteTypeName = undefined;
+
+    try {
+      expect(generateAnkiNotesFile(entries)).toThrowError(
+        "Invalid result list",
+      );
+    } catch {}
+
+    entries[randomIndex]!.noteTypeName = noteTypeName;
+    entries[randomIndex]!.deckPath = undefined;
+
+    try {
+      expect(generateAnkiNotesFile(entries)).toThrowError(
+        "Invalid result list",
+      );
+    } catch {}
+
+    entries[randomIndex]!.noteID = undefined;
+    entries[randomIndex]!.noteTypeName = undefined;
+    entries[randomIndex]!.deckPath = undefined;
+
+    expect(
+      generateAnkiNotesFile(entries, {
+        guid: "main_information",
+        noteType: "Basic",
+        deckPath: "Test::Test 2",
+      }).split("\n").length,
+    ).toBe(entries.length + 7);
+
+    expect(
+      generateAnkiNotesFile(
+        entries.map((kanji: Kanji) => {
+          kanji.noteID = undefined;
+          kanji.noteTypeName = undefined;
+          kanji.deckPath = undefined;
+          return kanji;
+        }),
+      ).split("\n").length,
+    ).toBe(entries.length + 4);
+  });
+
+  it("special cases transformation", () => {
+    expect(
+      getKanjiExtended({ kanji: "NAK" }, "NAK", convertedKanjiDic),
+    ).toBeUndefined();
+
+    const kokuji: Kanji | undefined = getKanji("込", convertedKanjiDic);
+
+    expect(kokuji).toBeDefined();
+
+    if (kokuji) {
+      kokuji.strokes = undefined;
+      kokuji.tags = undefined;
+
+      expect(kokuji.kokuji === true).toBeTruthy();
+      expect(kokuji.meanings && kokuji.meanings.length > 0).toBeTruthy();
+      expect(generateAnkiNote(kokuji).length).toBe(10);
+    }
   });
 });

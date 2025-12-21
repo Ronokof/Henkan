@@ -14,9 +14,9 @@ Equivalent to the `rmgroup` KANJIDIC2 element
 
 ## Properties
 
-### meanings
+### meanings?
 
-> **meanings**: `string`[]
+> `optional` **meanings**: `string`[]
 
 Defined in: [types.ts:266](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L266)
 
@@ -24,9 +24,9 @@ The kanji meanings
 
 ***
 
-### readings
+### readings?
 
-> **readings**: [`DictKanjiReading`](DictKanjiReading.md)[]
+> `optional` **readings**: [`DictKanjiReading`](DictKanjiReading.md)[]
 
 Defined in: [types.ts:262](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L262)
 

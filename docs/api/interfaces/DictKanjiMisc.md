@@ -52,9 +52,9 @@ The [pre-2010 JLPT](https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_
 
 ***
 
-### strokeNumber
+### strokeNumber?
 
-> `readonly` **strokeNumber**: `string`
+> `optional` **strokeNumber**: `string`
 
 Defined in: [types.ts:216](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L216)
 

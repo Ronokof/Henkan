@@ -6,9 +6,9 @@
 
 # Function: getWordDefinitions()
 
-> **getWordDefinitions**(`entryList`, `jmDict`, `generateFurigana?`): `Promise`\<[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]\>
+> **getWordDefinitions**(`entryList`, `jmDict`): [`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
 
-Defined in: [utils.ts:911](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L911)
+Defined in: [utils.ts:869](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L869)
 
 Pairs Japanese definitions with JMdict word entries
 
@@ -16,24 +16,18 @@ Pairs Japanese definitions with JMdict word entries
 
 ### entryList
 
-`any`[]
+readonly [`JaWiktionaryEntry`](../interfaces/JaWiktionaryEntry.md)[]
 
-An array containing `ja.wiktionary.org` Japanese entries (converted using [convertJawiktionary](convertJawiktionary.md))
+An array containing `ja.wiktionary.org` Japanese entries (converted using [convertJawiktionarySync](convertJawiktionarySync.md) or [convertJawiktionaryAsync](convertJawiktionaryAsync.md))
 
 ### jmDict
 
-[`DictWord`](../interfaces/DictWord.md)[]
+readonly [`DictWord`](../interfaces/DictWord.md)[]
 
 An array of converted `JMdict` entries
 
-### generateFurigana?
-
-`true`
-
-Whether or not to generate furigana for the definitions
-
 ## Returns
 
-`Promise`\<[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]\>
+[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
 
 A promise resolving with an array of [WordDefinitionPair](../interfaces/WordDefinitionPair.md) objects

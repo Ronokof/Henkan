@@ -1,79 +1,120 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import loadDict from "./utils/loadDict";
-import { Definition, DictWord, WordDefinitionPair } from "../src/types";
+import { describe, it, expect, beforeAll, afterAll, inject } from "vitest";
 import {
-  convertJawiktionary,
+  Definition,
+  DictWord,
+  JaWiktionaryEntry,
+  WordDefinitionPair,
+} from "../src/types";
+import {
+  convertJawiktionaryAsync,
+  convertJawiktionarySync,
   convertJMdict,
   getWordDefinitions,
+  getWordDefinitionsWithFurigana,
 } from "../src/utils";
-import { createReadStream, promises } from "fs";
+import {
+  createReadStream,
+  existsSync,
+  mkdirSync,
+  rmSync,
+  writeFileSync,
+} from "fs";
 import path from "path";
 
 let convertedJmdict: DictWord[];
 
+const filesDir: string = path.resolve(`./test/temp_files-${process.pid}`);
 const jawiktionaryTemp: string = path.resolve(
-  `./test/files/jawiktionary_${crypto.randomUUID()}.jsonl`,
+  `${filesDir}/jawiktionary_${new Date().getTime()}-${process.pid}.jsonl`,
 );
 
-beforeAll(async () => {
-  const jmdict: string = (await loadDict("JMdict_e")) as string;
-  const jaWiktionary: Buffer<ArrayBuffer> = (await loadDict(
-    "raw-wiktextract-data",
-  )) as Buffer<ArrayBuffer>;
+beforeAll(() => {
+  if (!existsSync(filesDir)) mkdirSync(filesDir);
 
-  await promises.writeFile(jawiktionaryTemp, jaWiktionary, "utf-8");
+  writeFileSync(jawiktionaryTemp, inject("raw-wiktextract-data"), "utf-8");
 
-  convertedJmdict = convertJMdict(jmdict);
+  convertedJmdict = convertJMdict(inject("JMdict_e"));
 });
 
-afterAll(async () => {
-  convertedJmdict.length = 0;
-
-  await promises.rm(jawiktionaryTemp, { force: true });
-});
+afterAll(() => rmSync(filesDir, { force: true, recursive: true }));
 
 describe("Jawiktionary conversion", () => {
-  it("conversion", async () => {
-    const entries: any[] = await convertJawiktionary(
-      createReadStream(jawiktionaryTemp, "utf-8"),
+  it("sync conversion", () => {
+    const entries: JaWiktionaryEntry[] = convertJawiktionarySync(
+      inject("raw-wiktextract-data"),
     );
 
     expect(entries.length).toBeGreaterThan(0);
     expect(
       entries.every(
-        (entry: any) =>
-          entry !== undefined &&
-          entry !== null &&
-          typeof entry === "object" &&
-          entry.lang_code === "ja" &&
-          entry.lang === "日本語",
+        (entry: JaWiktionaryEntry) =>
+          typeof entry === "object" && typeof entry.word === "string",
+      ),
+    ).toBeTruthy();
+    expect(
+      entries.some(
+        (entry: JaWiktionaryEntry) => typeof entry.forms === "object",
+      ),
+    ).toBeTruthy();
+    expect(
+      entries.some(
+        (entry: JaWiktionaryEntry) => typeof entry.pos_title === "string",
+      ),
+    ).toBeTruthy();
+    expect(
+      entries.some(
+        (entry: JaWiktionaryEntry) => typeof entry.senses === "object",
       ),
     ).toBeTruthy();
 
     entries.length = 0;
   });
 
-  it("conversion with word pairing", async () => {
-    const entries: any[] | null = await convertJawiktionary(
+  it("async conversion", async () => {
+    const entries: JaWiktionaryEntry[] = await convertJawiktionaryAsync(
       createReadStream(jawiktionaryTemp, "utf-8"),
     );
 
     expect(entries.length).toBeGreaterThan(0);
     expect(
       entries.every(
-        (entry: any) =>
-          entry !== undefined &&
-          entry !== null &&
-          typeof entry === "object" &&
-          entry.lang_code === "ja" &&
-          entry.lang === "日本語",
+        (entry: JaWiktionaryEntry) =>
+          typeof entry === "object" && typeof entry.word === "string",
+      ),
+    ).toBeTruthy();
+    expect(
+      entries.some(
+        (entry: JaWiktionaryEntry) => typeof entry.forms === "object",
+      ),
+    ).toBeTruthy();
+    expect(
+      entries.some(
+        (entry: JaWiktionaryEntry) => typeof entry.pos_title === "string",
+      ),
+    ).toBeTruthy();
+    expect(
+      entries.some(
+        (entry: JaWiktionaryEntry) => typeof entry.senses === "object",
       ),
     ).toBeTruthy();
 
-    const pairs: WordDefinitionPair[] | null = await getWordDefinitions(
+    entries.length = 0;
+  });
+
+  it("word-definitions pairing", async () => {
+    const entries: JaWiktionaryEntry[] = await convertJawiktionaryAsync(
+      createReadStream(jawiktionaryTemp, "utf-8"),
+    );
+
+    expect(entries.length).toBeGreaterThan(0);
+
+    const pairs: WordDefinitionPair[] = await getWordDefinitionsWithFurigana(
       entries,
       convertedJmdict,
-      true,
+    );
+    const pairsWithoutFurigana: WordDefinitionPair[] = getWordDefinitions(
+      entries,
+      convertedJmdict,
     );
 
     entries.length = 0;
@@ -109,6 +150,13 @@ describe("Jawiktionary conversion", () => {
       ),
     ).toBeTruthy();
 
+    expect(
+      pairsWithoutFurigana.every((pair: WordDefinitionPair) =>
+        pair.definitions.every((def: Definition) => def.furigana === undefined),
+      ),
+    ).toBeTruthy();
+
     pairs.length = 0;
+    pairsWithoutFurigana.length = 0;
   });
 });

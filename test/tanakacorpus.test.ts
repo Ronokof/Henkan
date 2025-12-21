@@ -1,7 +1,9 @@
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import loadDict from "./utils/loadDict";
+import { describe, it, expect, inject } from "vitest";
 import { ExamplePart, TanakaExample } from "../src/types";
-import { convertTanakaCorpus } from "../src/utils";
+import {
+  convertTanakaCorpus,
+  convertTanakaCorpusWithFurigana,
+} from "../src/utils";
 
 function checkCorpus(
   convertedTanakaCorpus: TanakaExample[],
@@ -62,22 +64,12 @@ function checkCorpus(
   expect(validPart).toBeTruthy();
 }
 
-let examples: string;
-
-beforeAll(async () => (examples = (await loadDict("examples.utf")) as string));
-afterAll(() => (examples = ""));
-
 describe("Tanaka Corpus conversion", () => {
-  it("conversion without furigana", async () => {
-    const convertedTanakaCorpus: TanakaExample[] =
-      await convertTanakaCorpus(examples);
-
-    checkCorpus(convertedTanakaCorpus);
-  });
-  it("conversion with furigana", async () => {
-    const convertedTanakaCorpusWithFurigana: TanakaExample[] =
-      await convertTanakaCorpus(examples, true);
-
-    checkCorpus(convertedTanakaCorpusWithFurigana, true);
-  });
+  it("conversion without furigana", () =>
+    checkCorpus(convertTanakaCorpus(inject("examples.utf"))));
+  it("conversion with furigana", async () =>
+    checkCorpus(
+      await convertTanakaCorpusWithFurigana(inject("examples.utf")),
+      true,
+    ));
 });

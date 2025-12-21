@@ -8,7 +8,7 @@
 
 > **convertJMdict**(`xmlString`, `examples?`): [`DictWord`](../interfaces/DictWord.md)[]
 
-Defined in: [utils.ts:125](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L125)
+Defined in: [utils.ts:120](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L120)
 
 Converts a JMdict `JMdict_e` file into an array of [DictWord](../interfaces/DictWord.md) objects.
 
@@ -22,7 +22,7 @@ The raw `JMdict_e` file contents
 
 ### examples?
 
-[`TanakaExample`](../interfaces/TanakaExample.md)[]
+readonly [`TanakaExample`](../interfaces/TanakaExample.md)[]
 
 An array of converted `Tanaka Corpus` examples
 

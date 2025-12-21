@@ -1,4 +1,4 @@
-import { POS, UsefulRegExps } from "./types";
+import { NoteHeaderKeys, POS, UsefulRegExps } from "./types";
 
 export const regexps: UsefulRegExps = {
   hiragana: /[\u{3040}-\u{309F}]/u,
@@ -9,6 +9,15 @@ export const regexps: UsefulRegExps = {
   tanakaPart:
     /(?<base>[^()\[\]\{\}\s]+)(?:\((?<reading>[\S]+)\))?(?:\[(?<glossnum>[\S]+)\])?(?:\{(?<inflection>[\S]+)\})?/,
   tanakaReferenceID: /#(?<entryid>[\d]+)/,
+};
+
+export const noteHeaderKeys: NoteHeaderKeys = {
+  separator: "#separator:tab",
+  html: "#html:true",
+  guid: "#guid column:",
+  notetype: "#notetype column:",
+  deck: "#deck column:",
+  tags: "#tags column:",
 };
 
 export const notSearchedForms: Set<string> = new Set<string>([
@@ -31,10 +40,10 @@ export const notSearchedForms: Set<string> = new Set<string>([
 
 export const noteMap: Map<
   string,
-  readonly [string, string] | readonly [string, string, POS | POS[]]
+  readonly [string, string] | readonly [string, string, POS | readonly POS[]]
 > = new Map<
   string,
-  readonly [string, string] | readonly [string, string, POS | POS[]]
+  readonly [string, string] | readonly [string, string, POS | readonly POS[]]
 >([
   ["brazilian", ["dialect::brazilian", "Dialect: Brazilian"]],
   ["hokkaido-ben", ["dialect::hokkaido-ben", "Dialect: Hokkaidō-ben"]],

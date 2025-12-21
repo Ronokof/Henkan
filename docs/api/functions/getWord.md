@@ -6,49 +6,43 @@
 
 # Function: getWord()
 
-> **getWord**(`dict?`, `id?`, `kanjiDic?`, `examples?`, `definitions?`, `dictWord?`, `noteTypeName?`, `deckPath?`): [`Word`](../interfaces/Word.md)
+> **getWord**(`word`, `dict?`, `kanjiDic?`, `examples?`, `definitions?`, `noteTypeName?`, `deckPath?`): [`Word`](../interfaces/Word.md) \| `undefined`
 
-Defined in: [utils.ts:1659](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1659)
+Defined in: [utils.ts:1611](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1611)
 
-Transforms a converted `JMdict` entry into a more readable format, by providing either its [id](#getword) or the [dictWord](#getword) object directly.
+Transforms a converted `JMdict` entry into a more readable format, by providing either its JMdict entry ID or the [DictWord](../interfaces/DictWord.md) object directly.
 
 ## Parameters
 
+### word
+
+The ID of the `JMdict` entry or a [DictWord](../interfaces/DictWord.md) object
+
+`` `${number}` `` | [`DictWord`](../interfaces/DictWord.md)
+
 ### dict?
 
-[`DictWord`](../interfaces/DictWord.md)[]
+readonly [`DictWord`](../interfaces/DictWord.md)[]
 
 An array of converted `JMdict` entries
 
-### id?
-
-`string`
-
-The ID of the `JMdict` entry
-
 ### kanjiDic?
 
-[`DictKanji`](../interfaces/DictKanji.md)[]
+An array or an ID-kanji map of converted `KANJIDIC` entries
 
-An array of converted `KANJIDIC` entries
+readonly [`DictKanji`](../interfaces/DictKanji.md)[] | `Map`\<`string`, readonly [`DictKanji`](../interfaces/DictKanji.md)[]\>
 
 ### examples?
 
-[`TanakaExample`](../interfaces/TanakaExample.md)[]
-
 An array of converted `Tanaka Corpus` examples
+
+readonly [`TanakaExample`](../interfaces/TanakaExample.md)[] | `Map`\<`string`, readonly [`TanakaExample`](../interfaces/TanakaExample.md)[]\>
 
 ### definitions?
 
-An array of `ja.wiktionary.org` word definitions
+An array or ID-definitions map of `ja.wiktionary.org` word definitions
 
-[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[] | `Map`\<`string`, [`Definition`](../interfaces/Definition.md)[]\>
-
-### dictWord?
-
-[`DictWord`](../interfaces/DictWord.md)
-
-The converted `JMdict` entry
+`Map`\<`string`, readonly [`Definition`](../interfaces/Definition.md)[]\> | readonly [`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
 
 ### noteTypeName?
 
@@ -64,6 +58,6 @@ The full Anki deck path
 
 ## Returns
 
-[`Word`](../interfaces/Word.md)
+[`Word`](../interfaces/Word.md) \| `undefined`
 
-The transformed [Word](../interfaces/Word.md) object
+The transformed [Word](../interfaces/Word.md) object or `undefined` if entry is not found

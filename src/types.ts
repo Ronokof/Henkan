@@ -173,7 +173,7 @@ export interface DictWord {
   /**
    * The entry sequence number
    */
-  readonly id: string;
+  readonly id: `${number}`;
   /**
    * The word's kanji forms
    */
@@ -213,7 +213,7 @@ export interface DictKanjiMisc {
   /**
    * The stroke count of the kanji, including the radical
    */
-  readonly strokeNumber: string;
+  strokeNumber?: string | undefined;
   /**
    * The kanji grade level
    *
@@ -259,11 +259,11 @@ export interface DictKanjiReadingMeaningGroup {
   /**
    * The kanji readings
    */
-  readings: DictKanjiReading[];
+  readings?: DictKanjiReading[] | undefined;
   /**
    * The kanji meanings
    */
-  meanings: string[];
+  meanings?: string[] | undefined;
 }
 
 /**
@@ -275,7 +275,7 @@ export interface DictKanjiReadingMeaning {
   /**
    * The Kanji "readings-meanings" pairs
    */
-  groups: DictKanjiReadingMeaningGroup[];
+  groups?: DictKanjiReadingMeaningGroup[] | undefined;
   /**
    * The kanji nanori readings
    */
@@ -335,9 +335,9 @@ export interface DictKanjiWithRadicals {
   /**
    * The radicals/components that make up the kanji
    *
-   * Can be {@link DictKanji} objects if the component is a kanji found in KANJIDIC and/or {@link Kana.kana} if the component is a katakana character that does not use (or have) its (or a) kanji variant.
+   * Can be {@link DictKanji} objects with either an actual kanji or a katakana character (which takes the place of the missing kanji)
    */
-  radicals: (DictKanji | string)[];
+  radicals: DictKanji[];
 }
 
 /**
@@ -411,7 +411,7 @@ export interface TanakaExample {
   /**
    * The Japanese phrase, with furigana attached
    */
-  readonly furigana?: string | undefined;
+  furigana?: string | undefined;
   /**
    * The word-gloss pair
    */
@@ -500,11 +500,11 @@ export interface ResultEntry<EntryType extends string> {
   /**
    * ID used for the resulting Anki note
    */
-  readonly noteID?: `${EntryType}_${string}` | undefined;
+  noteID?: `${`${EntryType}_` | ""}${string}` | undefined;
   /**
    * ID used for the Anki note ID
    */
-  readonly id?: string | undefined;
+  id?: `${number}` | undefined;
   /**
    * Anki note type name
    */
@@ -530,7 +530,7 @@ export interface NoteAndTag {
   /**
    * The note
    */
-  readonly note?: string | undefined;
+  readonly note: string;
   /**
    * The tag
    */
@@ -678,9 +678,9 @@ export interface Kanji extends ResultEntry<"kanji"> {
    */
   source?: string | undefined;
   /**
-   * Whether or not this kanji object contains information **only** from `jpdb.io`
+   * Whether or not this kanji object contains information extracted from {@link source}
    */
-  fromJpdb?: true | undefined;
+  externalInfo?: true | undefined;
 }
 
 /**
@@ -720,9 +720,9 @@ export interface Radical extends ResultEntry<"radical"> {
    */
   sources?: string[] | undefined;
   /**
-   * Whether or not this radical/component object contains information **only** from `jpdb.io`
+   * Whether or not this radical/component object contains information extracted from {@link sources}
    */
-  fromJpdb?: true | undefined;
+  externalInfo?: true | undefined;
 }
 
 /**
@@ -867,6 +867,67 @@ export interface Grammar extends ResultEntry<"grammar"> {
  * Any type of converted entry from a {@link Dict} array + others not from a dictionary
  */
 export type Result = Word | Kanji | Radical | Kana | Grammar;
+
+/**
+ * Default note ID, note type and deck name of a note
+ *
+ * Setting any of the properties to:
+ *
+ * - a `string` will make that string the default note ID/note type/deck name of the note in case {@link Result.noteID}/{@link Result.noteTypeName}/{@link Result.deckPath} is `undefined`.
+ *
+ * - `true` will require all {@link Result} objects to have {@link Result.noteID}/{@link Result.noteTypeName}/{@link Result.deckPath} set (*no default values*).
+ *
+ * - `undefined` (*or not set*) will require all {@link Result} objects to either have {@link Result.noteID}/{@link Result.noteTypeName}/{@link Result.deckPath} set or not set (*no default values*).
+ *
+ */
+export interface DefaultNoteInfo {
+  /**
+   * A default for {@link Result.noteID}
+   *
+   * `main_information` will make either the ID or kana/kanji/radical character the default note ID of the note.
+   */
+  guid?: "main_information" | true | undefined;
+  /**
+   * A default for {@link Result.noteTypeName}
+   */
+  noteType?: string | true | undefined;
+  /**
+   * A default for {@link Result.deckPath}
+   */
+  deckPath?: string | true | undefined;
+}
+
+/**
+ * Anki note file headers keys
+ *
+ * @see {@link https://docs.ankiweb.net/importing/text-files.html#file-headers}
+ */
+export interface NoteHeaderKeys {
+  /**
+   * Field separator
+   */
+  readonly separator: `${string}:${string}`;
+  /**
+   * HTML treatment
+   */
+  readonly html: `${string}:${boolean}`;
+  /**
+   * GUID column header
+   */
+  readonly guid: `${string}:`;
+  /**
+   * Note type column header
+   */
+  readonly notetype: `${string}:`;
+  /**
+   * Deck name column header
+   */
+  readonly deck: `${string}:`;
+  /**
+   * Tags column header (*must be completed with a number after `:`*)
+   */
+  readonly tags: `${string}:`;
+}
 
 /**
  * Some useful regular expressions

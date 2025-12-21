@@ -24,10 +24,10 @@ The kanji character
 
 ### radicals
 
-> **radicals**: (`string` \| [`DictKanji`](DictKanji.md))[]
+> **radicals**: [`DictKanji`](DictKanji.md)[]
 
 Defined in: [types.ts:340](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L340)
 
 The radicals/components that make up the kanji
 
-Can be [DictKanji](DictKanji.md) objects if the component is a kanji found in KANJIDIC and/or [Kana.kana](Kana.md#kana) if the component is a katakana character that does not use (or have) its (or a) kanji variant.
+Can be [DictKanji](DictKanji.md) objects with either an actual kanji or a katakana character (which takes the place of the missing kanji)

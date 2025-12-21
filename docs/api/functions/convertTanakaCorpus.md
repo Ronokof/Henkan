@@ -6,9 +6,9 @@
 
 # Function: convertTanakaCorpus()
 
-> **convertTanakaCorpus**(`tanakaString`, `generateFurigana?`): `Promise`\<[`TanakaExample`](../interfaces/TanakaExample.md)[]\>
+> **convertTanakaCorpus**(`tanakaString`): [`TanakaExample`](../interfaces/TanakaExample.md)[]
 
-Defined in: [utils.ts:501](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L501)
+Defined in: [utils.ts:473](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L473)
 
 Converts a Tanaka Corpus `examples.utf` file into an array of [TanakaExample](../interfaces/TanakaExample.md) objects.
 
@@ -20,14 +20,8 @@ Converts a Tanaka Corpus `examples.utf` file into an array of [TanakaExample](..
 
 The raw contents of a `examples.utf` file
 
-### generateFurigana?
-
-`true`
-
-Whether or not to generate furigana for the phrases
-
 ## Returns
 
-`Promise`\<[`TanakaExample`](../interfaces/TanakaExample.md)[]\>
+[`TanakaExample`](../interfaces/TanakaExample.md)[]
 
 A promise resolving with an array of converted [TanakaExample](../interfaces/TanakaExample.md) objects

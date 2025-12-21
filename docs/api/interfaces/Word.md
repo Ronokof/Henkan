@@ -70,7 +70,7 @@ Whether or not this entry should be converted into an Anki note
 
 ### id?
 
-> `readonly` `optional` **id**: `string`
+> `optional` **id**: `` `${number}` ``
 
 Defined in: [types.ts:507](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L507)
 
@@ -104,7 +104,7 @@ The word kanji forms
 
 ### noteID?
 
-> `readonly` `optional` **noteID**: `` `word_${string}` ``
+> `optional` **noteID**: `string`
 
 Defined in: [types.ts:503](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L503)
 
