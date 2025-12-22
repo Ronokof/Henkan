@@ -2767,15 +2767,15 @@ export function generateAnkiNotesFile(
           result.deckPath = defaultNoteInfo!.deckPath;
 
         if (!hasHeader.guid && result.noteID) {
-          headers.push(`${noteHeaderKeys.guid}:${++headerCount}`);
+          headers.push(`${noteHeaderKeys.guid}${++headerCount}`);
           hasHeader.guid = true;
         }
         if (!hasHeader.noteType && result.noteTypeName) {
-          headers.push(`${noteHeaderKeys.notetype}:${++headerCount}`);
+          headers.push(`${noteHeaderKeys.notetype}${++headerCount}`);
           hasHeader.noteType = true;
         }
         if (!hasHeader.deckPath && result.deckPath) {
-          headers.push(`${noteHeaderKeys.deck}:${++headerCount}`);
+          headers.push(`${noteHeaderKeys.deck}${++headerCount}`);
           hasHeader.deckPath = true;
         }
 
