@@ -2089,33 +2089,67 @@ export function getKanji(
     }
 
     if (jmDict) {
-      const kanjiWords: readonly DictWord[] | Word[] | undefined = (
-        Array.isArray(jmDict)
-          ? (jmDict as readonly DictWord[])
-          : (jmDict as Map<string, readonly DictWord[]>).get(kanji.kanji)
+      let kanjiWords: readonly DictWord[] | Word[] | undefined = Array.isArray(
+        jmDict,
       )
-        ?.filter(
-          (word: DictWord) =>
-            word.kanjiForms && word.kanjiForms[0]!.form.includes(kanji.kanji),
-        )
-        .slice(0, 3);
+        ? (jmDict as readonly DictWord[])
+        : (jmDict as Map<string, readonly DictWord[]>).get(kanji.kanji);
+
+      const firstKfWords: readonly DictWord[] | undefined = kanjiWords?.filter(
+        (word: DictWord) =>
+          word.kanjiForms && word.kanjiForms[0]!.form.includes(kanji.kanji),
+      );
+
+      if (firstKfWords && firstKfWords.length > 0) kanjiWords = firstKfWords;
+      else if (kanjiWords) kanjiWords = kanjiWords;
 
       if (kanjiWords) {
         const validWords: Word[] = [];
 
         for (const word of kanjiWords) {
-          const translation: DictTranslation =
-            word.meanings[0]!.translations![0]!;
-          const translationText: string =
-            typeof translation === "object"
-              ? translation.translation
-              : translation;
+          const kanjiForm: string | undefined = (
+            firstKfWords && firstKfWords.length > 0
+              ? word.kanjiForms![0]
+              : word.kanjiForms!.find((kf: DictKanjiForm) =>
+                  kf.form.includes(kanji.kanji),
+                )
+          )?.form;
+          if (!kanjiForm) continue;
+
+          const reading: string | undefined = (
+            firstKfWords && firstKfWords.length > 0
+              ? word.readings[0]
+              : word.readings.find(
+                  (reading: DictReading) =>
+                    reading.kanjiFormRestrictions &&
+                    reading.kanjiFormRestrictions.includes(kanjiForm),
+                )
+          )?.reading;
+          if (!reading) continue;
+
+          const meaning: DictTranslation | undefined =
+            firstKfWords && firstKfWords.length > 0
+              ? word.meanings[0]?.translations![0]
+              : word.meanings.find(
+                  (m: DictMeaning) =>
+                    m.translations &&
+                    m.kanjiFormRestrictions &&
+                    m.kanjiFormRestrictions.includes(kanjiForm),
+                )?.translations![0];
+          if (!meaning) continue;
 
           validWords.push({
-            kanjiForms: [{ kanjiForm: word.kanjiForms![0]!.form }],
-            readings: [{ reading: word.readings[0]!.reading }],
-            translations: [{ translation: translationText }],
+            kanjiForms: [{ kanjiForm: kanjiForm }],
+            readings: [{ reading: reading }],
+            translations: [
+              {
+                translation:
+                  typeof meaning === "string" ? meaning : meaning.translation,
+              },
+            ],
           });
+
+          if (validWords.length === 3) break;
         }
 
         if (validWords.length > 0) kanji.words = validWords;
