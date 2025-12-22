@@ -67,7 +67,7 @@ const noKanjiFormWords = dictWords
 
 const ankiNotesFile = generateAnkiNotesFile(noKanjiFormWords);
 
-if (ankiNotesFile) fs.writeFileSync('./nokfwords.json', ankiNotesFile, 'utf-8');
+fs.writeFileSync('./nokfwords.json', ankiNotesFile, 'utf-8');
 ```
 
 # API

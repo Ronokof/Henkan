@@ -964,8 +964,8 @@ export function getWordDefinitions(
 
               if (gloss !== undefined)
                 if (
-                  gloss.trim().includes("の漢字表記。") ||
-                  gloss.trim().includes("を参照。")
+                  gloss.trim().includes("漢字表記") ||
+                  gloss.trim().includes("参照")
                 )
                   for (const r of validReadings)
                     if (gloss.trim().includes(r)) {
@@ -1415,8 +1415,8 @@ export function getWordDefinitions(
 
                 if (gloss !== undefined)
                   if (
-                    gloss.trim().includes("の漢字表記。") ||
-                    gloss.trim().includes("を参照。")
+                    gloss.trim().includes("漢字表記") ||
+                    gloss.trim().includes("参照")
                   )
                     for (const r of pair.readings)
                       if (gloss.trim().includes(r)) {

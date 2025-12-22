@@ -298,14 +298,18 @@ export const noteMap: Map<
   ["conjunction", ["conjunction", "Conjunction", "接続詞"]],
   [
     "expression",
-    ["expression", "Expression", ["成語", "成句", "慣用句", "動詞句"]],
+    [
+      "expression",
+      "Expression",
+      ["成語", "成句", "慣用句", "動詞句", "感動詞"],
+    ],
   ],
   [
     "idiomatic expression",
     [
       "idiomatic_expression",
       "Idiomatic expression",
-      ["成語", "成句", "慣用句", "動詞句"],
+      ["成語", "成句", "慣用句", "動詞句", "感動詞"],
     ],
   ],
   [
@@ -545,7 +549,7 @@ export const noteMap: Map<
     [
       "expression",
       "Expression (phrase, clause, etc.)",
-      ["成語", "成句", "慣用句", "動詞句"],
+      ["成語", "成句", "慣用句", "動詞句", "感動詞"],
     ],
   ],
   ["adverbial noun (fukushitekimeishi)", ["adverbial_noun", "Adverbial noun"]],
