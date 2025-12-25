@@ -50,6 +50,11 @@ export type POS =
 export type DictName = "JMDict" | "Kanjidic" | "tanaka" | "radk" | "krad";
 
 /**
+ * A number written as a string
+ */
+export type StringNumber = `${number}`;
+
+/**
  * Word kanji form information
  *
  * Equivalent to the `k_ele` JMdict element
@@ -102,6 +107,20 @@ export interface DictReading {
 }
 
 /**
+ * A word's readings-kanji forms pair
+ */
+export interface ReadingsKanjiFormsPair {
+  /**
+   * The readings
+   */
+  readings: DictReading[];
+  /**
+   * The kanji forms
+   */
+  kanjiForms?: DictKanjiForm[] | undefined;
+}
+
+/**
  * A JMdict sense translation
  */
 export type DictTranslation =
@@ -119,11 +138,11 @@ export interface DictMeaning {
    *
    * @see {@link https://www.edrdg.org/jmwsgi/edhelp.py?svc=jmdict#kw_pos}
    */
-  partOfSpeech?: string[] | undefined;
+  partOfSpeech: string[];
   /**
    * Word glosses
    */
-  translations?: DictTranslation[] | undefined;
+  translations: DictTranslation[];
   /**
    * Cross-references to other similar/related words *(when used with this meaning)*
    */
@@ -173,7 +192,7 @@ export interface DictWord {
   /**
    * The entry sequence number
    */
-  readonly id: `${number}`;
+  readonly id: StringNumber;
   /**
    * The word's kanji forms
    */
@@ -199,7 +218,7 @@ export interface DictWord {
   /**
    * Whether or not the entry has at least one Tanaka Corpus phrase associated with it
    *
-   * **May not always be accurate** (It may only be `true` incorrectly. If it is `undefined`, the report is 100% correct.)
+   * **May not always be accurate**
    */
   hasPhrases?: true | undefined;
 }
@@ -363,7 +382,7 @@ export interface ExamplePart {
   /**
    * A sequence number that references a JMdict entry associated with the word
    */
-  referenceID?: string | undefined;
+  referenceID?: StringNumber | undefined;
   /**
    * Whether or not the word is part of an entry that has been edited and adapted
    *
@@ -381,12 +400,14 @@ export interface GlossSpecificNumber {
   /**
    * The entry ID
    */
-  readonly wordId: string;
+  readonly wordId: StringNumber;
   /**
    * The entry's gloss number
    */
   readonly glossNumber: number;
 }
+
+export type TanakaID = `${number}_${number}`;
 
 /**
  * Tanaka Corpus `examples.utf` examples
@@ -395,7 +416,7 @@ export interface TanakaExample {
   /**
    * The ID of the example
    */
-  readonly id: `${number}_${number}`;
+  readonly id: TanakaID;
   /**
    * The Japanese phrase (found in the `A` section, **before** the tab)
    */
@@ -418,6 +439,17 @@ export interface TanakaExample {
   glossNumber?: GlossSpecificNumber | undefined;
 }
 
+export interface JaWiktionaryEntrySense {
+  /**
+   * The sense's glosses
+   */
+  glosses: string[];
+  /**
+   * The readings associated with the sense
+   */
+  form_of?: string[] | undefined;
+}
+
 /**
  * Useful information from a `ja.wiktionary.org` entry
  */
@@ -433,16 +465,11 @@ export interface JaWiktionaryEntry {
   /**
    * The word senses
    */
-  senses?:
-    | {
-        form_of?: { word: string }[] | undefined;
-        glosses?: string[] | undefined;
-      }[]
-    | undefined;
+  senses: JaWiktionaryEntrySense[];
   /**
    * Other forms (as kanji form or kana) of the word
    */
-  forms?: { form: string }[] | undefined;
+  forms?: string[] | undefined;
 }
 
 /**
@@ -470,7 +497,7 @@ export interface WordDefinitionPair {
   /**
    * The word's JMdict entry ID
    */
-  wordID: string;
+  wordID: StringNumber;
   /**
    * The word definitions
    */
@@ -504,7 +531,7 @@ export interface ResultEntry<EntryType extends string> {
   /**
    * ID used for the Anki note ID
    */
-  id?: `${number}` | undefined;
+  id?: StringNumber | undefined;
   /**
    * Anki note type name
    */
@@ -670,7 +697,7 @@ export interface Kanji extends ResultEntry<"kanji"> {
    */
   jlpt?: JLPT | undefined;
   /**
-   * Whether or not the kanji is kokuji
+   * Whether or not the kanji is a kokuji
    */
   kokuji?: true | undefined;
   /**

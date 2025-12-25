@@ -59,6 +59,9 @@ export const noteMap: Map<
   ["tsugaru-ben", ["dialect::tsugaru-ben", "Dialect: Tsugaru-ben"]],
   ["aichi dialect", ["dialect::aichi", "Dialect: Aichi"]],
   ["tochigi dialect", ["dialect::tochigi", "Dialect: Tochigi"]],
+  ["lit", ["literal_meaning", "Literal meaning"]],
+  ["expl", ["explanation", "Explanation"]],
+  ["tm", ["trademark", "Trademark"]],
   ["adjective (keiyoushi)", ["adjective::i", "い-adjective", "形容詞"]],
   ["'taru' adjective", ["adjective::taru", "たる-adjective", "形容動詞"]],
   [

@@ -8,7 +8,7 @@
 
 > **getKanjiExtended**(`info`, `kanji`, `dict?`, `useWords?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`, `sourceURL?`): [`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
-Defined in: [utils.ts:2221](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2221)
+Defined in: [utils.ts:2098](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2098)
 
 Same as [getKanji](getKanji.md), but with possible extra info.
 
@@ -28,9 +28,9 @@ The kanji character or a [DictKanji](../interfaces/DictKanji.md) object
 
 ### dict?
 
-readonly [`DictKanji`](../interfaces/DictKanji.md)[]
+An array or a kanji-entry map of converted KANJIDIC entries (not needed if [kanji](#getkanjiextended) is a [DictKanji](../interfaces/DictKanji.md) object)
 
-An array of converted `KANJIDIC` entries
+readonly [`DictKanji`](../interfaces/DictKanji.md)[] | `Map`\<`string`, [`DictKanji`](../interfaces/DictKanji.md)\>
 
 ### useWords?
 
@@ -46,9 +46,9 @@ readonly [`DictWord`](../interfaces/DictWord.md)[] | `Map`\<`string`, readonly [
 
 ### svgList?
 
-readonly `string`[]
+An array or a kanji-filename map of SVG file names
 
-An array of SVG file names
+readonly `string`[] | `Map`\<`string`, `string`\>
 
 ### noteTypeName?
 
@@ -72,4 +72,4 @@ A link leading to the source of [info](#getkanjiextended)
 
 [`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
-The transformed [Kanji](../interfaces/Kanji.md) object
+The transformed [DictKanji](../interfaces/DictKanji.md) object

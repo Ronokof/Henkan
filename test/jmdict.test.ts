@@ -20,20 +20,32 @@ function checkDict(arr: DictWord[], checkPhrases?: true | undefined): void {
         word.kanjiForms != undefined && word.kanjiForms.length > 0,
     ),
   ).toBeTruthy();
+  expect(
+    arr.some((word: DictWord) => word.kanjiForms === undefined),
+  ).toBeTruthy();
   expect(arr.some((word: DictWord) => word.isCommon === true)).toBeTruthy();
+  expect(
+    arr.some((word: DictWord) => word.isCommon === undefined),
+  ).toBeTruthy();
   expect(
     arr.some((word: DictWord) => word.usuallyInKana === true),
   ).toBeTruthy();
+  expect(
+    arr.some((word: DictWord) => word.usuallyInKana === undefined),
+  ).toBeTruthy();
 
-  if (checkPhrases === true)
+  if (checkPhrases === true) {
+    expect(
+      arr.some((word: DictWord) => word.hasPhrases === undefined),
+    ).toBeTruthy();
     expect(arr.some((word: DictWord) => word.hasPhrases === true)).toBeTruthy();
+  }
 }
 
 let convertedTanakaCorpus: TanakaExample[];
 
 beforeAll(
-  async () =>
-    (convertedTanakaCorpus = await convertTanakaCorpus(inject("examples.utf"))),
+  () => (convertedTanakaCorpus = convertTanakaCorpus(inject("examples.utf"))),
 );
 
 describe("JMdict conversion", () => {
@@ -50,5 +62,9 @@ describe("JMdict conversion", () => {
     );
 
     checkDict(convertedJMdictWithExamples, true);
+  });
+
+  it("XML conversion error", () => {
+    expect(() => convertJMdict("NOTJMDICT")).toThrowError();
   });
 });

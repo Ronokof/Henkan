@@ -69,4 +69,8 @@ describe("KANJIDIC conversion", () => {
       convertedKanjidic.some((kanji: DictKanji) => kanji.isKokuji === true),
     ).toBeTruthy();
   });
+
+  it("XML conversion error", () => {
+    expect(() => convertKanjiDic("NOTKANJIDIC")).toThrowError();
+  });
 });

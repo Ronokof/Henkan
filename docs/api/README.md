@@ -33,6 +33,7 @@
 - [Phrase](interfaces/Phrase.md)
 - [Radical](interfaces/Radical.md)
 - [Reading](interfaces/Reading.md)
+- [ReadingsKanjiFormsPair](interfaces/ReadingsKanjiFormsPair.md)
 - [ResultEntry](interfaces/ResultEntry.md)
 - [TanakaExample](interfaces/TanakaExample.md)
 - [Translation](interfaces/Translation.md)
@@ -49,6 +50,7 @@
 - [JLPT](type-aliases/JLPT.md)
 - [POS](type-aliases/POS.md)
 - [Result](type-aliases/Result.md)
+- [StringNumber](type-aliases/StringNumber.md)
 
 ## Functions
 
@@ -65,10 +67,11 @@
 - [generateAnkiNotesFile](functions/generateAnkiNotesFile.md)
 - [getKanji](functions/getKanji.md)
 - [getKanjiExtended](functions/getKanjiExtended.md)
+- [getValidForms](functions/getValidForms.md)
 - [getWord](functions/getWord.md)
 - [getWordDefinitions](functions/getWordDefinitions.md)
 - [getWordDefinitionsWithFurigana](functions/getWordDefinitionsWithFurigana.md)
+- [isObjectArray](functions/isObjectArray.md)
 - [isStringArray](functions/isStringArray.md)
-- [isValidArray](functions/isValidArray.md)
 - [isValidArrayWithFirstElement](functions/isValidArrayWithFirstElement.md)
 - [shuffleArray](functions/shuffleArray.md)

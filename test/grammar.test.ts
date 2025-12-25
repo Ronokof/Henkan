@@ -38,55 +38,45 @@ describe("grammar note generation", () =>
 
     grammarPoints[randomIndex]!.noteID = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(grammarPoints, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(grammarPoints, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     grammarPoints[randomIndex]!.noteTypeName = noteTypeName;
     grammarPoints[randomIndex]!.deckPath = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(grammarPoints, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(grammarPoints, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     grammarPoints[randomIndex]!.deckPath = deckPath;
     grammarPoints[randomIndex]!.noteID = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(grammarPoints)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(grammarPoints)).toThrowError(
+      "Invalid result list",
+    );
 
     grammarPoints[randomIndex]!.noteID = noteID;
     grammarPoints[randomIndex]!.noteTypeName = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(grammarPoints)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(grammarPoints)).toThrowError(
+      "Invalid result list",
+    );
 
     grammarPoints[randomIndex]!.noteTypeName = noteTypeName;
     grammarPoints[randomIndex]!.deckPath = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(grammarPoints)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(grammarPoints)).toThrowError(
+      "Invalid result list",
+    );
 
     grammarPoints[randomIndex]!.noteID = undefined;
     grammarPoints[randomIndex]!.noteTypeName = undefined;

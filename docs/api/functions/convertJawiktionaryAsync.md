@@ -8,7 +8,7 @@
 
 > **convertJawiktionaryAsync**(`stream`): `Promise`\<[`JaWiktionaryEntry`](../interfaces/JaWiktionaryEntry.md)[]\>
 
-Defined in: [utils.ts:804](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L804)
+Defined in: [utils.ts:774](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L774)
 
 Converts and filters a `ja.wiktionary.org` JSONL dump (async)
 

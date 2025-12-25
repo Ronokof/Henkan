@@ -5,6 +5,7 @@ export default defineConfig({
   test: {
     hookTimeout: 0,
     testTimeout: 0,
+    teardownTimeout: 90000,
     globals: true,
     environment: 'node',
     globalSetup: resolve('./test/setup.ts'),
@@ -17,7 +18,7 @@ export default defineConfig({
       exclude: ['test/**', '**/*.test.*', 'scripts/**', 'dist/**', 'node_modules/**', '**/*.d.ts', 'src/types.ts', 'src/index.ts'],
       thresholds: {
         statements: 100,
-        branches: 90,
+        branches: 100,
         functions: 100,
         lines: 100
       }

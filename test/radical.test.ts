@@ -32,55 +32,45 @@ describe("radicals note generation", () =>
 
     radicals[randomIndex]!.noteID = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(radicals, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(radicals, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     radicals[randomIndex]!.noteTypeName = noteTypeName;
     radicals[randomIndex]!.deckPath = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(radicals, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(radicals, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     radicals[randomIndex]!.deckPath = deckPath;
     radicals[randomIndex]!.noteID = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(radicals)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(radicals)).toThrowError(
+      "Invalid result list",
+    );
 
     radicals[randomIndex]!.noteID = noteID;
     radicals[randomIndex]!.noteTypeName = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(radicals)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(radicals)).toThrowError(
+      "Invalid result list",
+    );
 
     radicals[randomIndex]!.noteTypeName = noteTypeName;
     radicals[randomIndex]!.deckPath = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(radicals)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(radicals)).toThrowError(
+      "Invalid result list",
+    );
 
     radicals[randomIndex]!.noteID = undefined;
     radicals[randomIndex]!.noteTypeName = undefined;

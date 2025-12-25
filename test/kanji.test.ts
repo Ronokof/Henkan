@@ -117,8 +117,7 @@ function checkTransformedEntry(
                   group.meanings.some(
                     (meaning: string) =>
                       transformedEntry.meanings &&
-                      ((dictEntry.isKokuji === true &&
-                        meaning === "(kokuji)") ||
+                      (dictEntry.isKokuji === true ||
                         transformedEntry.meanings.some(
                           (m: string) => m === meaning,
                         )),
@@ -215,13 +214,14 @@ function checkTransformedEntry(
 let convertedJMdict: DictWord[];
 let convertedKanjiDic: DictKanji[];
 let svgList: readonly string[];
+let svgMap: Map<string, string>;
+let kanjiEntryMap: Map<string, DictKanji>;
 let kanjiWordsMap: Map<string, DictWord[]>;
 let randomKanjiWithWords: string;
+let randomKanjiWithSVG: string;
 
-beforeAll(async () => {
+beforeAll(() => {
   svgList = inject("svg_list");
-
-  const kanjiChars: Map<string, number> = new Map<string, number>();
 
   convertedKanjiDic = shuffleArray<DictKanji>(
     convertKanjiDic(inject("kanjidic2.xml")),
@@ -229,13 +229,39 @@ beforeAll(async () => {
 
   convertedJMdict = shuffleArray<DictWord>(convertJMdict(inject("JMdict_e")));
 
+  svgMap = new Map<string, string>();
+
+  randomKanjiWithSVG = "";
+
+  for (const kanji of convertedKanjiDic) {
+    const codePoint: string | undefined = kanji.kanji
+      .codePointAt(0)
+      ?.toString(16)
+      .toLowerCase();
+    if (!codePoint) throw new Error("Invalid KANJIDIC file");
+
+    const svg: string | undefined = svgList.find((file: string) => {
+      const baseName = file.split(".")[0]?.toLowerCase();
+      if (!baseName) return false;
+
+      return baseName === codePoint || baseName === `0${codePoint}`;
+    });
+
+    if (svg) {
+      svgMap.set(kanji.kanji, svg);
+
+      if (randomKanjiWithSVG === "") randomKanjiWithSVG = kanji.kanji;
+    }
+  }
+
+  kanjiEntryMap = new Map<string, DictKanji>();
   kanjiWordsMap = new Map<string, DictWord[]>();
 
   for (let i: number = 0; i < convertedKanjiDic.length; i++) {
     const kanji: DictKanji | undefined = convertedKanjiDic[i];
     if (!kanji) continue;
 
-    kanjiChars.set(kanji.kanji, i);
+    kanjiEntryMap.set(kanji.kanji, kanji);
   }
 
   randomKanjiWithWords = "";
@@ -244,7 +270,7 @@ beforeAll(async () => {
     if (word.kanjiForms)
       for (let i: number = 0; i < word.kanjiForms.length; i++) {
         for (const char of word.kanjiForms[i]!.form.split(""))
-          if (kanjiChars.has(char)) {
+          if (kanjiEntryMap.has(char)) {
             if (!kanjiWordsMap.has(char)) kanjiWordsMap.set(char, [word]);
             else kanjiWordsMap.get(char)!.push(word);
 
@@ -255,7 +281,11 @@ beforeAll(async () => {
   }
 });
 
-afterAll(() => kanjiWordsMap.clear());
+afterAll(() => {
+  kanjiEntryMap.clear();
+  kanjiWordsMap.clear();
+  svgMap.clear();
+});
 
 describe("DictKanji transformation to Kanji", () => {
   it("transformation without words or extra info", () => {
@@ -269,7 +299,7 @@ describe("DictKanji transformation to Kanji", () => {
         entry,
         undefined,
         undefined,
-        svgList,
+        entry.kanji !== randomKanjiWithSVG ? svgMap : svgList,
         noteTypeName,
         deckPath,
       );
@@ -338,7 +368,7 @@ describe("DictKanji transformation to Kanji", () => {
         undefined,
         true,
         undefined,
-        svgList,
+        entry.kanji !== randomKanjiWithSVG ? svgMap : svgList,
         noteTypeName,
         deckPath,
         sourceURL,
@@ -380,7 +410,7 @@ describe("DictKanji transformation to Kanji", () => {
         entry,
         undefined,
         entry.kanji !== randomKanjiWithWords ? kanjiWordsMap : convertedJMdict,
-        svgList,
+        entry.kanji !== randomKanjiWithSVG ? svgMap : svgList,
         noteTypeName,
         deckPath,
       );
@@ -412,68 +442,56 @@ describe("DictKanji transformation to Kanji", () => {
 
     entries[randomIndex]!.noteID = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(entries, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(entries, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     entries[randomIndex]!.noteID = noteID;
     entries[randomIndex]!.noteTypeName = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(entries, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(entries, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     entries[randomIndex]!.noteTypeName = noteTypeName;
     entries[randomIndex]!.deckPath = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(entries, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(entries, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     entries[randomIndex]!.deckPath = deckPath;
     entries[randomIndex]!.noteID = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(entries)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(entries)).toThrowError(
+      "Invalid result list",
+    );
 
     entries[randomIndex]!.noteID = noteID;
     entries[randomIndex]!.noteTypeName = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(entries)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(entries)).toThrowError(
+      "Invalid result list",
+    );
 
     entries[randomIndex]!.noteTypeName = noteTypeName;
     entries[randomIndex]!.deckPath = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(entries)).toThrowError(
-        "Invalid result list",
-      );
-    } catch {}
+    expect(() => generateAnkiNotesFile(entries)).toThrowError(
+      "Invalid result list",
+    );
 
     entries[randomIndex]!.noteID = undefined;
     entries[randomIndex]!.noteTypeName = undefined;
@@ -501,10 +519,17 @@ describe("DictKanji transformation to Kanji", () => {
 
   it("special cases transformation", () => {
     expect(
-      getKanjiExtended({ kanji: "NAK" }, "NAK", convertedKanjiDic),
+      getKanjiExtended({ kanji: "NAK" }, "NAK", kanjiEntryMap),
     ).toBeUndefined();
 
-    const kokuji: Kanji | undefined = getKanji("込", convertedKanjiDic);
+    const kokuji: Kanji | undefined = getKanji("込", kanjiEntryMap, [
+      {
+        id: "123456789",
+        kanjiForms: [{ form: "馬" }],
+        readings: [{ reading: "うま" }],
+        meanings: [{ partOfSpeech: ["noun"], translations: ["horse"] }],
+      },
+    ]);
 
     expect(kokuji).toBeDefined();
 
@@ -514,6 +539,9 @@ describe("DictKanji transformation to Kanji", () => {
 
       expect(kokuji.kokuji === true).toBeTruthy();
       expect(kokuji.meanings && kokuji.meanings.length > 0).toBeTruthy();
+      expect(
+        kokuji.meanings && !kokuji.meanings.includes("(kokuji)"),
+      ).toBeTruthy();
       expect(generateAnkiNote(kokuji).length).toBe(10);
     }
   });

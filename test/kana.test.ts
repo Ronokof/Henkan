@@ -34,49 +34,45 @@ describe("kana note generation", () =>
 
     kana[randomIndex]!.noteID = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(kana, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(kana, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     kana[randomIndex]!.noteTypeName = noteTypeName;
     kana[randomIndex]!.deckPath = undefined;
 
-    try {
-      expect(
-        generateAnkiNotesFile(kana, {
-          guid: true,
-          noteType: true,
-          deckPath: true,
-        }),
-      ).toThrowError("Invalid result list");
-    } catch {}
+    expect(() =>
+      generateAnkiNotesFile(kana, {
+        guid: true,
+        noteType: true,
+        deckPath: true,
+      }),
+    ).toThrowError("Invalid result list");
 
     kana[randomIndex]!.deckPath = deckPath;
     kana[randomIndex]!.noteID = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(kana)).toThrowError("Invalid result list");
-    } catch {}
+    expect(() => generateAnkiNotesFile(kana)).toThrowError(
+      "Invalid result list",
+    );
 
     kana[randomIndex]!.noteID = noteID;
     kana[randomIndex]!.noteTypeName = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(kana)).toThrowError("Invalid result list");
-    } catch {}
+    expect(() => generateAnkiNotesFile(kana)).toThrowError(
+      "Invalid result list",
+    );
 
     kana[randomIndex]!.noteTypeName = noteTypeName;
     kana[randomIndex]!.deckPath = undefined;
 
-    try {
-      expect(generateAnkiNotesFile(kana)).toThrowError("Invalid result list");
-    } catch {}
+    expect(() => generateAnkiNotesFile(kana)).toThrowError(
+      "Invalid result list",
+    );
 
     kana[randomIndex]!.noteID = undefined;
     kana[randomIndex]!.noteTypeName = undefined;

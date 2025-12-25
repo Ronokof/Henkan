@@ -6,7 +6,7 @@
 
 # Interface: GlossSpecificNumber
 
-Defined in: [types.ts:380](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L380)
+Defined in: [types.ts:399](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L399)
 
 A pair of a word ID and a number associated with a gloss number
 
@@ -16,7 +16,7 @@ A pair of a word ID and a number associated with a gloss number
 
 > `readonly` **glossNumber**: `number`
 
-Defined in: [types.ts:388](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L388)
+Defined in: [types.ts:407](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L407)
 
 The entry's gloss number
 
@@ -24,8 +24,8 @@ The entry's gloss number
 
 ### wordId
 
-> `readonly` **wordId**: `string`
+> `readonly` **wordId**: `` `${number}` ``
 
-Defined in: [types.ts:384](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L384)
+Defined in: [types.ts:403](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L403)
 
 The entry ID

@@ -8,7 +8,7 @@
 
 > **convertRadkFile**(`radkBuffer`, `kanjiDic`): [`DictRadical`](../interfaces/DictRadical.md)[]
 
-Defined in: [utils.ts:603](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L603)
+Defined in: [utils.ts:585](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L585)
 
 Converts a `radkfile2` file (EUC-JP encoded) into an array of [DictRadical](../interfaces/DictRadical.md) objects.
 
