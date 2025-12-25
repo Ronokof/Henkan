@@ -9,20 +9,26 @@ const deps = (pkg.dependencies) ? Object.keys(pkg.dependencies).map((dep) => `${
 const devDeps = (pkg.peerDependencies) ? Object.keys(pkg.devDependencies).map((dep) => `${dep}${(dep !== '@types/node') ? '@latest' : `@^${majorNodeVer}`}`) : [];
 const optionalDeps = (pkg.optionalDependencies) ? Object.keys(pkg.optionalDependencies).map((dep) => `${dep}@latest`) : [];
 
-if (deps.length > 0) {
-    const depsCmd = spawnSync('npm', ['i', '--save', ...deps], { stdio: 'inherit' });
+if (process.argv[2] === undefined || !Number.isSafeInteger(Number.parseInt(process.argv[2].trim()))) {
+    if (deps.length > 0) {
+        const depsCmd = spawnSync('npm', ['i', '--save', ...deps], { stdio: 'inherit' });
 
-    if (depsCmd.error) console.error('Error while updating dependencies:', depsCmd.error);
-}
+        if (depsCmd.error) console.error('Error while updating dependencies:', depsCmd.error);
+    }
 
-if (devDeps.length > 0) {
-    const devDepsCmd = spawnSync('npm', ['i', '--save-dev', ...devDeps], { stdio: 'inherit' });
+    if (devDeps.length > 0) {
+        const devDepsCmd = spawnSync('npm', ['i', '--save-dev', ...devDeps], { stdio: 'inherit' });
 
-    if (devDepsCmd.error) console.error('Error while updating dev dependencies:', devDepsCmd.error);
-}
+        if (devDepsCmd.error) console.error('Error while updating dev dependencies:', devDepsCmd.error);
+    }
 
-if (optionalDeps.length > 0) {
-    const optionalDepsCmd = spawnSync('npm', ['i', '--save-optional', ...optionalDeps], { stdio: 'inherit' });
+    if (optionalDeps.length > 0) {
+        const optionalDepsCmd = spawnSync('npm', ['i', '--save-optional', ...optionalDeps], { stdio: 'inherit' });
 
-    if (optionalDepsCmd.error) console.error('Error while updating optional dependencies:', optionalDepsCmd.error);
+        if (optionalDepsCmd.error) console.error('Error while updating optional dependencies:', optionalDepsCmd.error);
+    }
+} else {
+    const nodeTypesCmd = spawnSync('npm', ['i', '--save-dev', `@types/node@^${majorNodeVer}`], { stdio: 'inherit' });
+
+    if (nodeTypesCmd.error) console.error('Error while updating Node types :', nodeTypesCmd.error);
 }

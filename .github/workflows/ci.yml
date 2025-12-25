@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Install matching Node types
-        run: npm run sync-node-types -- ${{ matrix.node-version }}
+        run: npm run update:pkgs -- ${{ matrix.node-version }}
 
       - name: Build
         run: npm run build
