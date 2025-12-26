@@ -8,7 +8,7 @@
 
 > **getKanjiExtended**(`info`, `kanji`, `dict?`, `useWords?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`, `sourceURL?`): [`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
-Defined in: [utils.ts:2098](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2098)
+Defined in: [utils.ts:2290](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2290)
 
 Same as [getKanji](getKanji.md), but with possible extra info.
 
@@ -28,9 +28,9 @@ The kanji character or a [DictKanji](../interfaces/DictKanji.md) object
 
 ### dict?
 
-An array or a kanji-entry map of converted KANJIDIC entries (not needed if [kanji](#getkanjiextended) is a [DictKanji](../interfaces/DictKanji.md) object)
+An array of converted KANJIDIC entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md) *(not needed if [kanji](#getkanjiextended) is a [DictKanji](../interfaces/DictKanji.md) object)*
 
-readonly [`DictKanji`](../interfaces/DictKanji.md)[] | `Map`\<`string`, [`DictKanji`](../interfaces/DictKanji.md)\>
+[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) | readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 
 ### useWords?
 
@@ -40,15 +40,15 @@ Whether or not to use the words provided in the `info` object (if present) inste
 
 ### jmDict?
 
-An array or a kanji-words map of converted `JMdict` entries
+An array of converted `JMdict` entries or a [KanjiWordsMap](../type-aliases/KanjiWordsMap.md)
 
-readonly [`DictWord`](../interfaces/DictWord.md)[] | `Map`\<`string`, readonly [`DictWord`](../interfaces/DictWord.md)[]\>
+[`KanjiWordsMap`](../type-aliases/KanjiWordsMap.md) | readonly [`DictWord`](../interfaces/DictWord.md)[]
 
 ### svgList?
 
-An array or a kanji-filename map of SVG file names
+An array of SVG file names or a [KanjiSVGMap](../type-aliases/KanjiSVGMap.md)
 
-readonly `string`[] | `Map`\<`string`, `string`\>
+[`KanjiSVGMap`](../type-aliases/KanjiSVGMap.md) | readonly `string`[]
 
 ### noteTypeName?
 

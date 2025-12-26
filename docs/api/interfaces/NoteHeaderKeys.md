@@ -6,7 +6,7 @@
 
 # Interface: NoteHeaderKeys
 
-Defined in: [types.ts:932](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L932)
+Defined in: [types.ts:987](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L987)
 
 Anki note file headers keys
 
@@ -20,7 +20,7 @@ Anki note file headers keys
 
 > `readonly` **deck**: `` `${string}:` ``
 
-Defined in: [types.ts:952](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L952)
+Defined in: [types.ts:1007](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1007)
 
 Deck name column header
 
@@ -30,7 +30,7 @@ Deck name column header
 
 > `readonly` **guid**: `` `${string}:` ``
 
-Defined in: [types.ts:944](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L944)
+Defined in: [types.ts:999](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L999)
 
 GUID column header
 
@@ -40,7 +40,7 @@ GUID column header
 
 > `readonly` **html**: `` `${string}:false` `` \| `` `${string}:true` ``
 
-Defined in: [types.ts:940](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L940)
+Defined in: [types.ts:995](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L995)
 
 HTML treatment
 
@@ -50,7 +50,7 @@ HTML treatment
 
 > `readonly` **notetype**: `` `${string}:` ``
 
-Defined in: [types.ts:948](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L948)
+Defined in: [types.ts:1003](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1003)
 
 Note type column header
 
@@ -60,7 +60,7 @@ Note type column header
 
 > `readonly` **separator**: `` `${string}:${string}` ``
 
-Defined in: [types.ts:936](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L936)
+Defined in: [types.ts:991](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L991)
 
 Field separator
 
@@ -70,6 +70,6 @@ Field separator
 
 > `readonly` **tags**: `` `${string}:` ``
 
-Defined in: [types.ts:956](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L956)
+Defined in: [types.ts:1011](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1011)
 
 Tags column header (*must be completed with a number after `:`*)

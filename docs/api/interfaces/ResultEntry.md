@@ -6,7 +6,7 @@
 
 # Interface: ResultEntry\<EntryType\>
 
-Defined in: [types.ts:526](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L526)
+Defined in: [types.ts:581](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L581)
 
 Basic Anki note information
 
@@ -30,7 +30,7 @@ Basic Anki note information
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:542](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L542)
+Defined in: [types.ts:597](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L597)
 
 The full path of the Anki deck
 
@@ -40,7 +40,7 @@ The full path of the Anki deck
 
 > `optional` **doNotCreateNote**: `true`
 
-Defined in: [types.ts:550](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L550)
+Defined in: [types.ts:605](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L605)
 
 Whether or not this entry should be converted into an Anki note
 
@@ -50,7 +50,7 @@ Whether or not this entry should be converted into an Anki note
 
 > `optional` **id**: `` `${number}` ``
 
-Defined in: [types.ts:534](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L534)
+Defined in: [types.ts:589](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L589)
 
 ID used for the Anki note ID
 
@@ -60,7 +60,7 @@ ID used for the Anki note ID
 
 > `optional` **noteID**: `string`
 
-Defined in: [types.ts:530](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L530)
+Defined in: [types.ts:585](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L585)
 
 ID used for the resulting Anki note
 
@@ -70,7 +70,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:538](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L538)
+Defined in: [types.ts:593](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L593)
 
 Anki note type name
 
@@ -80,6 +80,6 @@ Anki note type name
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:546](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L546)
+Defined in: [types.ts:601](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L601)
 
 Tags generated based on the entry's information

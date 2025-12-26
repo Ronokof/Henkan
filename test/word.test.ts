@@ -1,11 +1,10 @@
 import { describe, it, expect, beforeAll, afterAll, inject } from "vitest";
 import {
-  Definition,
   DictKanji,
   DictWord,
+  EntryMaps,
   Kanji,
   KanjiForm,
-  StringNumber,
   TanakaExample,
   Word,
   WordDefinitionPair,
@@ -15,6 +14,7 @@ import {
   convertJMdict,
   convertKanjiDic,
   convertTanakaCorpusWithFurigana,
+  createEntryMaps,
   generateAnkiNote,
   generateAnkiNotesFile,
   getWord,
@@ -22,7 +22,6 @@ import {
   isWord,
   shuffleArray,
 } from "../src/utils";
-import { regexps } from "../src/constants";
 
 function checkTransformedEntry(
   transformedEntry: Word,
@@ -85,16 +84,10 @@ let convertedJMdict: DictWord[];
 let convertedKanjiDic: DictKanji[];
 let convertedTanakaCorpus: TanakaExample[];
 let wordDefs: WordDefinitionPair[];
-let idWordMap: Map<StringNumber, DictWord>;
-let charKanjiMap: Map<string, DictKanji[]>;
-let wordExamplesMap: Map<StringNumber, TanakaExample[]>;
-let wordDefsMap: Map<StringNumber, Definition[]>;
+let entryMaps: EntryMaps;
 let randomWordID: string;
 
 beforeAll(async () => {
-  charKanjiMap = new Map<string, DictKanji[]>();
-  wordExamplesMap = new Map<StringNumber, TanakaExample[]>();
-
   convertedTanakaCorpus = await convertTanakaCorpusWithFurigana(
     inject("examples.utf"),
   );
@@ -107,165 +100,31 @@ beforeAll(async () => {
     convertJMdict(inject("JMdict_e"), convertedTanakaCorpus),
   );
 
-  idWordMap = new Map<StringNumber, DictWord>();
-
-  for (const entry of convertedJMdict) idWordMap.set(entry.id, entry);
-
   wordDefs = await getWordDefinitionsWithFurigana(
     convertJawiktionarySync(inject("raw-wiktextract-data")),
     convertedJMdict,
   );
 
-  wordDefsMap = new Map<StringNumber, Definition[]>();
-
-  for (const pair of wordDefs) wordDefsMap.set(pair.wordID, pair.definitions);
-
-  const kanjiMap: Map<string, DictKanji> = new Map<string, DictKanji>();
-
-  for (const kanji of convertedKanjiDic) kanjiMap.set(kanji.kanji, kanji);
-
-  const wordsWithKanjiForms: Set<string> = new Set<string>();
-
-  for (const word of convertedJMdict) {
-    if (word.kanjiForms) {
-      for (const kf of word.kanjiForms)
-        for (const char of kf.form
-          .split("")
-          .filter((c: string) => regexps.kanji.test(c))) {
-          const kanjiChar: DictKanji | undefined = kanjiMap.get(char);
-
-          wordsWithKanjiForms.add(word.id);
-
-          if (!charKanjiMap.has(char))
-            charKanjiMap.set(char, kanjiChar ? [kanjiChar] : []);
-          else if (kanjiChar) charKanjiMap.get(char)!.push(kanjiChar);
-        }
-    }
-  }
-
-  const entryParts: Set<string> = new Set<string>();
-  const wordPartsMap: Map<StringNumber, Set<string>> = new Map<
-    StringNumber,
-    Set<string>
-  >();
-
-  for (let i: number = 0; i < convertedJMdict.length; i++) {
-    const word: DictWord | undefined = convertedJMdict[i];
-    if (!word) continue;
-
-    let localPartParts: Set<string> = new Set<string>();
-
-    for (const reading of word.readings) {
-      entryParts.add(reading.reading);
-      localPartParts.add(reading.reading);
-    }
-
-    if (word.kanjiForms !== undefined)
-      for (const kanjiForm of word.kanjiForms) {
-        entryParts.add(kanjiForm.form);
-        localPartParts.add(kanjiForm.form);
-      }
-
-    entryParts.add(word.id);
-    localPartParts.add(word.id);
-
-    wordPartsMap.set(word.id, localPartParts);
-  }
-
-  const partExamplesMap: Map<string, TanakaExample[]> = new Map<
-    string,
-    TanakaExample[]
-  >();
-
-  for (const ex of convertedTanakaCorpus) {
-    for (const part of ex.parts) {
-      if (entryParts.has(part.baseForm)) {
-        let exList: TanakaExample[] | undefined = partExamplesMap.get(
-          part.baseForm,
-        );
-        if (!exList) {
-          exList = [];
-          partExamplesMap.set(part.baseForm, exList);
-        }
-
-        exList.push(ex);
-      }
-      if (part.reading && entryParts.has(part.reading)) {
-        let exList: TanakaExample[] | undefined = partExamplesMap.get(
-          part.reading,
-        );
-        if (!exList) {
-          exList = [];
-          partExamplesMap.set(part.reading, exList);
-        }
-
-        exList.push(ex);
-      }
-      if (part.inflectedForm && entryParts.has(part.inflectedForm)) {
-        let exList: TanakaExample[] | undefined = partExamplesMap.get(
-          part.inflectedForm,
-        );
-        if (!exList) {
-          exList = [];
-          partExamplesMap.set(part.inflectedForm, exList);
-        }
-
-        exList.push(ex);
-      }
-
-      if (part.referenceID && entryParts.has(part.referenceID)) {
-        let exList: TanakaExample[] | undefined = partExamplesMap.get(
-          part.referenceID,
-        );
-        if (!exList) {
-          exList = [];
-          partExamplesMap.set(part.referenceID, exList);
-        }
-
-        exList.push(ex);
-      }
-    }
-  }
-
-  for (let i: number = 0; i < convertedJMdict.length; i++) {
-    const word: DictWord | undefined = convertedJMdict[i];
-    if (!word) continue;
-
-    const entryParts: Set<string> | undefined = wordPartsMap.get(word.id);
-    if (!entryParts) continue;
-
-    const seenEx: Set<string> = new Set<string>();
-    const validExamples: TanakaExample[] = [];
-
-    for (const p of entryParts) {
-      const examplesForPart: TanakaExample[] | undefined =
-        partExamplesMap.get(p);
-      if (!examplesForPart) continue;
-
-      for (const ex of examplesForPart)
-        if (!seenEx.has(ex.id)) {
-          seenEx.add(ex.id);
-          validExamples.push(ex);
-        }
-    }
-
-    if (validExamples.length > 0) wordExamplesMap.set(word.id, validExamples);
-  }
+  entryMaps = createEntryMaps(
+    convertedJMdict,
+    convertedKanjiDic,
+    convertedTanakaCorpus,
+    wordDefs,
+  );
 
   randomWordID = "";
 
-  for (const id of wordExamplesMap.keys())
-    if (wordsWithKanjiForms.has(id) && wordDefsMap.has(id)) {
+  for (const id of entryMaps.wordExamplesMap!.keys())
+    if (
+      entryMaps.wordIDEntryMap?.get(id)?.kanjiForms !== undefined &&
+      entryMaps.wordDefinitionsMap?.has(id)
+    ) {
       randomWordID = id;
       break;
     }
 });
 
-afterAll(() => {
-  charKanjiMap.clear();
-  wordExamplesMap.clear();
-  wordDefsMap.clear();
-});
+afterAll(() => (entryMaps = {}));
 
 describe("DictWord transformation to Word", () => {
   it("transformation only with KANJIDIC", () => {
@@ -280,9 +139,9 @@ describe("DictWord transformation to Word", () => {
       const transformedEntry: Word | undefined = getWord(
         entry,
         undefined,
-        entry.id !== randomWordID ? charKanjiMap : convertedKanjiDic,
+        entry.id !== randomWordID ? entryMaps.kanjiEntryMap : convertedKanjiDic,
         undefined,
-        entry.id !== randomWordID ? wordDefsMap : wordDefs,
+        entry.id !== randomWordID ? entryMaps.wordDefinitionsMap : wordDefs,
         noteTypeName,
         deckPath,
       );
@@ -322,8 +181,10 @@ describe("DictWord transformation to Word", () => {
         entry,
         undefined,
         undefined,
-        entry.id !== randomWordID ? wordExamplesMap : convertedTanakaCorpus,
-        entry.id !== randomWordID ? wordDefsMap : wordDefs,
+        entry.id !== randomWordID
+          ? entryMaps.wordExamplesMap
+          : convertedTanakaCorpus,
+        entry.id !== randomWordID ? entryMaps.wordDefinitionsMap : wordDefs,
         noteTypeName,
         deckPath,
       );
@@ -367,9 +228,11 @@ describe("DictWord transformation to Word", () => {
       const transformedEntry: Word | undefined = getWord(
         entry,
         undefined,
-        entry.id !== randomWordID ? charKanjiMap : convertedKanjiDic,
-        entry.id !== randomWordID ? wordExamplesMap : convertedTanakaCorpus,
-        entry.id !== randomWordID ? wordDefsMap : wordDefs,
+        entry.id !== randomWordID ? entryMaps.kanjiEntryMap : convertedKanjiDic,
+        entry.id !== randomWordID
+          ? entryMaps.wordExamplesMap
+          : convertedTanakaCorpus,
+        entry.id !== randomWordID ? entryMaps.wordDefinitionsMap : wordDefs,
         noteTypeName,
         deckPath,
       );
@@ -471,31 +334,31 @@ describe("DictWord transformation to Word", () => {
   });
 
   it("special cases transformation", () => {
-    expect(getWord("-1", idWordMap)).toBeUndefined();
+    expect(getWord("-1", entryMaps.wordIDEntryMap)).toBeUndefined();
 
     const testWord: Word | undefined = getWord(
       "1002080",
-      idWordMap,
+      entryMaps.wordIDEntryMap,
       convertedKanjiDic,
       convertedTanakaCorpus,
     );
 
-    wordExamplesMap.delete("1002080");
+    entryMaps.wordExamplesMap?.delete("1002080");
 
     const testWord2: Word | undefined = getWord(
       "1002080",
       convertedJMdict,
       convertedKanjiDic,
-      wordExamplesMap,
+      entryMaps.wordExamplesMap,
     );
 
-    idWordMap.delete("1002080");
+    entryMaps.wordIDEntryMap?.delete("1002080");
 
     const testWord3: Word | undefined = getWord(
       "1002080",
-      idWordMap,
+      entryMaps.wordIDEntryMap,
       convertedKanjiDic,
-      wordExamplesMap,
+      entryMaps.wordExamplesMap,
     );
 
     expect(testWord).toBeDefined();
@@ -511,5 +374,7 @@ describe("DictWord transformation to Word", () => {
       expect(generateAnkiNote(testWord).length).toBe(6);
       expect(generateAnkiNotesFile([]).split("\n").length).toBe(4);
     }
+
+    expect(Object.keys(createEntryMaps()).length).toBe(0);
   });
 });

@@ -439,6 +439,61 @@ export interface TanakaExample {
   glossNumber?: GlossSpecificNumber | undefined;
 }
 
+/**
+ * A `JMdict entry ID` ---> {@link DictWord} `object` map
+ */
+export type WordIDEntryMap = Map<StringNumber, DictWord>;
+/**
+ * A `KANJIDIC kanji character` ---> {@link DictKanji} `object` map
+ */
+export type KanjiEntryMap = Map<string, DictKanji>;
+/**
+ * A `KANJIDIC kanji character` ---> `SVG filename` map
+ */
+export type KanjiSVGMap = Map<string, string>;
+/**
+ * A `KANJIDIC kanji character` ---> `JMdict entries with kanji forms that include the kanji` map
+ */
+export type KanjiWordsMap = Map<string, DictWord[]>;
+/**
+ * A `JMdict entry ID` ---> `Tanaka examples associated with the JMdict entry` map
+ */
+export type WordExamplesMap = Map<StringNumber, TanakaExample[]>;
+/**
+ * A `JMdict entry ID` ---> `Japanese definitions associated with the JMdict entry` map
+ */
+export type WordDefinitionsMap = Map<StringNumber, Definition[]>;
+
+/**
+ * Maps with various entry associations
+ */
+export interface EntryMaps {
+  /**
+   * @see {@link WordIDEntryMap}
+   */
+  wordIDEntryMap?: WordIDEntryMap | undefined;
+  /**
+   * @see {@link KanjiWordsMap}
+   */
+  kanjiWordsMap?: KanjiWordsMap | undefined;
+  /**
+   * @see {@link KanjiEntryMap}
+   */
+  kanjiEntryMap?: KanjiEntryMap | undefined;
+  /**
+   * @see {@link WordExamplesMap}
+   */
+  wordExamplesMap?: WordExamplesMap | undefined;
+  /**
+   * @see {@link WordDefinitionsMap}
+   */
+  wordDefinitionsMap?: WordDefinitionsMap | undefined;
+  /**
+   * @see {@link KanjiSVGMap}
+   */
+  kanjiSVGMap?: KanjiSVGMap | undefined;
+}
+
 export interface JaWiktionaryEntrySense {
   /**
    * The sense's glosses

@@ -8,7 +8,7 @@
 
 > **getValidForms**(`readings`, `kanjiForms?`, `wordIsCommon?`): [`ReadingsKanjiFormsPair`](../interfaces/ReadingsKanjiFormsPair.md)
 
-Defined in: [utils.ts:119](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L119)
+Defined in: [utils.ts:126](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L126)
 
 Filters out all the old/rare or (if [wordIsCommon](#getvalidforms) is `true`) uncommon readings and kanji forms of a JMdict entry.
 

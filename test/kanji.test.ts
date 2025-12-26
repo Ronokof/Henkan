@@ -5,6 +5,7 @@ import {
   DictKanjiReadingMeaning,
   DictKanjiReadingMeaningGroup,
   DictWord,
+  EntryMaps,
   Kanji,
   KanjiComponent,
   KanjiForm,
@@ -15,6 +16,7 @@ import {
 import {
   convertJMdict,
   convertKanjiDic,
+  createEntryMaps,
   generateAnkiNote,
   generateAnkiNotesFile,
   getKanji,
@@ -214,9 +216,7 @@ function checkTransformedEntry(
 let convertedJMdict: DictWord[];
 let convertedKanjiDic: DictKanji[];
 let svgList: readonly string[];
-let svgMap: Map<string, string>;
-let kanjiEntryMap: Map<string, DictKanji>;
-let kanjiWordsMap: Map<string, DictWord[]>;
+let entryMaps: EntryMaps;
 let randomKanjiWithWords: string;
 let randomKanjiWithSVG: string;
 
@@ -229,63 +229,19 @@ beforeAll(() => {
 
   convertedJMdict = shuffleArray<DictWord>(convertJMdict(inject("JMdict_e")));
 
-  svgMap = new Map<string, string>();
+  entryMaps = createEntryMaps(
+    convertedJMdict,
+    convertedKanjiDic,
+    undefined,
+    undefined,
+    svgList,
+  );
 
-  randomKanjiWithSVG = "";
-
-  for (const kanji of convertedKanjiDic) {
-    const codePoint: string | undefined = kanji.kanji
-      .codePointAt(0)
-      ?.toString(16)
-      .toLowerCase();
-    if (!codePoint) throw new Error("Invalid KANJIDIC file");
-
-    const svg: string | undefined = svgList.find((file: string) => {
-      const baseName = file.split(".")[0]?.toLowerCase();
-      if (!baseName) return false;
-
-      return baseName === codePoint || baseName === `0${codePoint}`;
-    });
-
-    if (svg) {
-      svgMap.set(kanji.kanji, svg);
-
-      if (randomKanjiWithSVG === "") randomKanjiWithSVG = kanji.kanji;
-    }
-  }
-
-  kanjiEntryMap = new Map<string, DictKanji>();
-  kanjiWordsMap = new Map<string, DictWord[]>();
-
-  for (let i: number = 0; i < convertedKanjiDic.length; i++) {
-    const kanji: DictKanji | undefined = convertedKanjiDic[i];
-    if (!kanji) continue;
-
-    kanjiEntryMap.set(kanji.kanji, kanji);
-  }
-
-  randomKanjiWithWords = "";
-
-  for (const word of convertedJMdict) {
-    if (word.kanjiForms)
-      for (let i: number = 0; i < word.kanjiForms.length; i++) {
-        for (const char of word.kanjiForms[i]!.form.split(""))
-          if (kanjiEntryMap.has(char)) {
-            if (!kanjiWordsMap.has(char)) kanjiWordsMap.set(char, [word]);
-            else kanjiWordsMap.get(char)!.push(word);
-
-            if (i === 0 && randomKanjiWithWords === "")
-              randomKanjiWithWords = char;
-          }
-      }
-  }
+  randomKanjiWithSVG = entryMaps.kanjiSVGMap!.keys().toArray()[0]!;
+  randomKanjiWithWords = entryMaps.kanjiWordsMap!.keys().toArray()[0]!;
 });
 
-afterAll(() => {
-  kanjiEntryMap.clear();
-  kanjiWordsMap.clear();
-  svgMap.clear();
-});
+afterAll(() => (entryMaps = {}));
 
 describe("DictKanji transformation to Kanji", () => {
   it("transformation without words or extra info", () => {
@@ -299,7 +255,7 @@ describe("DictKanji transformation to Kanji", () => {
         entry,
         undefined,
         undefined,
-        entry.kanji !== randomKanjiWithSVG ? svgMap : svgList,
+        entry.kanji !== randomKanjiWithSVG ? entryMaps.kanjiSVGMap : svgList,
         noteTypeName,
         deckPath,
       );
@@ -368,7 +324,7 @@ describe("DictKanji transformation to Kanji", () => {
         undefined,
         true,
         undefined,
-        entry.kanji !== randomKanjiWithSVG ? svgMap : svgList,
+        entry.kanji !== randomKanjiWithSVG ? entryMaps.kanjiSVGMap : svgList,
         noteTypeName,
         deckPath,
         sourceURL,
@@ -409,8 +365,10 @@ describe("DictKanji transformation to Kanji", () => {
       const transformedEntry: Kanji | undefined = getKanji(
         entry,
         undefined,
-        entry.kanji !== randomKanjiWithWords ? kanjiWordsMap : convertedJMdict,
-        entry.kanji !== randomKanjiWithSVG ? svgMap : svgList,
+        entry.kanji !== randomKanjiWithWords
+          ? entryMaps.kanjiWordsMap
+          : convertedJMdict,
+        entry.kanji !== randomKanjiWithSVG ? entryMaps.kanjiSVGMap : svgList,
         noteTypeName,
         deckPath,
       );
@@ -519,10 +477,10 @@ describe("DictKanji transformation to Kanji", () => {
 
   it("special cases transformation", () => {
     expect(
-      getKanjiExtended({ kanji: "NAK" }, "NAK", kanjiEntryMap),
+      getKanjiExtended({ kanji: "NAK" }, "NAK", entryMaps.kanjiEntryMap),
     ).toBeUndefined();
 
-    const kokuji: Kanji | undefined = getKanji("込", kanjiEntryMap, [
+    const kokuji: Kanji | undefined = getKanji("込", entryMaps.kanjiEntryMap, [
       {
         id: "123456789",
         kanjiForms: [{ form: "馬" }],
@@ -544,5 +502,7 @@ describe("DictKanji transformation to Kanji", () => {
       ).toBeTruthy();
       expect(generateAnkiNote(kokuji).length).toBe(10);
     }
+
+    expect(Object.keys(createEntryMaps()).length).toBe(0);
   });
 });

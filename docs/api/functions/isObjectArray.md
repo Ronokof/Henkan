@@ -8,7 +8,7 @@
 
 > **isObjectArray**(`arg`): `arg is any[]`
 
-Defined in: [utils.ts:87](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L87)
+Defined in: [utils.ts:94](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L94)
 
 Checks if the argument is an array of object.
 

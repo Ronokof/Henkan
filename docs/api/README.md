@@ -19,6 +19,7 @@
 - [DictRadical](interfaces/DictRadical.md)
 - [DictReading](interfaces/DictReading.md)
 - [DictWord](interfaces/DictWord.md)
+- [EntryMaps](interfaces/EntryMaps.md)
 - [ExamplePart](interfaces/ExamplePart.md)
 - [GlossSpecificNumber](interfaces/GlossSpecificNumber.md)
 - [Grammar](interfaces/Grammar.md)
@@ -48,9 +49,15 @@
 - [DictTranslation](type-aliases/DictTranslation.md)
 - [EntryType](type-aliases/EntryType.md)
 - [JLPT](type-aliases/JLPT.md)
+- [KanjiEntryMap](type-aliases/KanjiEntryMap.md)
+- [KanjiSVGMap](type-aliases/KanjiSVGMap.md)
+- [KanjiWordsMap](type-aliases/KanjiWordsMap.md)
 - [POS](type-aliases/POS.md)
 - [Result](type-aliases/Result.md)
 - [StringNumber](type-aliases/StringNumber.md)
+- [WordDefinitionsMap](type-aliases/WordDefinitionsMap.md)
+- [WordExamplesMap](type-aliases/WordExamplesMap.md)
+- [WordIDEntryMap](type-aliases/WordIDEntryMap.md)
 
 ## Functions
 
@@ -63,6 +70,7 @@
 - [convertRadkFile](functions/convertRadkFile.md)
 - [convertTanakaCorpus](functions/convertTanakaCorpus.md)
 - [convertTanakaCorpusWithFurigana](functions/convertTanakaCorpusWithFurigana.md)
+- [createEntryMaps](functions/createEntryMaps.md)
 - [generateAnkiNote](functions/generateAnkiNote.md)
 - [generateAnkiNotesFile](functions/generateAnkiNotesFile.md)
 - [getKanji](functions/getKanji.md)
