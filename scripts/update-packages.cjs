@@ -1,12 +1,11 @@
 const { spawnSync } = require('child_process');
 const pkg = require('../package.json');
 
-let majorNodeVer = process.argv[2] ?? process.versions.node.split('.')[0];
-if (majorNodeVer) majorNodeVer = majorNodeVer.trim();
-if (majorNodeVer === undefined || !Number.isSafeInteger(Number.parseInt(majorNodeVer))) throw new Error('Invalid Node version');
+const majorNodeVer = Number(String(process.argv[2] && process.argv[2].trim().length > 0 ? process.argv[2] : process.versions.node.split('.')[0]).trim());
+if (!Number.isSafeInteger(majorNodeVer)) throw new Error('Invalid Node version');
 
 const deps = (pkg.dependencies) ? Object.keys(pkg.dependencies).map((dep) => `${dep}@latest`) : [];
-const devDeps = (pkg.peerDependencies) ? Object.keys(pkg.devDependencies).map((dep) => `${dep}${(dep !== '@types/node') ? '@latest' : `@^${majorNodeVer}`}`) : [];
+const devDeps = (pkg.devDependencies) ? Object.keys(pkg.devDependencies).map((dep) => `${dep}${(dep !== '@types/node') ? '@latest' : `@^${majorNodeVer}`}`) : [];
 const optionalDeps = (pkg.optionalDependencies) ? Object.keys(pkg.optionalDependencies).map((dep) => `${dep}@latest`) : [];
 
 if (process.argv[2] === undefined || !Number.isSafeInteger(Number.parseInt(process.argv[2].trim()))) {
