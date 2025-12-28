@@ -2029,9 +2029,7 @@ export function getWord(
         }
       }
 
-      if (glossSpecificExamples.length === word.translations.length)
-        wordExamples = glossSpecificExamples;
-      else if (glossSpecificExamples.length > 0) {
+      if (glossSpecificExamples.length > 0) {
         const exes: {
           ex: TanakaExample;
           partIndex: number;
@@ -2056,7 +2054,9 @@ export function getWord(
 
       if (wordExamples.length > 0) {
         word.phrases = (
-          wordExamples.length > 5 ? wordExamples.slice(0, 5) : wordExamples
+          glossSpecificExamples.length === 0
+            ? wordExamples.slice(0, 5)
+            : wordExamples
         ).map((ex: { ex: TanakaExample; partIndex: number }) => ({
           phrase: ex.ex.furigana ?? ex.ex.phrase,
           translation: ex.ex.translation,
