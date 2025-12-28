@@ -131,7 +131,9 @@ export function getValidForms(
   const kanjiFormRestrictions: Set<string> = new Set<string>();
 
   const validReadings: DictReading[] = readings.filter(
-    (reading: DictReading) => {
+    (reading: DictReading, index: number) => {
+      if (index === 0) return true;
+
       if (
         reading.notes === undefined ||
         !reading.notes.some((note: string) => notSearchedForms.has(note))
@@ -151,31 +153,36 @@ export function getValidForms(
     },
   );
 
-  const existValidKf: boolean | undefined = kanjiForms
-    ? kanjiForms.some(
-        (kf: DictKanjiForm) =>
-          ((kf.notes === undefined ||
-            !kf.notes.some((note: string) => notSearchedForms.has(note))) &&
-            (wordIsCommon === undefined || kf.commonness !== undefined)) ||
-          kanjiFormRestrictions.has(kf.form),
-      )
-    : undefined;
+  const existValidKf: boolean | undefined =
+    kanjiForms !== undefined
+      ? kanjiForms.some(
+          (kf: DictKanjiForm, index: number) =>
+            index !== 0 &&
+            (((kf.notes === undefined ||
+              !kf.notes.some((note: string) => notSearchedForms.has(note))) &&
+              (wordIsCommon === undefined || kf.commonness !== undefined)) ||
+              kanjiFormRestrictions.has(kf.form)),
+        )
+      : undefined;
 
-  const validKanjiForms: DictKanjiForm[] | undefined = kanjiForms
-    ? kanjiForms.filter((kanjiForm: DictKanjiForm) => {
-        if (existValidKf === true)
-          return (
-            ((kanjiForm.notes === undefined ||
-              !kanjiForm.notes.some((note: string) =>
-                notSearchedForms.has(note),
-              )) &&
-              (wordIsCommon === undefined ||
-                kanjiForm.commonness !== undefined)) ||
-            kanjiFormRestrictions.has(kanjiForm.form)
-          );
-        else return true;
-      })
-    : undefined;
+  const validKanjiForms: DictKanjiForm[] | undefined =
+    kanjiForms !== undefined
+      ? kanjiForms.filter((kanjiForm: DictKanjiForm, index: number) => {
+          if (index === 0) return true;
+
+          if (existValidKf === true)
+            return (
+              ((kanjiForm.notes === undefined ||
+                !kanjiForm.notes.some((note: string) =>
+                  notSearchedForms.has(note),
+                )) &&
+                (wordIsCommon === undefined ||
+                  kanjiForm.commonness !== undefined)) ||
+              kanjiFormRestrictions.has(kanjiForm.form)
+            );
+          else return true;
+        })
+      : undefined;
 
   return {
     readings: validReadings,
