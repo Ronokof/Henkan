@@ -8,6 +8,6 @@
 
 > **Result** = [`Word`](../interfaces/Word.md) \| [`Kanji`](../interfaces/Kanji.md) \| [`Radical`](../interfaces/Radical.md) \| [`Kana`](../interfaces/Kana.md) \| [`Grammar`](../interfaces/Grammar.md)
 
-Defined in: [types.ts:951](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L951)
+Defined in: [types.ts:957](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L957)
 
 Any type of converted entry from a [Dict](Dict.md) array + others not from a dictionary

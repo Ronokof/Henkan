@@ -6,7 +6,7 @@
 
 # Interface: DefaultNoteInfo
 
-Defined in: [types.ts:965](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L965)
+Defined in: [types.ts:971](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L971)
 
 Default note ID, note type and deck name of a note
 
@@ -24,7 +24,7 @@ Setting any of the properties to:
 
 > `optional` **deckPath**: `string` \| `true`
 
-Defined in: [types.ts:979](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L979)
+Defined in: [types.ts:985](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L985)
 
 A default for [Result.deckPath](Grammar.md#deckpath)
 
@@ -34,7 +34,7 @@ A default for [Result.deckPath](Grammar.md#deckpath)
 
 > `optional` **guid**: `true` \| `"main_information"`
 
-Defined in: [types.ts:971](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L971)
+Defined in: [types.ts:977](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L977)
 
 A default for [Result.noteID](Grammar.md#noteid)
 
@@ -46,6 +46,6 @@ A default for [Result.noteID](Grammar.md#noteid)
 
 > `optional` **noteType**: `string` \| `true`
 
-Defined in: [types.ts:975](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L975)
+Defined in: [types.ts:981](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L981)
 
 A default for [Result.noteTypeName](Grammar.md#notetypename)

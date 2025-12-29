@@ -557,6 +557,12 @@ export interface WordDefinitionPair {
    * The word definitions
    */
   definitions: Definition[];
+  /**
+   * The word's readings and/or kanji forms used when searching definitions.
+   *
+   * **Used for final checks in case of inaccurate definitions; always deleted afterwards**
+   */
+  wordForms?: Set<string> | undefined;
 }
 
 /**

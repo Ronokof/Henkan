@@ -813,11 +813,10 @@ export function createEntryMaps(
 
         const localPartParts: Set<string> = new Set<string>();
 
-        if (rkf.readings.length > 0)
-          for (const reading of rkf.readings) {
-            entryParts.add(reading.reading);
-            localPartParts.add(reading.reading);
-          }
+        for (const reading of rkf.readings) {
+          entryParts.add(reading.reading);
+          localPartParts.add(reading.reading);
+        }
 
         if (rkf.kanjiForms && rkf.kanjiForms.length > 0)
           for (const kanjiForm of rkf.kanjiForms) {
@@ -1087,12 +1086,11 @@ export function getWordDefinitions(
       word.isCommon,
     );
 
-    if (rkf.readings.length > 0)
-      for (const r of rkf.readings) {
-        validReadings.add(r.reading);
-        wordReadings.add(r.reading);
-        validForms.add(r.reading);
-      }
+    for (const r of rkf.readings) {
+      validReadings.add(r.reading);
+      wordReadings.add(r.reading);
+      validForms.add(r.reading);
+    }
     if (rkf.kanjiForms && rkf.kanjiForms.length > 0)
       for (const kf of rkf.kanjiForms) {
         validKanjiForms.add(kf.form);
@@ -1134,7 +1132,7 @@ export function getWordDefinitions(
       for (const sense of entry.senses) {
         if (
           sense.form_of &&
-          sense.form_of.some((form: string) => validReadings.has(form))
+          sense.form_of.some((form: string) => validForms.has(form))
         )
           validFormOfEntries.add(entry.word);
 
@@ -1154,10 +1152,10 @@ export function getWordDefinitions(
 
       if (entry.forms)
         for (const form of entry.forms)
-          if (validReadings.has(form)) validFormsEntries.add(entry.word);
+          if (validForms.has(form)) validFormsEntries.add(entry.word);
     }
 
-    if (validReadings.has(entry.word)) {
+    if (validForms.has(entry.word)) {
       valid = true;
       const ftEntry = entriesWithFormTitlesGlobal.get(entry.word);
 
@@ -1174,10 +1172,8 @@ export function getWordDefinitions(
 
     if (
       entry.forms &&
-      (validKanjiForms.has(entry.word) || validReadings.has(entry.word)) &&
-      entry.forms.some(
-        (form: string) => validKanjiForms.has(form) || validReadings.has(form),
-      )
+      validForms.has(entry.word) &&
+      entry.forms.some((form: string) => validForms.has(form))
     ) {
       const wfEntry = entriesWithFormsGlobal.get(entry.word);
 
@@ -1384,7 +1380,7 @@ export function getWordDefinitions(
                     ent.forms &&
                     ent.forms.some(
                       (form: string) =>
-                        rkf.kanjiForms!.has(form) || rkf.readings.has(form),
+                        rkf.kanjiForms?.has(form) || rkf.readings.has(form),
                     ),
                 ),
               );
@@ -1400,12 +1396,11 @@ export function getWordDefinitions(
             entriesWithTitles.push(
               ...te.filter(
                 (ent: JaWiktionaryEntry) =>
-                  (ent.forms &&
-                    rkf.kanjiForms &&
-                    ent.forms.some((form: string) =>
-                      rkf.kanjiForms!.has(form),
-                    )) ||
-                  rkf.kanjiForms === undefined,
+                  ent.forms &&
+                  ent.forms.some(
+                    (form: string) =>
+                      rkf.kanjiForms?.has(form) || rkf.readings.has(form),
+                  ),
               ),
             );
           if (fe)
@@ -1415,8 +1410,7 @@ export function getWordDefinitions(
                   ent.forms &&
                   ent.forms.some(
                     (form: string) =>
-                      (rkf.kanjiForms && rkf.kanjiForms.has(form)) ||
-                      rkf.readings.has(form),
+                      rkf.kanjiForms?.has(form) || rkf.readings.has(form),
                   ),
               ),
             );
@@ -1451,7 +1445,7 @@ export function getWordDefinitions(
                   ent.forms &&
                   ent.forms.some(
                     (form: string) =>
-                      rkf.kanjiForms!.has(form) || rkf.readings.has(form),
+                      rkf.kanjiForms?.has(form) || rkf.readings.has(form),
                   ),
               ),
             );
@@ -1468,12 +1462,11 @@ export function getWordDefinitions(
           entriesWithTitles.push(
             ...te.filter(
               (ent: JaWiktionaryEntry) =>
-                (ent.forms &&
-                  rkf.kanjiForms &&
-                  ent.forms.some((form: string) =>
-                    rkf.kanjiForms!.has(form),
-                  )) ||
-                rkf.kanjiForms === undefined,
+                ent.forms &&
+                ent.forms.some(
+                  (form: string) =>
+                    rkf.kanjiForms?.has(form) || rkf.readings.has(form),
+                ),
             ),
           );
         if (fe)
@@ -1483,8 +1476,7 @@ export function getWordDefinitions(
                 ent.forms &&
                 ent.forms.some(
                   (form: string) =>
-                    (rkf.kanjiForms && rkf.kanjiForms.has(form)) ||
-                    rkf.readings.has(form),
+                    rkf.kanjiForms?.has(form) || rkf.readings.has(form),
                 ),
             ),
           );
@@ -1521,17 +1513,16 @@ export function getWordDefinitions(
       Set<string>
     >();
     const refsMap: Map<string, Set<string>> = new Map<string, Set<string>>();
-    const readingForms: Set<string> = new Set<string>();
+    const forms: Set<string> = new Set<string>();
 
     for (const ent of pair.entriesWithTitles) {
       const validFormOf: boolean = validFormOfEntries.has(ent.word);
       const validGlosses: boolean = validGlossesEntries.has(ent.word);
       const validForms: boolean = validFormsEntries.has(ent.word);
 
-      const hasKanjiForms: boolean =
+      const hasForms: boolean =
         ent.forms !== undefined &&
-        pair.kanjiForms !== undefined &&
-        ent.forms.some((form: string) => pair.kanjiForms!.has(form));
+        ent.forms.some((form: string) => pair.forms.has(form));
 
       if (
         pair.kanjiForms &&
@@ -1544,7 +1535,7 @@ export function getWordDefinitions(
           for (const sense of ent.senses) {
             if (validFormOf && sense.form_of) {
               for (const form of sense.form_of)
-                if (pair.readings.has(form)) {
+                if (pair.forms.has(form)) {
                   const elem: Set<string> | undefined = titleFormMap.get(form);
 
                   if (!elem)
@@ -1567,11 +1558,10 @@ export function getWordDefinitions(
 
         if (validForms && ent.forms)
           for (const form of ent.forms)
-            if (pair.readings.has(form)) readingForms.add(form);
+            if (pair.forms.has(form)) forms.add(form);
       }
 
-      if (pair.readings.has(ent.word) && hasKanjiForms)
-        entriesWithForms.push(ent);
+      if (pair.readings.has(ent.word) && hasForms) entriesWithForms.push(ent);
       if (pair.kanjiForms === undefined && pair.readings.has(ent.word))
         readingEntries.push(ent);
     }
@@ -1588,7 +1578,7 @@ export function getWordDefinitions(
     }
 
     for (const entry of pair.entriesWithFormTitles) {
-      if (readingForms.has(entry.word)) {
+      if (forms.has(entry.word)) {
         entriesWithForms.push(entry);
         continue;
       }
@@ -1615,6 +1605,7 @@ export function getWordDefinitions(
       japaneseDefinitions.push({
         wordID: pair.word.id,
         definitions: definitions,
+        wordForms: pair.forms,
       });
   }
 
@@ -1626,9 +1617,20 @@ export function getWordDefinitions(
         pair.definitions[j]!.definition,
       );
 
-      if (defCount && defCount.count > 1)
-        pair.definitions[j]!.mayNotBeAccurate = true;
+      if (defCount && defCount.count > 1) {
+        let mnba: boolean = true;
+
+        for (const f of pair.wordForms!)
+          if (pair.definitions[j]!.definition.includes(f)) {
+            mnba = false;
+            break;
+          }
+
+        if (mnba) pair.definitions[j]!.mayNotBeAccurate = true;
+      }
     }
+
+    delete pair.wordForms;
 
     japaneseDefinitions[i] = pair;
   }
@@ -2006,6 +2008,13 @@ export function getWord(
           : readingExamples),
       ];
 
+      wordExamples.sort(
+        (
+          a: { ex: TanakaExample; partIndex: number },
+          b: { ex: TanakaExample; partIndex: number },
+        ) => a.ex.phrase.length - b.ex.phrase.length,
+      );
+
       readingMatchingKanjiForms.clear();
 
       const glossSpecificExamples: {
@@ -2037,12 +2046,7 @@ export function getWord(
       }
 
       if (glossSpecificExamples.length > 0) {
-        const exes: {
-          ex: TanakaExample;
-          partIndex: number;
-        }[] = glossSpecificExamples;
-
-        if (exes.length < 5) {
+        if (glossSpecificExamples.length < 5) {
           wordExamples = wordExamples.filter(
             (ex: { ex: TanakaExample; partIndex: number }) =>
               !seenPhrases.has(ex.ex.phrase),
@@ -2050,13 +2054,13 @@ export function getWord(
 
           if (wordExamples.length > 0)
             for (const ex of wordExamples) {
-              exes.push(ex);
+              glossSpecificExamples.push(ex);
 
-              if (exes.length === 5) break;
+              if (glossSpecificExamples.length === 5) break;
             }
         }
 
-        wordExamples = exes;
+        wordExamples = glossSpecificExamples;
       }
 
       if (wordExamples.length > 0) {
@@ -2083,7 +2087,14 @@ export function getWord(
             ?.definitions
         : (definitions as WordDefinitionsMap).get(word.id!);
 
-      if (defs) word.definitions = [...defs];
+      if (defs)
+        word.definitions = [
+          ...defs.toSorted(
+            (a: Definition, b: Definition) =>
+              Number(Boolean(a.mayNotBeAccurate)) -
+              Number(Boolean(b.mayNotBeAccurate)),
+          ),
+        ];
     }
 
     return word;
@@ -2399,8 +2410,6 @@ const createEntry: (
   glossSpecific?: true,
 ) =>
   `<div class="entry${glossSpecific ? " gloss-specific" : ""}">${entry}${notes && notes.length > 0 ? createNotes(notes, phrase) : ""}</div>`;
-const noKanjiForms: string =
-  '<span class="word word-kanjiform">(no kanji forms)</span>';
 
 /**
  * Generates an array where each field holds an entry’s info wrapped in HTML tags.
@@ -2415,7 +2424,7 @@ export function generateAnkiNote(entry: Result): string[] {
       `<span class="word word-reading">${entry.readings[0]!.reading}${entry.readings[0]!.audio !== undefined ? `<br>[sound:${entry.readings[0]!.audio}]` : ""}</span>`,
       entry.readings[0]!.notes,
     );
-    const otherReadings: string | undefined =
+    const otherReadings: string =
       entry.readings.length > 1
         ? `<details><summary>Show other readings</summary>${entry.readings
             .slice(1)
@@ -2426,10 +2435,8 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")}</details>`
-        : undefined;
-    const readingsField: string = [firstReading, ...(otherReadings ?? [])].join(
-      "",
-    );
+        : "";
+    const readingsField: string = `${firstReading}${otherReadings}`;
 
     const firstKanjiForm: string | undefined = entry.kanjiForms
       ? createEntry(
@@ -2437,7 +2444,7 @@ export function generateAnkiNote(entry: Result): string[] {
           entry.kanjiForms[0]!.notes,
         )
       : undefined;
-    const otherKanjiForms: string | undefined =
+    const otherKanjiForms: string =
       entry.kanjiForms && entry.kanjiForms.length > 1
         ? `<details><summary>Show other kanji forms</summary>${entry.kanjiForms
             .slice(1)
@@ -2454,51 +2461,86 @@ export function generateAnkiNote(entry: Result): string[] {
               return `${createEntry(`<span class="word word-kanjiform">${restrictedReading ? "<ruby><rb>" : ""}${kanjiFormEntry.kanjiForm}${restrictedReading ? `</rb><rt>${restrictedReading.reading}</rt></ruby>` : ""}</span>`, kanjiFormEntry.notes)}`;
             })
             .join("")}</details>`
-        : undefined;
+        : "";
 
-    const kanjiFormsField: string | undefined = firstKanjiForm
-      ? [firstKanjiForm, ...(otherKanjiForms ?? [])].join("")
-      : undefined;
+    const kanjiFormsField: string = firstKanjiForm
+      ? `${firstKanjiForm}${otherKanjiForms}`
+      : '<span class="word word-kanjiform">(no kanji forms)</span>';
 
     const firstThreeTranslations: string = entry.translations
       .slice(0, 3)
-      .map(
-        (translationEntry: Translation, index: number) =>
-          `${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes, undefined, entry.phrases && entry.phrases.some((phrase: Phrase, index2: number) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? true : undefined)}`,
+      .map((translationEntry: Translation, index: number) =>
+        createEntry(
+          `<span class="word word-translation">${translationEntry.translation}</span>`,
+          translationEntry.notes,
+          undefined,
+          entry.phrases?.some(
+            (phrase: Phrase, index2: number) =>
+              index === index2 &&
+              phrase.glossNumber &&
+              phrase.glossNumber.wordId === entry.id &&
+              phrase.glossNumber.glossNumber === index + 1,
+          )
+            ? true
+            : undefined,
+        ),
       )
       .join("");
 
-    const otherTranslations: string | undefined =
+    const otherTranslations: string =
       entry.translations.length > 3
         ? `<details><summary>Show other translations</summary>${entry.translations
-            .map((translationEntry: Translation, index: number) =>
-              index > 2
-                ? `${createEntry(`<span class="word word-translation">${translationEntry.translation}</span>`, translationEntry.notes, undefined, entry.phrases && entry.phrases.some((phrase: Phrase, index2: number) => index === index2 && phrase.glossNumber && phrase.glossNumber.wordId === entry.id && phrase.glossNumber.glossNumber === index + 1) ? true : undefined)}`
-                : "null",
-            )
+            .map((translationEntry: Translation, index: number) => {
+              if (index < 3) return "null";
+
+              return createEntry(
+                `<span class="word word-translation">${translationEntry.translation}</span>`,
+                translationEntry.notes,
+                undefined,
+                entry.phrases?.some(
+                  (phrase: Phrase, index2: number) =>
+                    index === index2 &&
+                    phrase.glossNumber &&
+                    phrase.glossNumber.wordId === entry.id &&
+                    phrase.glossNumber.glossNumber === index + 1,
+                )
+                  ? true
+                  : undefined,
+              );
+            })
             .filter((translation: string) => translation !== "null")
             .join("")}</details>`
-        : undefined;
+        : "";
 
-    const translationsField: string = [
-      firstThreeTranslations,
-      ...(otherTranslations ?? []),
-    ].join("");
+    const translationsField: string = `${firstThreeTranslations}${otherTranslations}`;
 
-    fields.push(
-      ...(entry.kanjiForms && kanjiFormsField && !entry.usuallyInKana
-        ? [kanjiFormsField, readingsField]
-        : [
-            readingsField,
-            entry.kanjiForms && kanjiFormsField
-              ? kanjiFormsField
-              : noKanjiForms,
-          ]),
-      translationsField,
-      entry.phrases
-        ? entry.phrases
-            .map((phraseEntry: Phrase, index: number) =>
-              createEntry(
+    const firstFivePhrases: string | undefined = entry.phrases
+      ?.slice(0, 5)
+      .map((phraseEntry: Phrase, index: number) =>
+        createEntry(
+          `<span class="word word-phrase"><span class="word word-phrase-original">${phraseEntry.originalPhrase}</span><span class="word word-phrase-furigana">${phraseEntry.phrase}</span></span>`,
+          [phraseEntry.translation],
+          true,
+          entry.translations.some(
+            (_translation: Translation, index2: number) =>
+              index === index2 &&
+              phraseEntry.glossNumber &&
+              phraseEntry.glossNumber.wordId === entry.id &&
+              phraseEntry.glossNumber.glossNumber === index2 + 1,
+          )
+            ? true
+            : undefined,
+        ),
+      )
+      .join("");
+
+    const otherPhrases: string =
+      entry.phrases !== undefined && entry.phrases.length > 5
+        ? `<details><summary>Show other phrases</summary>${entry.phrases
+            .map((phraseEntry: Phrase, index: number) => {
+              if (index < 5) return "null";
+
+              return createEntry(
                 `<span class="word word-phrase"><span class="word word-phrase-original">${phraseEntry.originalPhrase}</span><span class="word word-phrase-furigana">${phraseEntry.phrase}</span></span>`,
                 [phraseEntry.translation],
                 true,
@@ -2511,19 +2553,50 @@ export function generateAnkiNote(entry: Result): string[] {
                 )
                   ? true
                   : undefined,
-              ),
+              );
+            })
+            .filter((phrase: string) => phrase !== "null")
+            .join("")}</details>`
+        : "";
+
+    const phrasesField: string = firstFivePhrases
+      ? `${firstFivePhrases}${otherPhrases}`
+      : '<span class="word word-phrase">(no phrases) (Search on dictionaries!)</span>';
+
+    const firstThreeDefinitions: string | undefined = entry.definitions
+      ?.slice(0, 3)
+      .map((definitionEntry: Definition) =>
+        createEntry(
+          `<span class="word word-definition${definitionEntry.mayNotBeAccurate === true ? " mnba" : ""}"><span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
+        ),
+      )
+      .join("");
+
+    const otherDefinitions: string =
+      entry.definitions !== undefined && entry.definitions.length > 3
+        ? `<details><summary>Show other definitions</summary>${entry.definitions
+            .map((definitionEntry: Definition, index: number) =>
+              index > 2
+                ? `${createEntry(
+                    `<span class="word word-definition${definitionEntry.mayNotBeAccurate === true ? " mnba" : ""}"><span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
+                  )}`
+                : "null",
             )
-            .join("")
-        : '<span class="word word-phrase">(no phrases) (Search on dictionaries!)</span>',
-      entry.definitions
-        ? entry.definitions
-            .map((definitionEntry: Definition) =>
-              createEntry(
-                `<span class="word word-definition${definitionEntry.mayNotBeAccurate === true ? " mnba" : ""}"><span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
-              ),
-            )
-            .join("")
-        : '<span class="word word-definition">(no definitions)</span>',
+            .filter((definition: string) => definition !== "null")
+            .join("")}</details>`
+        : "";
+
+    const definitionsField: string = firstThreeDefinitions
+      ? `${firstThreeDefinitions}${otherDefinitions}`
+      : '<span class="word word-definition">(no definitions)</span>';
+
+    fields.push(
+      ...(entry.kanjiForms && !entry.usuallyInKana
+        ? [kanjiFormsField, readingsField]
+        : [readingsField, kanjiFormsField]),
+      translationsField,
+      phrasesField,
+      definitionsField,
       entry.kanji
         ? entry.kanji
             .map((kanjiEntry: Kanji) =>
@@ -2614,7 +2687,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : `<span class="kanji kanji-onyomi">(no onyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span`,
+        : `<span class="kanji kanji-onyomi">(no onyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span>`,
       entry.kunyomi
         ? entry.kunyomi
             .map((kunyomiEntry: string) =>

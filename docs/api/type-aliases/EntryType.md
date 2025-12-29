@@ -8,6 +8,6 @@
 
 > **EntryType** = `"word"` \| `"kanji"` \| `"radical"` \| `"kana"` \| `"grammar"`
 
-Defined in: [types.ts:576](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L576)
+Defined in: [types.ts:582](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L582)
 
 Names of entry types used for the Anki note IDs

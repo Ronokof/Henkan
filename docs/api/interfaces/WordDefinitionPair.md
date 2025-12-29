@@ -22,6 +22,18 @@ The word definitions
 
 ***
 
+### wordForms?
+
+> `optional` **wordForms**: `Set`\<`string`\>
+
+Defined in: [types.ts:565](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L565)
+
+The word's readings and/or kanji forms used when searching definitions.
+
+**Used for final checks in case of inaccurate definitions; always deleted afterwards**
+
+***
+
 ### wordID
 
 > **wordID**: `` `${number}` ``
