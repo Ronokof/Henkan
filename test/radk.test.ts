@@ -16,9 +16,7 @@ describe("radkfile2 conversion", () => {
     expect(
       convertedRadkfile2.every(
         (rad: DictRadical) =>
-          rad.radical != undefined &&
           rad.radical.length === 1 &&
-          rad.strokes != undefined &&
           rad.strokes.length > 0 &&
           Number.isSafeInteger(Number.parseInt(rad.strokes)),
       ),

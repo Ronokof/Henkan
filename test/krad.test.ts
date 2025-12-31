@@ -6,7 +6,7 @@ let convertedKanjiDic: DictKanji[];
 
 beforeAll(() => (convertedKanjiDic = convertKanjiDic(inject("kanjidic2.xml"))));
 
-describe("kradfile2 conversion", () =>
+describe("kradfile2 conversion", () => {
   it("conversion", () => {
     const convertedKradfile2: DictKanjiWithRadicals[] = convertKradFile(
       inject("kradfile2"),
@@ -17,18 +17,15 @@ describe("kradfile2 conversion", () =>
     expect(
       convertedKradfile2.every(
         (kanji: DictKanjiWithRadicals) =>
-          kanji.kanji != undefined &&
           kanji.kanji.length === 1 &&
-          kanji.radicals != undefined &&
           (kanji.radicals.some(
             (rad: string | DictKanji) => typeof rad === "string",
           ) ||
             kanji.radicals.some(
               (rad: string | DictKanji) =>
                 typeof rad === "object" &&
-                rad.kanji != undefined &&
                 rad.kanji.length === 1 &&
-                rad.readingMeaning != undefined &&
+                rad.readingMeaning !== undefined &&
                 rad.readingMeaning.length > 0,
             )),
       ),
@@ -45,4 +42,5 @@ describe("kradfile2 conversion", () =>
         ),
       ),
     ).toBeTruthy();
-  }));
+  });
+});

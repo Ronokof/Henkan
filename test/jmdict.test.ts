@@ -2,22 +2,20 @@ import { describe, it, expect, beforeAll, inject } from "vitest";
 import { DictWord, TanakaExample } from "../src/types";
 import { convertJMdict, convertTanakaCorpus } from "../src/utils";
 
-function checkDict(arr: DictWord[], checkPhrases?: true | undefined): void {
+function checkDict(arr: DictWord[], checkPhrases?: true): void {
   expect(arr.length).toBeGreaterThan(0);
   expect(
     arr.every(
       (word: DictWord) =>
-        word.id != undefined &&
-        word.meanings != undefined &&
+        word.id.length > 0 &&
         word.meanings.length > 0 &&
-        word.readings != undefined &&
         word.readings.length > 0,
     ),
   ).toBeTruthy();
   expect(
     arr.some(
       (word: DictWord) =>
-        word.kanjiForms != undefined && word.kanjiForms.length > 0,
+        word.kanjiForms !== undefined && word.kanjiForms.length > 0,
     ),
   ).toBeTruthy();
   expect(

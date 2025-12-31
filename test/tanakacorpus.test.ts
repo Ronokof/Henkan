@@ -7,18 +7,17 @@ import {
 
 function checkCorpus(
   convertedTanakaCorpus: TanakaExample[],
-  withFurigana?: true | undefined,
+  withFurigana?: true,
 ): void {
   expect(
     convertedTanakaCorpus.every(
       (ex: TanakaExample) =>
         ex.glossNumber === undefined &&
-        ex.id != undefined &&
-        ex.parts != undefined &&
+        ex.id.length > 0 &&
         ex.parts.length > 0 &&
-        ex.phrase != undefined &&
-        ex.translation != undefined &&
-        ex.parts.every((part: ExamplePart) => part.baseForm != undefined),
+        ex.phrase.length > 0 &&
+        ex.translation.length > 0 &&
+        ex.parts.every((part: ExamplePart) => part.baseForm.length > 0),
     ),
   ).toBeTruthy();
 
@@ -43,13 +42,18 @@ function checkCorpus(
 
     for (const part of ex.parts) {
       if (part.edited === true) edited = true;
-      if (part.glossNumber && Number.isSafeInteger(part.glossNumber))
-        glossNumber = true;
-      if (part.inflectedForm && part.inflectedForm.length > 0)
-        inflectedForm = true;
-      if (part.reading && part.reading.length > 0) reading = true;
       if (
-        part.referenceID &&
+        part.glossNumber !== undefined &&
+        Number.isSafeInteger(part.glossNumber)
+      )
+        glossNumber = true;
+
+      if (part.inflectedForm !== undefined && part.inflectedForm.length > 0)
+        inflectedForm = true;
+
+      if (part.reading !== undefined && part.reading.length > 0) reading = true;
+      if (
+        part.referenceID !== undefined &&
         Number.isSafeInteger(Number.parseInt(part.referenceID))
       )
         referenceID = true;
@@ -65,11 +69,13 @@ function checkCorpus(
 }
 
 describe("Tanaka Corpus conversion", () => {
-  it("conversion without furigana", () =>
-    checkCorpus(convertTanakaCorpus(inject("examples.utf"))));
-  it("conversion with furigana", async () =>
+  it("conversion without furigana", () => {
+    checkCorpus(convertTanakaCorpus(inject("examples.utf")));
+  });
+  it("conversion with furigana", async () => {
     checkCorpus(
       await convertTanakaCorpusWithFurigana(inject("examples.utf")),
       true,
-    ));
+    );
+  });
 });

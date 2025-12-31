@@ -1,3 +1,5 @@
+import { ReadStream } from "fs";
+import { createInterface, Interface } from "readline";
 import libxml from "libxmljs2";
 import xml from "xml2js";
 import iconv from "iconv-lite";
@@ -5,6 +7,7 @@ import {
   noteHeaderKeys,
   noteMap,
   notSearchedForms,
+  posList,
   regexps,
 } from "./constants";
 import {
@@ -25,7 +28,6 @@ import {
   ExamplePart,
   Grammar,
   JaWiktionaryEntry,
-  JLPT,
   Kana,
   Kanji,
   KanjiComponent,
@@ -50,8 +52,6 @@ import {
   WordExamplesMap,
   WordIDEntryMap,
 } from "./types";
-import { ReadStream } from "fs";
-import { createInterface, Interface } from "readline";
 
 const Kuroshiro: any = require("kuroshiro");
 const KuromojiAnalyzer: any = require("kuroshiro-analyzer-kuromoji");
@@ -104,16 +104,66 @@ export function isObjectArray(arg: unknown): arg is any[] {
  * @returns The shuffled array
  */
 export function shuffleArray<T>(arr: readonly T[]): T[] {
-  const a: T[] = arr.slice();
+  const a: T[] = Array.from(arr);
 
   for (let i: number = a.length - 1; i > 0; i--) {
     const j: number = Math.floor(Math.random() * (i + 1));
     const tmp: T = a[i]!;
     a[i] = a[j]!;
-    a[j] = tmp;
+    a[j] = tmp!;
   }
 
   return a;
+}
+
+/**
+ * Convert hiragana text to katakana text
+ * @param input The hiragana text
+ * @returns The katakana text
+ */
+export function hiraganaToKatakana(input: string): string {
+  const decomposed: string = input.normalize("NFD");
+  const output: string[] = [];
+
+  for (const ch of decomposed.split("")) {
+    const cp: number = ch.codePointAt(0)!;
+
+    if (cp === 0x3099 || cp === 0x309a) {
+      output.push(ch);
+      continue;
+    }
+
+    if (cp >= 0x3040 && cp <= 0x309f)
+      output.push(String.fromCodePoint(cp + 0x60));
+    else output.push(ch);
+  }
+
+  return output.join("").normalize("NFC");
+}
+
+/**
+ * Convert katakana text to hiragana text
+ * @param input The katakana text
+ * @returns The hiragana text
+ */
+export function katakanaToHiragana(input: string): string {
+  const decomposed: string = input.normalize("NFD");
+  const output: string[] = [];
+
+  for (const ch of decomposed.split("")) {
+    const cp: number = ch.codePointAt(0)!;
+
+    if (cp === 0x3099 || cp === 0x309a) {
+      output.push(ch);
+      continue;
+    }
+
+    if (cp >= 0x30a0 && cp <= 0x30ff)
+      output.push(String.fromCodePoint(cp - 0x60));
+    else output.push(ch);
+  }
+
+  return output.join("").normalize("NFC");
 }
 
 /**
@@ -125,8 +175,8 @@ export function shuffleArray<T>(arr: readonly T[]): T[] {
  */
 export function getValidForms(
   readings: readonly DictReading[],
-  kanjiForms?: readonly DictKanjiForm[] | undefined,
-  wordIsCommon?: true | undefined,
+  kanjiForms?: readonly DictKanjiForm[],
+  wordIsCommon?: true,
 ): ReadingsKanjiFormsPair {
   const kanjiFormRestrictions: Set<string> = new Set<string>();
 
@@ -138,7 +188,7 @@ export function getValidForms(
         reading.notes === undefined ||
         !reading.notes.some((note: string) => notSearchedForms.has(note))
       ) {
-        if (reading.kanjiFormRestrictions) {
+        if (reading.kanjiFormRestrictions !== undefined) {
           for (const kfr of reading.kanjiFormRestrictions)
             kanjiFormRestrictions.add(kfr);
 
@@ -153,40 +203,36 @@ export function getValidForms(
     },
   );
 
-  const existValidKf: boolean | undefined =
-    kanjiForms !== undefined
-      ? kanjiForms.some(
-          (kf: DictKanjiForm, index: number) =>
-            index !== 0 &&
-            (((kf.notes === undefined ||
-              !kf.notes.some((note: string) => notSearchedForms.has(note))) &&
-              (wordIsCommon === undefined || kf.commonness !== undefined)) ||
-              kanjiFormRestrictions.has(kf.form)),
-        )
-      : undefined;
+  const existValidKf: boolean | undefined = kanjiForms?.some(
+    (kf: DictKanjiForm, index: number) =>
+      index !== 0 &&
+      (kf.notes === undefined ||
+        (!kf.notes.some((note: string) => notSearchedForms.has(note)) &&
+          (wordIsCommon === undefined || kf.commonness !== undefined)) ||
+        kanjiFormRestrictions.has(kf.form)),
+  );
 
-  const validKanjiForms: DictKanjiForm[] | undefined =
-    kanjiForms !== undefined
-      ? kanjiForms.filter((kanjiForm: DictKanjiForm, index: number) => {
-          if (index === 0) return true;
+  const validKanjiForms: DictKanjiForm[] | undefined = kanjiForms?.filter(
+    (kanjiForm: DictKanjiForm, index: number) => {
+      if (index === 0) return true;
 
-          if (existValidKf === true)
-            return (
-              ((kanjiForm.notes === undefined ||
-                !kanjiForm.notes.some((note: string) =>
-                  notSearchedForms.has(note),
-                )) &&
-                (wordIsCommon === undefined ||
-                  kanjiForm.commonness !== undefined)) ||
-              kanjiFormRestrictions.has(kanjiForm.form)
-            );
-          else return true;
-        })
-      : undefined;
+      if (existValidKf === true)
+        return (
+          kanjiForm.notes === undefined ||
+          (!kanjiForm.notes.some((note: string) =>
+            notSearchedForms.has(note),
+          ) &&
+            (wordIsCommon === undefined ||
+              kanjiForm.commonness !== undefined)) ||
+          kanjiFormRestrictions.has(kanjiForm.form)
+        );
+      else return true;
+    },
+  );
 
   return {
     readings: validReadings,
-    ...(validKanjiForms ? { kanjiForms: validKanjiForms } : {}),
+    ...(validKanjiForms !== undefined ? { kanjiForms: validKanjiForms } : {}),
   };
 }
 
@@ -198,7 +244,7 @@ export function getValidForms(
  */
 export function convertJMdict(
   xmlString: string,
-  examples?: readonly TanakaExample[] | undefined,
+  examples?: readonly TanakaExample[],
 ): DictWord[] {
   const dictParsed: libxml.Document = libxml.parseXml(xmlString, {
     dtdvalid: true,
@@ -210,14 +256,16 @@ export function convertJMdict(
 
   xml.parseString(dictParsed, (_err: Error | null, result: any) => {
     const tanakaParts: Set<string> | undefined =
-      examples && examples.length > 0
+      examples !== undefined && examples.length > 0
         ? new Set<string>(
             examples.flatMap((example: TanakaExample) =>
               example.parts.flatMap((part: ExamplePart) => [
                 part.baseForm,
-                ...(part.reading ? [part.reading] : []),
-                ...(part.inflectedForm ? [part.inflectedForm] : []),
-                ...(part.referenceID ? [part.referenceID] : []),
+                ...(part.reading !== undefined ? [part.reading] : []),
+                ...(part.inflectedForm !== undefined
+                  ? [part.inflectedForm]
+                  : []),
+                ...(part.referenceID !== undefined ? [part.referenceID] : []),
               ]),
             ),
           )
@@ -261,6 +309,7 @@ export function convertJMdict(
         if (isStringArray(reading.re_inf)) readingObj.notes = reading.re_inf;
         if (isStringArray(reading.re_restr))
           readingObj.kanjiFormRestrictions = reading.re_restr;
+
         if (isStringArray(reading.re_pri)) {
           readingObj.commonness = reading.re_pri;
 
@@ -283,11 +332,8 @@ export function convertJMdict(
           if (typeof gloss === "string") meaningObj.translations.push(gloss);
           else if (
             typeof gloss === "object" &&
-            gloss._ &&
             typeof gloss._ === "string" &&
-            gloss.$ &&
             typeof gloss.$ === "object" &&
-            gloss.$.g_type &&
             (gloss.$.g_type === "lit" ||
               gloss.$.g_type === "expl" ||
               gloss.$.g_type === "tm")
@@ -300,8 +346,10 @@ export function convertJMdict(
         if (isStringArray(meaning.xref)) meaningObj.references = meaning.xref;
         if (isStringArray(meaning.stagk))
           meaningObj.kanjiFormRestrictions = meaning.stagk;
+
         if (isStringArray(meaning.stagr))
           meaningObj.readingRestrictions = meaning.stagr;
+
         if (isStringArray(meaning.ant)) meaningObj.antonyms = meaning.ant;
         if (isStringArray(meaning.field)) meaningObj.fields = meaning.field;
         if (isStringArray(meaning.s_inf)) meaningObj.info = meaning.s_inf;
@@ -309,7 +357,7 @@ export function convertJMdict(
           meaningObj.misc = meaning.misc;
 
           if (
-            meaningObj.misc &&
+            meaningObj.misc !== undefined &&
             meaningObj.misc.includes("word usually written using kana alone")
           )
             usuallyInKanaMeanings++;
@@ -322,10 +370,11 @@ export function convertJMdict(
       if (entryObj.meanings.length === usuallyInKanaMeanings)
         entryObj.usuallyInKana = true;
 
-      if (examples) {
+      if (examples !== undefined) {
         let existsExample: boolean = false;
 
-        if (tanakaParts && tanakaParts.has(entryObj.id)) existsExample = true;
+        if (tanakaParts !== undefined && tanakaParts.has(entryObj.id))
+          existsExample = true;
 
         if (!existsExample) {
           const rkf: ReadingsKanjiFormsPair = getValidForms(
@@ -334,27 +383,33 @@ export function convertJMdict(
             entryObj.isCommon,
           );
 
-          const readings: Set<string> = new Set<string>(
+          const validReadings: Set<string> = new Set<string>(
             rkf.readings.map((r: DictReading) => r.reading),
           );
-          const kanjiForms: Set<string> | undefined = rkf.kanjiForms
-            ? new Set<string>(
-                rkf.kanjiForms.map((kf: DictKanjiForm) => kf.form),
-              )
-            : undefined;
+          const validKanjiForms: Set<string> | undefined =
+            rkf.kanjiForms !== undefined
+              ? new Set<string>(
+                  rkf.kanjiForms.map((kf: DictKanjiForm) => kf.form),
+                )
+              : undefined;
 
-          if (kanjiForms && kanjiForms.size > 0 && tanakaParts)
-            for (const kf of kanjiForms)
+          if (
+            validKanjiForms !== undefined &&
+            validKanjiForms.size > 0 &&
+            tanakaParts !== undefined
+          )
+            for (const kf of validKanjiForms)
               if (tanakaParts.has(kf)) {
                 existsExample = true;
                 break;
               }
+
           if (
             entryObj.kanjiForms === undefined &&
-            readings.size > 0 &&
-            tanakaParts
+            validReadings.size > 0 &&
+            tanakaParts !== undefined
           )
-            for (const r of readings)
+            for (const r of validReadings)
               if (tanakaParts.has(r)) {
                 existsExample = true;
                 break;
@@ -403,7 +458,7 @@ export function convertKanjiDic(xmlString: string): DictKanji[] {
           isStringArray(misc.jlpt) &&
           ["5", "4", "3", "2", "1"].includes(misc.jlpt[0])
         )
-          kanjiObj.misc.jlpt = `N${misc.jlpt[0]}` as JLPT;
+          kanjiObj.misc.jlpt = `N${Number(String(misc.jlpt[0]))}`;
 
         if (isObjectArray(entry.reading_meaning))
           for (const rm of entry.reading_meaning) {
@@ -418,11 +473,8 @@ export function convertKanjiDic(xmlString: string): DictKanji[] {
               if (isObjectArray(group.reading))
                 for (const reading of group.reading)
                   if (
-                    reading._ &&
                     typeof reading._ === "string" &&
-                    reading.$ &&
                     typeof reading.$ === "object" &&
-                    reading.$.r_type &&
                     (reading.$.r_type === "ja_on" ||
                       reading.$.r_type === "ja_kun")
                   )
@@ -444,6 +496,7 @@ export function convertKanjiDic(xmlString: string): DictKanji[] {
 
                     groupObj.meanings!.push(meaning);
                   }
+
               if (
                 groupObj.readings!.length > 0 ||
                 groupObj.meanings!.length > 0
@@ -458,7 +511,7 @@ export function convertKanjiDic(xmlString: string): DictKanji[] {
             if (isStringArray(rm.nanori) && rm.nanori.length > 0)
               rmObj.nanori = rm.nanori;
 
-            if (rmObj.groups!.length > 0 || rmObj.nanori)
+            if (rmObj.groups!.length > 0 || rmObj.nanori !== undefined)
               kanjiObj.readingMeaning!.push(rmObj);
           }
 
@@ -483,15 +536,24 @@ export function convertTanakaCorpus(tanakaString: string): TanakaExample[] {
     let a: string | undefined = tanakaParsed[i];
     let b: string | undefined = tanakaParsed[i + 1];
 
-    if (a && b && a.startsWith("A: ") && b.startsWith("B: ")) {
+    if (
+      a !== undefined &&
+      b !== undefined &&
+      a.startsWith("A: ") &&
+      b.startsWith("B: ")
+    ) {
       a = a.replace("A: ", "");
       b = b.replace("B: ", "");
 
-      const idMatch: RegExpExecArray | null = regexps.tanakaID.exec(a);
+      const idMatch: string | undefined = regexps.tanakaID
+        .exec(a)
+        ?.groups!["id"]?.trim();
+      const idParts: string[] = String(idMatch).split("_");
+      const id: TanakaID = `${Number(idParts[0])}_${Number(idParts[1])}`;
 
       const aParts: string[] = a.replace(regexps.tanakaID, "").split("\t");
 
-      const bRawParts = b
+      const bRawParts: string[] = b
         .split(" ")
         .filter((part: string) => part.trim().length !== 0);
 
@@ -511,21 +573,24 @@ export function convertTanakaCorpus(tanakaString: string): TanakaExample[] {
         const inflectedForm: string | undefined =
           partMatches?.groups!["inflection"];
 
-        if (reading)
+        if (reading !== undefined)
           if (regexps.tanakaReferenceID.test(reading)) {
             const referenceID: RegExpExecArray | null =
               regexps.tanakaReferenceID.exec(reading);
 
-            examplePart.referenceID = referenceID?.groups![
-              "entryid"
-            ] as StringNumber;
+            examplePart.referenceID = `${Number(
+              referenceID?.groups!["entryid"],
+            )}`;
           } else examplePart.reading = reading;
 
-        if (glossNumber)
+        if (glossNumber !== undefined)
           examplePart.glossNumber = glossNumber.startsWith("0")
             ? Number.parseInt(glossNumber.substring(1))
             : Number.parseInt(glossNumber);
-        if (inflectedForm) examplePart.inflectedForm = inflectedForm;
+
+        if (inflectedForm !== undefined)
+          examplePart.inflectedForm = inflectedForm;
+
         if (baseForm.endsWith("~")) {
           examplePart.edited = true;
           examplePart.baseForm = examplePart.baseForm.replace("~", "");
@@ -538,7 +603,7 @@ export function convertTanakaCorpus(tanakaString: string): TanakaExample[] {
       const translation: string = aParts[1]!;
 
       tanakaArray.push({
-        id: idMatch?.groups!["id"]?.trim() as TanakaID,
+        id: id,
         phrase: phrase.trim(),
         translation: translation.trim(),
         parts: bParts,
@@ -557,37 +622,23 @@ export function convertTanakaCorpus(tanakaString: string): TanakaExample[] {
 export async function convertTanakaCorpusWithFurigana(
   tanakaString: string,
 ): Promise<TanakaExample[]> {
-  return new Promise<TanakaExample[]>(
-    async (
-      resolve: (value: TanakaExample[] | PromiseLike<TanakaExample[]>) => void,
-    ) => {
-      let tanakaArray: TanakaExample[] = convertTanakaCorpus(tanakaString);
+  const tanakaArray: TanakaExample[] = convertTanakaCorpus(tanakaString);
 
-      const kuroshiro: any = new Kuroshiro.default();
+  const kuroshiro: any = new Kuroshiro.default();
+  await kuroshiro.init(new KuromojiAnalyzer());
 
-      await kuroshiro.init(new KuromojiAnalyzer());
+  const convert: any = kuroshiro.convert.bind(kuroshiro);
 
-      const convert: any = kuroshiro.convert.bind(kuroshiro);
-
-      tanakaArray = await Promise.all(
-        tanakaArray.map(async (ex: TanakaExample) => {
-          let furigana: string | undefined = undefined;
-
-          if (convert !== null && !ex.phrase.includes("・"))
-            furigana = (await convert(ex.phrase, {
-              to: "hiragana",
-              mode: "furigana",
-            })) as string;
-
-          if (furigana) ex.furigana = furigana;
-
-          return ex;
+  for (let i: number = 0; i < tanakaArray.length; i++)
+    if (!tanakaArray[i]!.phrase.includes("・"))
+      tanakaArray[i]!.furigana = String(
+        await convert(tanakaArray[i]!.phrase, {
+          to: "hiragana",
+          mode: "furigana",
         }),
       );
 
-      resolve(tanakaArray);
-    },
-  );
+  return tanakaArray;
 }
 
 /**
@@ -606,10 +657,10 @@ export function convertRadkFile(
     .filter((line: string) => !line.startsWith("#"));
   const radicals: DictRadical[] = [];
 
-  for (let i = 0; i < fileParsed.length; i++) {
+  for (let i: number = 0; i < fileParsed.length; i++) {
     const line: string | undefined = fileParsed[i];
 
-    if (line && line.startsWith("$ ")) {
+    if (line !== undefined && line.startsWith("$ ")) {
       const radical: DictRadical = {
         radical: line.charAt(2).trim(),
         strokes: line.substring(4).trim(),
@@ -620,7 +671,7 @@ export function convertRadkFile(
 
       const kanjiList: DictKanji[] = [];
 
-      while (kanjiLine && !kanjiLine.startsWith("$ ")) {
+      while (kanjiLine !== undefined && !kanjiLine.startsWith("$ ")) {
         const kanjis: string[] = kanjiLine.split("");
 
         for (const kanji of kanjis) {
@@ -636,7 +687,7 @@ export function convertRadkFile(
         }
 
         kanjiLine = fileParsed[++j];
-        if (!kanjiLine) continue;
+        if (kanjiLine === undefined) continue;
 
         if (kanjiLine.startsWith("$ ")) i = j - 1;
       }
@@ -668,7 +719,7 @@ export function convertKradFile(
     .filter((line: string) => !line.startsWith("#"));
   const kanjiWithRadicals: DictKanjiWithRadicals[] = [];
 
-  for (const line of fileParsed) {
+  for (const line of fileParsed)
     if (line.length > 0) {
       const split: string[] = line.split(" : ");
 
@@ -689,11 +740,11 @@ export function convertKradFile(
 
         let radicalObj: DictKanji = foundRadical ?? { kanji: radical };
 
-        if (!foundRadical) {
+        if (foundRadical === undefined) {
           const katakanaChar: Kana | undefined = katakanaList.find(
             (kana: Kana) => kana.kana === radical,
           );
-          if (!katakanaChar) continue;
+          if (katakanaChar === undefined) continue;
 
           radicalObj = {
             kanji: katakanaChar.kana,
@@ -716,7 +767,6 @@ export function convertKradFile(
       if (kanji.kanji.length === 1 && kanji.radicals.length > 0)
         kanjiWithRadicals.push(kanji);
     }
-  }
 
   return kanjiWithRadicals;
 }
@@ -769,13 +819,14 @@ export function createEntryMaps(
   >();
   const entryParts: Set<string> = new Set<string>();
 
-  if (kanjiDic)
+  if (kanjiDic !== undefined)
     for (const kanji of kanjiDic) kanjiEntryMap.set(kanji.kanji, kanji);
-  if (wordDefinitionPairs)
+
+  if (wordDefinitionPairs !== undefined)
     for (const pair of wordDefinitionPairs)
       wordDefinitionsMap.set(pair.wordID, pair.definitions);
 
-  if (kanjiDic && svgList)
+  if (kanjiDic !== undefined && svgList !== undefined)
     for (const kanji of kanjiDic) {
       const codePoint: string = kanji.kanji
         .codePointAt(0)!
@@ -788,23 +839,22 @@ export function createEntryMaps(
         return baseName === codePoint || baseName === `0${codePoint}`;
       });
 
-      if (svg) kanjiSVGMap.set(kanji.kanji, svg);
+      if (svg !== undefined) kanjiSVGMap.set(kanji.kanji, svg);
     }
 
-  if (jmDict) {
+  if (jmDict !== undefined) {
     for (const word of jmDict) {
       wordIDEntryMap.set(word.id, word);
 
-      if (word.kanjiForms)
+      if (word.kanjiForms !== undefined)
         for (const kf of word.kanjiForms)
           for (const char of kf.form
             .split("")
-            .filter((c: string) => regexps.kanji.test(c))) {
+            .filter((c: string) => regexps.kanji.test(c)))
             if (!kanjiWordsMap.has(char)) kanjiWordsMap.set(char, [word]);
             else kanjiWordsMap.get(char)!.push(word);
-          }
 
-      if (tanakaExamples) {
+      if (tanakaExamples !== undefined) {
         const rkf: ReadingsKanjiFormsPair = getValidForms(
           word.readings,
           word.kanjiForms,
@@ -818,7 +868,7 @@ export function createEntryMaps(
           localPartParts.add(reading.reading);
         }
 
-        if (rkf.kanjiForms && rkf.kanjiForms.length > 0)
+        if (rkf.kanjiForms !== undefined && rkf.kanjiForms.length > 0)
           for (const kanjiForm of rkf.kanjiForms) {
             entryParts.add(kanjiForm.form);
             localPartParts.add(kanjiForm.form);
@@ -831,36 +881,39 @@ export function createEntryMaps(
       }
     }
 
-    if (tanakaExamples) {
-      for (const ex of tanakaExamples) {
+    if (tanakaExamples !== undefined) {
+      for (const ex of tanakaExamples)
         for (const part of ex.parts) {
           if (entryParts.has(part.baseForm)) {
             let exList: TanakaExample[] | undefined = partExamplesMap.get(
               part.baseForm,
             );
-            if (!exList) {
+            if (exList === undefined) {
               exList = [];
               partExamplesMap.set(part.baseForm, exList);
             }
 
             exList.push(ex);
           }
-          if (part.reading && entryParts.has(part.reading)) {
+          if (part.reading !== undefined && entryParts.has(part.reading)) {
             let exList: TanakaExample[] | undefined = partExamplesMap.get(
               part.reading,
             );
-            if (!exList) {
+            if (exList === undefined) {
               exList = [];
               partExamplesMap.set(part.reading, exList);
             }
 
             exList.push(ex);
           }
-          if (part.inflectedForm && entryParts.has(part.inflectedForm)) {
+          if (
+            part.inflectedForm !== undefined &&
+            entryParts.has(part.inflectedForm)
+          ) {
             let exList: TanakaExample[] | undefined = partExamplesMap.get(
               part.inflectedForm,
             );
-            if (!exList) {
+            if (exList === undefined) {
               exList = [];
               partExamplesMap.set(part.inflectedForm, exList);
             }
@@ -868,11 +921,14 @@ export function createEntryMaps(
             exList.push(ex);
           }
 
-          if (part.referenceID && entryParts.has(part.referenceID)) {
+          if (
+            part.referenceID !== undefined &&
+            entryParts.has(part.referenceID)
+          ) {
             let exList: TanakaExample[] | undefined = partExamplesMap.get(
               part.referenceID,
             );
-            if (!exList) {
+            if (exList === undefined) {
               exList = [];
               partExamplesMap.set(part.referenceID, exList);
             }
@@ -880,19 +936,16 @@ export function createEntryMaps(
             exList.push(ex);
           }
         }
-      }
 
       for (const word of jmDict) {
-        const entryParts: Set<string> = wordPartsMap.get(word.id)!;
-
         const seenEx: Set<string> = new Set<string>();
         const validExamples: TanakaExample[] = [];
 
-        for (const p of entryParts) {
+        for (const p of wordPartsMap.get(word.id)!) {
           const examplesForPart: TanakaExample[] | undefined = partExamplesMap
             .get(p)
             ?.filter((ex: TanakaExample) => !seenEx.has(ex.id));
-          if (!examplesForPart) continue;
+          if (examplesForPart === undefined) continue;
 
           for (const ex of examplesForPart) {
             seenEx.add(ex.id);
@@ -925,23 +978,22 @@ function mapEntry(entry: any): JaWiktionaryEntry {
     senses: entry.senses
       .filter(
         (sense: any) =>
-          (isObjectArray(sense.form_of) &&
-            sense.form_of.every(
-              (form: any) => form.word && typeof form.word === "string",
-            )) ||
+          (isObjectArray(sense.form_of)
+            ? sense.form_of.every((form: any) => typeof form.word === "string")
+            : isStringArray(sense.glosses)) === true ||
           isStringArray(sense.glosses),
       )
       .map((sense: any) => ({
-        ...(sense.form_of
+        ...(isObjectArray(sense.form_of)
           ? {
-              form_of: sense.form_of.map((form: any) => form.word),
+              form_of: sense.form_of.map((form: any) => String(form.word)),
             }
           : {}),
         glosses: sense.glosses,
       })),
     ...(isObjectArray(entry.forms) &&
-    entry.forms.every((form: any) => typeof form.form === "string")
-      ? { forms: entry.forms.map((form: any) => form.form) }
+    entry.forms.every((form: any) => typeof form.form === "string") === true
+      ? { forms: entry.forms.map((form: any) => String(form.form)) }
       : {}),
   };
 }
@@ -954,19 +1006,17 @@ function mapEntry(entry: any): JaWiktionaryEntry {
  * @returns An array containing only the Japanese entries
  */
 export function convertJawiktionarySync(buffer: Buffer): JaWiktionaryEntry[] {
-  const lines = buffer.toString("utf-8").split("\n");
+  const lines: string[] = buffer.toString("utf-8").split("\n");
   const entries: JaWiktionaryEntry[] = [];
 
   for (let i: number = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (!line) continue;
+    const line: string | undefined = lines[i]?.trim();
+    if (line === undefined || line.length === 0) continue;
 
     const obj: any = JSON.parse(line);
 
     if (
-      obj &&
       typeof obj === "object" &&
-      typeof obj.lang === "string" &&
       (obj.lang === "日本語" || obj.lang === "古典日本語")
     )
       entries.push(mapEntry(obj));
@@ -985,38 +1035,28 @@ export function convertJawiktionarySync(buffer: Buffer): JaWiktionaryEntry[] {
 export async function convertJawiktionaryAsync(
   stream: ReadStream,
 ): Promise<JaWiktionaryEntry[]> {
-  return new Promise<JaWiktionaryEntry[]>(
-    async (
-      resolve: (
-        value: JaWiktionaryEntry[] | PromiseLike<JaWiktionaryEntry[]>,
-      ) => void,
-    ) => {
-      const rl: Interface = createInterface({
-        input: stream,
-        crlfDelay: Infinity,
-      });
+  const rl: Interface = createInterface({
+    input: stream,
+    crlfDelay: Infinity,
+  });
 
-      const entries: JaWiktionaryEntry[] = [];
+  const entries: JaWiktionaryEntry[] = [];
 
-      for await (const line of rl) {
-        const obj: any = JSON.parse(line.trim());
+  for await (const line of rl) {
+    const obj: any = JSON.parse(line.trim());
 
-        if (
-          obj &&
-          typeof obj === "object" &&
-          typeof obj.lang === "string" &&
-          (obj.lang === "日本語" || obj.lang === "古典日本語")
-        )
-          entries.push(mapEntry(obj));
-      }
+    if (
+      typeof obj === "object" &&
+      (obj.lang === "日本語" || obj.lang === "古典日本語")
+    )
+      entries.push(mapEntry(obj));
+  }
 
-      rl.close();
-      stream.close();
-      stream.destroy();
+  rl.close();
+  stream.close();
+  stream.destroy();
 
-      resolve(entries);
-    },
-  );
+  return entries;
 }
 
 function parseEntry(
@@ -1039,12 +1079,12 @@ function parseEntry(
 
 /**
  * Pairs Japanese definitions with JMdict word entries
- * @param entryList An array containing `ja.wiktionary.org` Japanese entries (converted using {@link convertJawiktionarySync} or {@link convertJawiktionaryAsync})
+ * @param wiktionaryEntries An array containing `ja.wiktionary.org` Japanese entries (converted using {@link convertJawiktionarySync} or {@link convertJawiktionaryAsync})
  * @param jmDict An array of converted `JMdict` entries
- * @returns A promise resolving with an array of {@link WordDefinitionPair} objects
+ * @returns An array of {@link WordDefinitionPair} objects
  */
 export function getWordDefinitions(
-  entryList: readonly JaWiktionaryEntry[],
+  wiktionaryEntries: readonly JaWiktionaryEntry[],
   jmDict: readonly DictWord[],
 ): WordDefinitionPair[] {
   const entries: Map<string, JaWiktionaryEntry[]> = new Map<
@@ -1052,10 +1092,10 @@ export function getWordDefinitions(
     JaWiktionaryEntry[]
   >();
 
-  for (const entry of entryList) {
+  for (const entry of wiktionaryEntries) {
     const ent: JaWiktionaryEntry[] | undefined = entries.get(entry.word);
 
-    if (ent) ent.push(entry);
+    if (ent !== undefined) ent.push(entry);
     else entries.set(entry.word, [entry]);
   }
 
@@ -1083,7 +1123,6 @@ export function getWordDefinitions(
     const rkf: ReadingsKanjiFormsPair = getValidForms(
       word.readings,
       word.kanjiForms,
-      word.isCommon,
     );
 
     for (const r of rkf.readings) {
@@ -1091,7 +1130,7 @@ export function getWordDefinitions(
       wordReadings.add(r.reading);
       validForms.add(r.reading);
     }
-    if (rkf.kanjiForms && rkf.kanjiForms.length > 0)
+    if (rkf.kanjiForms !== undefined && rkf.kanjiForms.length > 0)
       for (const kf of rkf.kanjiForms) {
         validKanjiForms.add(kf.form);
         wordKanjiForms.add(kf.form);
@@ -1121,17 +1160,17 @@ export function getWordDefinitions(
   const validGlossesEntries: Set<string> = new Set<string>();
   const validFormsEntries: Set<string> = new Set<string>();
 
-  const ents = Array.from(entries.values()).flat();
+  const ents: JaWiktionaryEntry[] = Array.from(entries.values()).flat();
 
   for (const entry of ents) {
     let valid: boolean = false;
 
-    if (validKanjiForms && validKanjiForms.has(entry.word)) {
+    if (validKanjiForms.has(entry.word)) {
       valid = true;
 
       for (const sense of entry.senses) {
         if (
-          sense.form_of &&
+          sense.form_of !== undefined &&
           sense.form_of.some((form: string) => validForms.has(form))
         )
           validFormOfEntries.add(entry.word);
@@ -1139,45 +1178,48 @@ export function getWordDefinitions(
         for (const gloss of sense.glosses) {
           let hasForm: boolean = false;
 
-          if (gloss.includes("表記") || gloss.includes("参照"))
-            for (const r of validForms)
-              if (gloss.includes(r)) {
-                hasForm = true;
-                break;
-              }
+          for (const r of validForms)
+            if (gloss.includes(r)) {
+              hasForm = true;
+              break;
+            }
 
           if (hasForm) validGlossesEntries.add(entry.word);
         }
       }
 
-      if (entry.forms)
+      if (entry.forms !== undefined)
         for (const form of entry.forms)
           if (validForms.has(form)) validFormsEntries.add(entry.word);
     }
 
     if (validForms.has(entry.word)) {
       valid = true;
-      const ftEntry = entriesWithFormTitlesGlobal.get(entry.word);
+      const ftEntry: JaWiktionaryEntry[] | undefined =
+        entriesWithFormTitlesGlobal.get(entry.word);
 
-      if (ftEntry) ftEntry.push(entry);
+      if (ftEntry !== undefined) ftEntry.push(entry);
       else entriesWithFormTitlesGlobal.set(entry.word, [entry]);
     }
 
     if (valid) {
-      const tEntry = validTitleEntries.get(entry.word);
+      const tEntry: JaWiktionaryEntry[] | undefined = validTitleEntries.get(
+        entry.word,
+      );
 
-      if (tEntry) tEntry.push(entry);
+      if (tEntry !== undefined) tEntry.push(entry);
       else validTitleEntries.set(entry.word, [entry]);
     }
 
     if (
-      entry.forms &&
+      entry.forms !== undefined &&
       validForms.has(entry.word) &&
       entry.forms.some((form: string) => validForms.has(form))
     ) {
-      const wfEntry = entriesWithFormsGlobal.get(entry.word);
+      const wfEntry: JaWiktionaryEntry[] | undefined =
+        entriesWithFormsGlobal.get(entry.word);
 
-      if (wfEntry) wfEntry.push(entry);
+      if (wfEntry !== undefined) wfEntry.push(entry);
       else entriesWithFormsGlobal.set(entry.word, [entry]);
     }
   }
@@ -1210,44 +1252,8 @@ export function getWordDefinitions(
     entriesWithFormsGlobal.values(),
   ).flat();
 
-  for (const pos of [
-    "名詞",
-    "動詞",
-    "成句",
-    "副詞",
-    "形容動詞",
-    "助詞",
-    "感動詞",
-    "代名詞",
-    "接尾辞",
-    "接頭語",
-    "造語成分",
-    "略語",
-    "固有名詞",
-    "人称代名詞",
-    "接頭辞",
-    "接続助詞",
-    "間投詞",
-    "助動詞",
-    "形容詞",
-    "縮約形",
-    "接辞",
-    "接続詞",
-    "連体詞",
-    "人名",
-    "記号",
-    "数詞",
-    "慣用句",
-    "ことわざ",
-    "助数詞",
-    "英数字混合表記",
-    "動詞句",
-    "成語",
-    "意義",
-    "頭字語",
-    "接尾語",
-  ]) {
-    posMap.set(pos as POS, {});
+  for (const pos of posList) {
+    posMap.set(pos, {});
 
     for (const te of vte)
       if (te.pos_title === pos || te.pos_title === "和語の漢字表記") {
@@ -1255,7 +1261,7 @@ export function getWordDefinitions(
           title?: Map<string, JaWiktionaryEntry[]>;
           formTitle?: Map<string, JaWiktionaryEntry[]>;
           form?: Map<string, JaWiktionaryEntry[]>;
-        } = posMap.get(pos as POS)!;
+        } = posMap.get(pos)!;
 
         if (posEntries.title === undefined)
           posEntries.title = new Map<string, JaWiktionaryEntry[]>();
@@ -1264,7 +1270,7 @@ export function getWordDefinitions(
           te.word,
         );
 
-        if (entryList) entryList.push(te);
+        if (entryList !== undefined) entryList.push(te);
         else posEntries.title.set(te.word, [te]);
       }
 
@@ -1274,7 +1280,7 @@ export function getWordDefinitions(
           title?: Map<string, JaWiktionaryEntry[]>;
           formTitle?: Map<string, JaWiktionaryEntry[]>;
           form?: Map<string, JaWiktionaryEntry[]>;
-        } = posMap.get(pos as POS)!;
+        } = posMap.get(pos)!;
 
         if (posEntries.formTitle === undefined)
           posEntries.formTitle = new Map<string, JaWiktionaryEntry[]>();
@@ -1282,7 +1288,7 @@ export function getWordDefinitions(
         const entryList: JaWiktionaryEntry[] | undefined =
           posEntries.formTitle.get(ft.word);
 
-        if (entryList) entryList.push(ft);
+        if (entryList !== undefined) entryList.push(ft);
         else posEntries.formTitle.set(ft.word, [ft]);
       }
 
@@ -1292,7 +1298,7 @@ export function getWordDefinitions(
           title?: Map<string, JaWiktionaryEntry[]>;
           formTitle?: Map<string, JaWiktionaryEntry[]>;
           form?: Map<string, JaWiktionaryEntry[]>;
-        } = posMap.get(pos as POS)!;
+        } = posMap.get(pos)!;
 
         if (posEntries.form === undefined)
           posEntries.form = new Map<string, JaWiktionaryEntry[]>();
@@ -1301,7 +1307,7 @@ export function getWordDefinitions(
           wf.word,
         );
 
-        if (entryList) entryList.push(wf);
+        if (entryList !== undefined) entryList.push(wf);
         else posEntries.form.set(wf.word, [wf]);
       }
   }
@@ -1313,11 +1319,11 @@ export function getWordDefinitions(
   const wordEntriesPairs: {
     word: DictWord;
     readings: Set<string>;
-    kanjiForms?: Set<string>;
     forms: Set<string>;
     entriesWithTitles: JaWiktionaryEntry[];
     entriesWithFormTitles: JaWiktionaryEntry[];
     entriesWithForms: JaWiktionaryEntry[];
+    kanjiForms?: Set<string>;
   }[] = [];
 
   for (const word of jmDict) {
@@ -1330,7 +1336,7 @@ export function getWordDefinitions(
           | readonly [string, string, POS | readonly POS[]]
           | undefined = noteMap.get(note);
 
-        if (noteEntry && noteEntry.length === 3) {
+        if (noteEntry?.length === 3) {
           const notePos: POS | readonly POS[] = noteEntry[2];
 
           if (Array.isArray(notePos))
@@ -1357,14 +1363,14 @@ export function getWordDefinitions(
           form?: Map<string, JaWiktionaryEntry[]>;
         } = posMap.get(pos)!;
 
-        if (rkf.kanjiForms)
+        if (rkf.kanjiForms !== undefined)
           for (const kf of rkf.kanjiForms) {
             const te: JaWiktionaryEntry[] | undefined =
               posEntries.title?.get(kf);
             const fe: JaWiktionaryEntry[] | undefined =
               posEntries.form?.get(kf);
 
-            if (te)
+            if (te !== undefined)
               entriesWithTitles.push(
                 ...te.filter(
                   (ent: JaWiktionaryEntry) =>
@@ -1373,14 +1379,17 @@ export function getWordDefinitions(
                     validFormsEntries.has(ent.word),
                 ),
               );
-            if (fe)
+
+            if (fe !== undefined)
               entriesWithForms.push(
                 ...fe.filter(
                   (ent: JaWiktionaryEntry) =>
-                    ent.forms &&
+                    ent.forms !== undefined &&
                     ent.forms.some(
                       (form: string) =>
-                        rkf.kanjiForms?.has(form) || rkf.readings.has(form),
+                        (rkf.kanjiForms !== undefined &&
+                          rkf.kanjiForms.has(form)) ||
+                        rkf.readings.has(form),
                     ),
                 ),
               );
@@ -1392,29 +1401,35 @@ export function getWordDefinitions(
           const fte: JaWiktionaryEntry[] | undefined =
             posEntries.formTitle?.get(r);
 
-          if (te)
+          if (te !== undefined)
             entriesWithTitles.push(
               ...te.filter(
                 (ent: JaWiktionaryEntry) =>
-                  ent.forms &&
+                  ent.forms !== undefined &&
                   ent.forms.some(
                     (form: string) =>
-                      rkf.kanjiForms?.has(form) || rkf.readings.has(form),
+                      (rkf.kanjiForms !== undefined &&
+                        rkf.kanjiForms.has(form)) ||
+                      rkf.readings.has(form),
                   ),
               ),
             );
-          if (fe)
+
+          if (fe !== undefined)
             entriesWithForms.push(
               ...fe.filter(
                 (ent: JaWiktionaryEntry) =>
-                  ent.forms &&
+                  ent.forms !== undefined &&
                   ent.forms.some(
                     (form: string) =>
-                      rkf.kanjiForms?.has(form) || rkf.readings.has(form),
+                      (rkf.kanjiForms !== undefined &&
+                        rkf.kanjiForms.has(form)) ||
+                      rkf.readings.has(form),
                   ),
               ),
             );
-          if (fte) entriesWithFormTitles.push(...fte);
+
+          if (fte !== undefined) entriesWithFormTitles.push(...fte);
         }
       }
 
@@ -1423,13 +1438,13 @@ export function getWordDefinitions(
       entriesWithFormTitles.length === 0 &&
       entriesWithForms.length === 0
     ) {
-      if (rkf.kanjiForms)
+      if (rkf.kanjiForms !== undefined)
         for (const kf of rkf.kanjiForms) {
           const te: JaWiktionaryEntry[] | undefined = validTitleEntries.get(kf);
           const fe: JaWiktionaryEntry[] | undefined =
             entriesWithFormsGlobal.get(kf);
 
-          if (te)
+          if (te !== undefined)
             entriesWithTitles.push(
               ...te.filter(
                 (ent: JaWiktionaryEntry) =>
@@ -1438,14 +1453,17 @@ export function getWordDefinitions(
                   validFormsEntries.has(ent.word),
               ),
             );
-          if (fe)
+
+          if (fe !== undefined)
             entriesWithForms.push(
               ...fe.filter(
                 (ent: JaWiktionaryEntry) =>
-                  ent.forms &&
+                  ent.forms !== undefined &&
                   ent.forms.some(
                     (form: string) =>
-                      rkf.kanjiForms?.has(form) || rkf.readings.has(form),
+                      (rkf.kanjiForms !== undefined &&
+                        rkf.kanjiForms.has(form)) ||
+                      rkf.readings.has(form),
                   ),
               ),
             );
@@ -1458,29 +1476,35 @@ export function getWordDefinitions(
         const fte: JaWiktionaryEntry[] | undefined =
           entriesWithFormTitlesGlobal.get(r);
 
-        if (te)
+        if (te !== undefined)
           entriesWithTitles.push(
             ...te.filter(
               (ent: JaWiktionaryEntry) =>
-                ent.forms &&
+                ent.forms !== undefined &&
                 ent.forms.some(
                   (form: string) =>
-                    rkf.kanjiForms?.has(form) || rkf.readings.has(form),
+                    (rkf.kanjiForms !== undefined &&
+                      rkf.kanjiForms.has(form)) ||
+                    rkf.readings.has(form),
                 ),
             ),
           );
-        if (fe)
+
+        if (fe !== undefined)
           entriesWithForms.push(
             ...fe.filter(
               (ent: JaWiktionaryEntry) =>
-                ent.forms &&
+                ent.forms !== undefined &&
                 ent.forms.some(
                   (form: string) =>
-                    rkf.kanjiForms?.has(form) || rkf.readings.has(form),
+                    (rkf.kanjiForms !== undefined &&
+                      rkf.kanjiForms.has(form)) ||
+                    rkf.readings.has(form),
                 ),
             ),
           );
-        if (fte) entriesWithFormTitles.push(...fte);
+
+        if (fte !== undefined) entriesWithFormTitles.push(...fte);
       }
     }
 
@@ -1491,10 +1515,11 @@ export function getWordDefinitions(
       wordEntriesPairs.push({
         word: word,
         readings: rkf.readings,
-        ...(rkf.kanjiForms ? { kanjiForms: rkf.kanjiForms } : {}),
-        forms: rkf.kanjiForms
-          ? rkf.readings.union(rkf.kanjiForms)
-          : rkf.readings,
+        ...(rkf.kanjiForms !== undefined ? { kanjiForms: rkf.kanjiForms } : {}),
+        forms:
+          rkf.kanjiForms !== undefined
+            ? rkf.readings.union(rkf.kanjiForms)
+            : rkf.readings,
         entriesWithTitles: entriesWithTitles,
         entriesWithFormTitles: entriesWithFormTitles,
         entriesWithForms: entriesWithForms,
@@ -1516,47 +1541,39 @@ export function getWordDefinitions(
     const forms: Set<string> = new Set<string>();
 
     for (const ent of pair.entriesWithTitles) {
-      const validFormOf: boolean = validFormOfEntries.has(ent.word);
-      const validGlosses: boolean = validGlossesEntries.has(ent.word);
-      const validForms: boolean = validFormsEntries.has(ent.word);
+      const hasValidFormOf: boolean = validFormOfEntries.has(ent.word);
+      const hasValidForms: boolean = validFormsEntries.has(ent.word);
 
       const hasForms: boolean =
         ent.forms !== undefined &&
         ent.forms.some((form: string) => pair.forms.has(form));
 
-      if (
-        pair.kanjiForms &&
-        pair.kanjiForms.has(ent.word) &&
-        (validFormOf || validGlosses || validForms)
-      ) {
+      if (pair.kanjiForms !== undefined && pair.kanjiForms.has(ent.word)) {
         kanjiFormEntries.push(ent);
 
-        if ((validFormOf || validGlosses) && ent.senses)
-          for (const sense of ent.senses) {
-            if (validFormOf && sense.form_of) {
-              for (const form of sense.form_of)
-                if (pair.forms.has(form)) {
-                  const elem: Set<string> | undefined = titleFormMap.get(form);
+        for (const sense of ent.senses) {
+          if (hasValidFormOf && sense.form_of !== undefined)
+            for (const form of sense.form_of)
+              if (pair.forms.has(form)) {
+                const elem: Set<string> | undefined = titleFormMap.get(form);
 
-                  if (!elem)
-                    titleFormMap.set(form, new Set<string>([ent.word]));
-                  else elem.add(ent.word);
-                }
-            }
+                if (elem === undefined)
+                  titleFormMap.set(form, new Set<string>([ent.word]));
+                else elem.add(ent.word);
+              }
 
-            if (validGlosses)
-              for (const gloss of sense.glosses)
-                if (gloss.includes("表記") || gloss.includes("参照"))
-                  for (const f of pair.forms)
-                    if (gloss.includes(f)) {
-                      const elem: Set<string> | undefined = refsMap.get(f);
+          for (const gloss of sense.glosses)
+            for (const f of pair.forms)
+              if (gloss.includes(f)) {
+                const elem: Set<string> | undefined = refsMap.get(f);
 
-                      if (!elem) refsMap.set(f, new Set<string>([ent.word]));
-                      else elem.add(ent.word);
-                    }
-          }
+                if (elem === undefined)
+                  refsMap.set(f, new Set<string>([ent.word]));
+                else elem.add(ent.word);
+              }
+        }
 
-        if (validForms && ent.forms)
+        if (hasValidForms && ent.forms !== undefined)
           for (const form of ent.forms)
             if (pair.forms.has(form)) forms.add(form);
       }
@@ -1570,8 +1587,8 @@ export function getWordDefinitions(
       const elem: Set<string> | undefined = titleFormMap.get(entry.word);
 
       if (
-        elem &&
-        entry.forms &&
+        elem !== undefined &&
+        entry.forms !== undefined &&
         entry.forms.some((form: string) => elem.has(form))
       )
         entriesWithForms.push(entry);
@@ -1585,7 +1602,8 @@ export function getWordDefinitions(
 
       const ft: Set<string> | undefined = refsMap.get(entry.word);
 
-      if (ft && !ft.isDisjointFrom(pair.forms)) entriesWithForms.push(entry);
+      if (ft !== undefined && !ft.isDisjointFrom(pair.forms))
+        entriesWithForms.push(entry);
     }
 
     if (kanjiFormEntries.length > 0)
@@ -1605,7 +1623,17 @@ export function getWordDefinitions(
       japaneseDefinitions.push({
         wordID: pair.word.id,
         definitions: definitions,
-        wordForms: pair.forms,
+        wordForms: pair.forms.union(
+          new Set<string>(
+            pair.forms
+              .values()
+              .toArray()
+              .flatMap((form: string) => [
+                hiraganaToKatakana(form),
+                katakanaToHiragana(form),
+              ]),
+          ),
+        ),
       });
   }
 
@@ -1617,7 +1645,7 @@ export function getWordDefinitions(
         pair.definitions[j]!.definition,
       );
 
-      if (defCount && defCount.count > 1) {
+      if (defCount !== undefined && defCount.count > 1) {
         let mnba: boolean = true;
 
         for (const f of pair.wordForms!)
@@ -1626,7 +1654,7 @@ export function getWordDefinitions(
             break;
           }
 
-        if (mnba) pair.definitions[j]!.mayNotBeAccurate = true;
+        pair.definitions[j]!.mayNotBeAccurate = mnba ? 2 : 1;
       }
     }
 
@@ -1648,35 +1676,32 @@ export async function getWordDefinitionsWithFurigana(
   entryList: readonly JaWiktionaryEntry[],
   jmDict: readonly DictWord[],
 ): Promise<WordDefinitionPair[]> {
-  return new Promise<WordDefinitionPair[]>(async (resolve) => {
-    const japaneseDefinitions: WordDefinitionPair[] = getWordDefinitions(
-      entryList,
-      jmDict,
-    );
+  const japaneseDefinitions: WordDefinitionPair[] = getWordDefinitions(
+    entryList,
+    jmDict,
+  );
 
-    const kuroshiro: any = new Kuroshiro.default();
-    await kuroshiro.init(new KuromojiAnalyzer());
+  const kuroshiro: any = new Kuroshiro.default();
+  await kuroshiro.init(new KuromojiAnalyzer());
 
-    const convert: any = kuroshiro.convert.bind(kuroshiro);
+  const convert: any = kuroshiro.convert.bind(kuroshiro);
 
-    for (let i: number = 0; i < japaneseDefinitions.length; i++) {
-      const pair: WordDefinitionPair = japaneseDefinitions[i]!;
+  for (let i: number = 0; i < japaneseDefinitions.length; i++) {
+    const pair: WordDefinitionPair = japaneseDefinitions[i]!;
 
-      for (let j: number = 0; j < pair.definitions.length; j++)
-        if (!pair.definitions[j]!.definition.includes("・"))
-          pair.definitions[j]!.furigana = (await convert(
-            pair.definitions[j]!.definition,
-            {
-              to: "hiragana",
-              mode: "furigana",
-            },
-          )) as string;
+    for (let j: number = 0; j < pair.definitions.length; j++)
+      if (!pair.definitions[j]!.definition.includes("・"))
+        pair.definitions[j]!.furigana = String(
+          await convert(pair.definitions[j]!.definition, {
+            to: "hiragana",
+            mode: "furigana",
+          }),
+        );
 
-      japaneseDefinitions[i] = pair;
-    }
+    japaneseDefinitions[i] = pair;
+  }
 
-    resolve(japaneseDefinitions);
-  });
+  return japaneseDefinitions;
 }
 
 function lookupWordNote(
@@ -1689,7 +1714,7 @@ function lookupWordNote(
     | readonly [string, string, POS | readonly POS[]]
     | undefined = noteMap.get(key.toLowerCase());
 
-  if (!info) {
+  if (info === undefined) {
     notes.push(key);
 
     return { note: key };
@@ -1706,15 +1731,286 @@ function lookupWordNote(
 const wordAddNoteArray: (
   arr: string[] | undefined,
   cb: (v: string) => void,
-) => void = (arr: string[] | undefined, cb: (v: string) => void) => {
-  if (!arr) return;
+) => void = (arr: string[] | undefined, cb: (v: string) => void): void => {
+  if (arr === undefined) return;
+
   for (const v of arr) cb(v);
 };
 
 /**
+ * Transforms a converted `KANJIDIC` entry into a more readable format, by providing either the kanji or the {@link DictKanji} object directly.
+ * @param searchedKanji The kanji character (requires {@link dict}) or a {@link DictKanji} object
+ * @param dict An array of converted `KANJIDIC` entries or a {@link KanjiEntryMap} (not needed if {@link searchedKanji} is a {@link DictKanji} object)
+ * @param jmDict An array of converted `JMdict` entries or a {@link KanjiWordsMap}
+ * @param svgList An array of SVG file names or a {@link KanjiSVGMap}
+ * @param noteTypeName The Anki note type name
+ * @param deckPath The full Anki deck path
+ * @returns The transformed {@link DictKanji} object or `undefined` if entry is not found
+ */
+export function getKanji(
+  searchedKanji: string | DictKanji,
+  dict?: readonly DictKanji[] | KanjiEntryMap,
+  jmDict?: readonly DictWord[] | KanjiWordsMap,
+  svgList?: readonly string[] | KanjiSVGMap,
+  noteTypeName?: string,
+  deckPath?: string,
+): Kanji | undefined {
+  let dictKanji: DictKanji | undefined = undefined;
+
+  if (typeof searchedKanji === "string" && dict !== undefined)
+    dictKanji =
+      dict instanceof Map
+        ? dict.get(searchedKanji)
+        : dict.find((entry: DictKanji) => entry.kanji === searchedKanji);
+  else if (typeof searchedKanji === "object") dictKanji = searchedKanji;
+
+  if (dictKanji !== undefined) {
+    const kanji: Kanji = {
+      kanji: dictKanji.kanji,
+      strokes: dictKanji.misc!.strokeNumber,
+      ...(dictKanji.misc?.grade !== undefined
+        ? { grade: dictKanji.misc.grade }
+        : {}),
+      ...(dictKanji.misc?.frequency !== undefined
+        ? { frequency: dictKanji.misc.frequency }
+        : {}),
+      ...(dictKanji.misc?.jlpt !== undefined
+        ? { jlpt: dictKanji.misc.jlpt }
+        : {}),
+      noteID: `kanji_${dictKanji.kanji}`,
+      ...(noteTypeName !== undefined ? { noteTypeName: noteTypeName } : {}),
+      ...(deckPath !== undefined ? { deckPath: deckPath } : {}),
+      tags: [],
+    };
+
+    if (
+      dictKanji.readingMeaning !== undefined &&
+      dictKanji.readingMeaning.length > 0
+    ) {
+      const meanings: string[] = [];
+      const nanori: string[] = [];
+      const onyomi: string[] = [];
+      const kunyomi: string[] = [];
+
+      for (const rm of dictKanji.readingMeaning) {
+        if (rm.nanori !== undefined && rm.nanori.length > 0)
+          nanori.push(...rm.nanori);
+
+        for (const group of rm.groups!) {
+          if (group.readings !== undefined) {
+            onyomi.push(
+              ...group.readings
+                .filter((reading: DictKanjiReading) => reading.type === "ja_on")
+                .map((reading: DictKanjiReading) => reading.reading),
+            );
+            kunyomi.push(
+              ...group.readings
+                .filter(
+                  (reading: DictKanjiReading) => reading.type === "ja_kun",
+                )
+                .map((reading: DictKanjiReading) => reading.reading),
+            );
+          }
+
+          if (group.meanings !== undefined && group.meanings.length > 0)
+            meanings.push(...group.meanings);
+        }
+      }
+
+      if (meanings.length > 0) kanji.meanings = meanings;
+      if (nanori.length > 0) kanji.nanori = nanori;
+      if (onyomi.length > 0) kanji.onyomi = onyomi;
+      if (kunyomi.length > 0) kanji.kunyomi = kunyomi;
+    }
+
+    if (jmDict !== undefined) {
+      let kanjiWords: readonly DictWord[] | Word[] | undefined =
+        jmDict instanceof Map ? jmDict.get(kanji.kanji) : jmDict;
+
+      const firstKfWords: readonly DictWord[] | undefined = kanjiWords?.filter(
+        (word: DictWord) =>
+          word.kanjiForms !== undefined &&
+          word.kanjiForms[0]!.form.includes(kanji.kanji),
+      );
+
+      if (firstKfWords !== undefined && firstKfWords.length > 0)
+        kanjiWords = firstKfWords;
+
+      if (kanjiWords !== undefined) {
+        const validWords: Word[] = [];
+
+        for (const word of kanjiWords) {
+          const kanjiForm: string | undefined = (
+            firstKfWords !== undefined && firstKfWords.length > 0
+              ? word.kanjiForms![0]
+              : word.kanjiForms!.find((kf: DictKanjiForm) =>
+                  kf.form.includes(kanji.kanji),
+                )
+          )?.form;
+
+          if (kanjiForm !== undefined) {
+            const reading: string | undefined = (
+              firstKfWords !== undefined && firstKfWords.length > 0
+                ? word.readings[0]
+                : word.readings.find(
+                    (r: DictReading) =>
+                      r.kanjiFormRestrictions !== undefined &&
+                      r.kanjiFormRestrictions.includes(kanjiForm),
+                  )
+            )?.reading;
+            if (reading === undefined) continue;
+
+            const translation: DictTranslation | undefined = (
+              firstKfWords !== undefined && firstKfWords.length > 0
+                ? word.meanings[0]
+                : word.meanings.find(
+                    (m: DictMeaning) =>
+                      m.kanjiFormRestrictions !== undefined &&
+                      m.kanjiFormRestrictions.includes(kanjiForm),
+                  )
+            )?.translations!.map((t: DictTranslation) =>
+              typeof t === "string" ? t : t.translation,
+            )[0];
+            if (translation === undefined) continue;
+
+            validWords.push({
+              kanjiForms: [{ kanjiForm: kanjiForm }],
+              readings: [{ reading: reading }],
+              translations: [
+                {
+                  translation: translation,
+                },
+              ],
+            });
+          }
+
+          if (validWords.length === 3) break;
+        }
+
+        if (validWords.length > 0) kanji.words = validWords;
+      }
+    }
+
+    if (svgList !== undefined) {
+      const codePoint: string = kanji.kanji
+        .codePointAt(0)!
+        .toString(16)
+        .toLowerCase();
+
+      const svg: string | undefined =
+        svgList instanceof Map
+          ? svgList.get(kanji.kanji)
+          : svgList.find((svgFile: string) =>
+              [`${codePoint}.svg`, `0${codePoint}.svg`].includes(
+                svgFile.toLowerCase(),
+              ),
+            );
+
+      if (svg !== undefined) kanji.svg = svg;
+    }
+
+    if (dictKanji.isKokuji === true) {
+      kanji.kokuji = true;
+      kanji.tags!.push("kanji::kokuji");
+    }
+
+    kanji.tags!.push(
+      `kanji::strokes::${kanji.strokes}`,
+      ...(kanji.frequency !== undefined
+        ? [`kanji::frequency::${kanji.frequency}`]
+        : []),
+      ...(kanji.grade !== undefined ? [`kanji::grade::${kanji.grade}`] : []),
+      ...(kanji.jlpt !== undefined
+        ? [`kanji::pre-2010_jlpt::${kanji.jlpt.toLowerCase()}`]
+        : []),
+      `kanji::onyomi::${kanji.onyomi?.length ?? 0}`,
+      `kanji::kunyomi::${kanji.kunyomi?.length ?? 0}`,
+      `kanji::nanori::${kanji.nanori?.length ?? 0}`,
+      `kanji::words::${kanji.words?.length ?? 0}`,
+      ...(kanji.svg !== undefined ? ["kanji::has_svg"] : []),
+    );
+
+    return kanji;
+  } else return undefined;
+}
+
+/**
+ * Same as {@link getKanji}, but with possible extra info.
+ * @param info Additional info for the kanji (mnemonic, components, words)
+ * @param kanji The kanji character or a {@link DictKanji} object
+ * @param dict An array of converted KANJIDIC entries or a {@link KanjiEntryMap} *(not needed if {@link kanji} is a {@link DictKanji} object)*
+ * @param useWords Whether or not to use the words provided in the `info` object (if present) instead of other words from `JMdict`
+ * @param jmDict An array of converted `JMdict` entries or a {@link KanjiWordsMap}
+ * @param svgList An array of SVG file names or a {@link KanjiSVGMap}
+ * @param noteTypeName The Anki note type name
+ * @param deckPath The full Anki deck path
+ * @param sourceURL A link leading to the source of {@link info}
+ * @returns The transformed {@link DictKanji} object
+ */
+export function getKanjiExtended(
+  info: Kanji,
+  kanji: string | DictKanji,
+  dict?: readonly DictKanji[] | KanjiEntryMap,
+  useWords?: true,
+  jmDict?: readonly DictWord[] | KanjiWordsMap,
+  svgList?: readonly string[] | KanjiSVGMap,
+  noteTypeName?: string,
+  deckPath?: string,
+  sourceURL?: string,
+): Kanji | undefined {
+  const kanjiObj: Kanji | undefined = getKanji(
+    kanji,
+    dict,
+    jmDict,
+    svgList,
+    noteTypeName,
+    deckPath,
+  );
+
+  if (kanjiObj !== undefined) {
+    let usedInfo: boolean = false;
+
+    if (info.components !== undefined) {
+      kanjiObj.components = info.components;
+      kanjiObj.tags!.push(`kanji::components::${kanjiObj.components.length}`);
+
+      usedInfo = true;
+    }
+    if (info.mnemonic !== undefined && info.mnemonic.length > 0) {
+      kanjiObj.mnemonic = info.mnemonic;
+      kanjiObj.tags!.push("kanji::has_mnemonic");
+
+      usedInfo = true;
+    }
+    if (
+      useWords === true &&
+      info.words !== undefined &&
+      info.words.length > 0
+    ) {
+      kanjiObj.words = info.words;
+      kanjiObj.tags!.forEach((tag: string, index: number) => {
+        if (tag.startsWith("kanji::words::") && kanjiObj.words !== undefined)
+          kanjiObj.tags!.splice(
+            index,
+            1,
+            `kanji::words::${kanjiObj.words.length}`,
+          );
+      });
+
+      usedInfo = true;
+    }
+
+    if (sourceURL !== undefined && info.externalInfo === true && usedInfo)
+      kanjiObj.source = sourceURL;
+
+    return kanjiObj;
+  } else return undefined;
+}
+
+/**
  * Transforms a converted `JMdict` entry into a more readable format, by providing either its JMdict entry ID or the {@link DictWord} object directly.
- * @param word The ID of the `JMdict` entry (requires {@link dict}) or a {@link DictWord} object
- * @param dict An array converted `JMdict` entries or a {@link WordIDEntryMap} *(not needed if {@link word} is a {@link DictWord} object)*
+ * @param searchedWord The ID of the `JMdict` entry (requires {@link dict}) or a {@link DictWord} object
+ * @param dict An array converted `JMdict` entries or a {@link WordIDEntryMap} *(not needed if {@link searchedWord} is a {@link DictWord} object)*
  * @param kanjiDic An array of converted `KANJIDIC` entries or a {@link KanjiEntryMap}
  * @param examples An array of converted `Tanaka Corpus` examples or a {@link WordExamplesMap}
  * @param definitions An array of `ja.wiktionary.org` word-definitions pairs or a {@link WordDefinitionsMap}
@@ -1723,7 +2019,7 @@ const wordAddNoteArray: (
  * @returns The transformed {@link DictWord} object or `undefined` if entry is not found
  */
 export function getWord(
-  word: StringNumber | DictWord,
+  searchedWord: StringNumber | DictWord,
   dict?: readonly DictWord[] | WordIDEntryMap,
   kanjiDic?: readonly DictKanji[] | KanjiEntryMap,
   examples?: readonly TanakaExample[] | WordExamplesMap,
@@ -1733,17 +2029,18 @@ export function getWord(
 ): Word | undefined {
   let dictWord: DictWord | undefined = undefined;
 
-  if (typeof word === "string" && dict) {
+  if (typeof searchedWord === "string" && dict !== undefined) {
     if (Array.isArray(dict))
       dictWord = (dict as readonly DictWord[]).find(
-        (entry: DictWord) => entry.id === word,
+        (entry: DictWord) => entry.id === searchedWord,
       );
-    if (dict instanceof Map) dictWord = dict.get(word);
+
+    if (dict instanceof Map) dictWord = dict.get(searchedWord);
   }
 
-  if (typeof word === "object") dictWord = word;
+  if (typeof searchedWord === "object") dictWord = searchedWord;
 
-  if (dictWord) {
+  if (dictWord !== undefined) {
     const word: Word = {
       id: dictWord.id,
       readings: [],
@@ -1759,11 +2056,11 @@ export function getWord(
       word.tags!.push("word::common");
     }
 
-    if (dictWord.kanjiForms)
+    if (dictWord.kanjiForms !== undefined)
       word.kanjiForms = dictWord.kanjiForms.map(
         (dictKanjiForm: DictKanjiForm) => ({
           kanjiForm: dictKanjiForm.form,
-          ...(dictKanjiForm.notes
+          ...(dictKanjiForm.notes !== undefined
             ? {
                 notes: dictKanjiForm.notes.map((note: string) => {
                   const noteAndTag: NoteAndTag = lookupWordNote(
@@ -1776,7 +2073,8 @@ export function getWord(
                 }),
               }
             : {}),
-          ...(dictKanjiForm.commonness && dictKanjiForm.commonness.length > 0
+          ...(dictKanjiForm.commonness !== undefined &&
+          dictKanjiForm.commonness.length > 0
             ? { common: true }
             : {}),
         }),
@@ -1784,16 +2082,17 @@ export function getWord(
 
     word.readings = dictWord.readings.map((dictReading: DictReading) => ({
       reading: dictReading.reading,
-      ...(dictReading.kanjiFormRestrictions || dictReading.notes
+      ...(dictReading.kanjiFormRestrictions !== undefined ||
+      dictReading.notes !== undefined
         ? {
             notes: [
-              ...(dictReading.kanjiFormRestrictions
+              ...(dictReading.kanjiFormRestrictions !== undefined
                 ? dictReading.kanjiFormRestrictions.map(
                     (restriction: string) =>
                       `Reading restricted to ${restriction}`,
                   )
                 : []),
-              ...(dictReading.notes
+              ...(dictReading.notes !== undefined
                 ? dictReading.notes.map((note: string) => {
                     const noteAndTag: NoteAndTag = lookupWordNote(
                       note,
@@ -1807,7 +2106,8 @@ export function getWord(
             ],
           }
         : {}),
-      ...(dictReading.commonness && dictReading.commonness.length > 0
+      ...(dictReading.commonness !== undefined &&
+      dictReading.commonness.length > 0
         ? { common: true }
         : {}),
     }));
@@ -1885,7 +2185,7 @@ export function getWord(
       word.tags!.push("word::usually_in_kana_for_all_senses");
     }
 
-    if (kanjiDic && word.kanjiForms) {
+    if (kanjiDic !== undefined && word.kanjiForms !== undefined) {
       const kanji: Kanji[] = [];
       const seenChars: Set<string> = new Set<string>();
 
@@ -1901,13 +2201,14 @@ export function getWord(
 
           const kanjiObj: Kanji | undefined = getKanji(
             kanjiEntry ?? char,
-            Array.isArray(kanjiDic) ? (kanjiDic as DictKanji[]) : undefined,
+            !(kanjiDic instanceof Map) ? kanjiDic : undefined,
           );
 
-          if (kanjiObj)
+          if (kanjiObj !== undefined)
             kanji.push({
               kanji: kanjiObj.kanji,
-              ...(kanjiObj.meanings && kanjiObj.meanings.length > 0
+              ...(kanjiObj.meanings !== undefined &&
+              kanjiObj.meanings.length > 0
                 ? { meanings: kanjiObj.meanings }
                 : {}),
             });
@@ -1916,10 +2217,9 @@ export function getWord(
       if (kanji.length > 0) word.kanji = kanji;
     }
 
-    if (dictWord.hasPhrases !== undefined && examples) {
-      const exampleList: readonly TanakaExample[] = Array.isArray(examples)
-        ? (examples as readonly TanakaExample[])
-        : ((examples as WordExamplesMap).get(dictWord.id) ?? []);
+    if (dictWord.hasPhrases === true && examples !== undefined) {
+      const exampleList: readonly TanakaExample[] =
+        examples instanceof Map ? (examples.get(dictWord.id) ?? []) : examples;
 
       const rkf: ReadingsKanjiFormsPair = getValidForms(
         dictWord.readings,
@@ -1930,9 +2230,10 @@ export function getWord(
       const readings: Set<string> = new Set<string>(
         rkf.readings.map((r: DictReading) => r.reading),
       );
-      const kanjiForms: Set<string> | undefined = rkf.kanjiForms
-        ? new Set<string>(rkf.kanjiForms.map((kf: DictKanjiForm) => kf.form))
-        : undefined;
+      const kanjiForms: Set<string> | undefined =
+        rkf.kanjiForms !== undefined
+          ? new Set<string>(rkf.kanjiForms.map((kf: DictKanjiForm) => kf.form))
+          : undefined;
 
       let kanjiFormExamples: {
         ex: TanakaExample;
@@ -1959,7 +2260,7 @@ export function getWord(
           const referenceIDMatch: boolean = part.referenceID === dictWord.id;
 
           if (
-            (kanjiForms && kanjiForms.has(part.baseForm)) ||
+            (kanjiForms !== undefined && kanjiForms.has(part.baseForm)) ||
             referenceIDMatch
           ) {
             if (readingAsReadingMatch || readingAsInflectedFormMatch) {
@@ -1981,10 +2282,7 @@ export function getWord(
 
           const readingAsBaseFormMatch: boolean = readings.has(part.baseForm);
 
-          if (
-            (readingAsBaseFormMatch || referenceIDMatch) &&
-            kanjiForms === undefined
-          ) {
+          if (readingAsBaseFormMatch && kanjiForms === undefined) {
             readingExamples.push({ ex: example, partIndex: i });
 
             break;
@@ -1997,7 +2295,7 @@ export function getWord(
             ex: TanakaExample;
             partIndex: number;
             form?: string | undefined;
-          }) => ex.form && readingMatchingKanjiForms.has(ex.form),
+          }) => ex.form !== undefined && readingMatchingKanjiForms.has(ex.form),
         );
 
       const includeKanjiFormExamples: boolean = word.kanjiForms !== undefined;
@@ -2023,7 +2321,7 @@ export function getWord(
       }[] = [];
       const seenPhrases: Set<string> = new Set<string>();
 
-      for (let i: number = 0; i < word.translations.length; i++) {
+      for (let i: number = 0; i < word.translations.length; i++)
         outer: for (const example of wordExamples) {
           if (seenPhrases.has(example.ex.phrase)) continue;
 
@@ -2043,7 +2341,6 @@ export function getWord(
             }
           }
         }
-      }
 
       if (glossSpecificExamples.length > 0) {
         if (glossSpecificExamples.length < 5) {
@@ -2072,7 +2369,9 @@ export function getWord(
           phrase: ex.ex.furigana ?? ex.ex.phrase,
           translation: ex.ex.translation,
           originalPhrase: ex.ex.phrase,
-          ...(ex.ex.glossNumber ? { glossNumber: ex.ex.glossNumber } : {}),
+          ...(ex.ex.glossNumber !== undefined
+            ? { glossNumber: ex.ex.glossNumber }
+            : {}),
         }));
 
         word.tags!.push("word::has_phrases");
@@ -2081,18 +2380,19 @@ export function getWord(
       }
     }
 
-    if (definitions) {
-      const defs: readonly Definition[] | undefined = Array.isArray(definitions)
-        ? definitions.find((wdp: WordDefinitionPair) => wdp.wordID === word.id!)
-            ?.definitions
-        : (definitions as WordDefinitionsMap).get(word.id!);
+    if (definitions !== undefined) {
+      const defs: readonly Definition[] | undefined =
+        definitions instanceof Map
+          ? definitions.get(word.id!)
+          : definitions.find(
+              (wdp: WordDefinitionPair) => wdp.wordID === word.id!,
+            )?.definitions;
 
-      if (defs)
+      if (defs !== undefined)
         word.definitions = [
           ...defs.toSorted(
             (a: Definition, b: Definition) =>
-              Number(Boolean(a.mayNotBeAccurate)) -
-              Number(Boolean(b.mayNotBeAccurate)),
+              (a.mayNotBeAccurate ?? 0) - (b.mayNotBeAccurate ?? 0),
           ),
         ];
     }
@@ -2101,296 +2401,38 @@ export function getWord(
   } else return undefined;
 }
 
-/**
- * Transforms a converted `KANJIDIC` entry into a more readable format, by providing either the kanji or the {@link DictKanji} object directly.
- * @param kanji The kanji character (requires {@link dict}) or a {@link DictKanji} object
- * @param dict An array of converted `KANJIDIC` entries or a {@link KanjiEntryMap} (not needed if {@link kanji} is a {@link DictKanji} object)
- * @param jmDict An array of converted `JMdict` entries or a {@link KanjiWordsMap}
- * @param svgList An array of SVG file names or a {@link KanjiSVGMap}
- * @param noteTypeName The Anki note type name
- * @param deckPath The full Anki deck path
- * @returns The transformed {@link DictKanji} object or `undefined` if entry is not found
- */
-export function getKanji(
-  kanji: string | DictKanji,
-  dict?: readonly DictKanji[] | KanjiEntryMap,
-  jmDict?: readonly DictWord[] | KanjiWordsMap,
-  svgList?: readonly string[] | KanjiSVGMap,
-  noteTypeName?: string,
-  deckPath?: string,
-): Kanji | undefined {
-  let dictKanji: DictKanji | undefined = undefined;
-
-  if (typeof kanji === "string" && dict)
-    dictKanji = Array.isArray(dict)
-      ? dict.find((entry: DictKanji) => entry.kanji === kanji)
-      : (dict as KanjiEntryMap).get(kanji);
-  else if (typeof kanji === "object") dictKanji = kanji;
-
-  if (dictKanji) {
-    const kanji: Kanji = {
-      kanji: dictKanji.kanji,
-      strokes: dictKanji.misc!.strokeNumber,
-      ...(dictKanji.misc && dictKanji.misc.grade
-        ? { grade: dictKanji.misc.grade }
-        : {}),
-      ...(dictKanji.misc && dictKanji.misc.frequency
-        ? { frequency: dictKanji.misc.frequency }
-        : {}),
-      ...(dictKanji.misc && dictKanji.misc.jlpt
-        ? { jlpt: dictKanji.misc.jlpt }
-        : {}),
-      noteID: `kanji_${dictKanji.kanji}`,
-      ...(noteTypeName ? { noteTypeName: noteTypeName } : {}),
-      ...(deckPath ? { deckPath: deckPath } : {}),
-      tags: [],
-    };
-
-    if (dictKanji.readingMeaning && dictKanji.readingMeaning.length > 0) {
-      const meanings: string[] = [];
-      const nanori: string[] = [];
-      const onyomi: string[] = [];
-      const kunyomi: string[] = [];
-
-      for (const rm of dictKanji.readingMeaning) {
-        if (rm.nanori && rm.nanori.length > 0) nanori.push(...rm.nanori);
-
-        for (const group of rm.groups!) {
-          if (group.readings) {
-            onyomi.push(
-              ...group.readings
-                .filter((reading: DictKanjiReading) => reading.type === "ja_on")
-                .map((reading: DictKanjiReading) => reading.reading),
-            );
-            kunyomi.push(
-              ...group.readings
-                .filter(
-                  (reading: DictKanjiReading) => reading.type === "ja_kun",
-                )
-                .map((reading: DictKanjiReading) => reading.reading),
-            );
-          }
-
-          if (group.meanings && group.meanings.length > 0)
-            meanings.push(...group.meanings);
-        }
-      }
-
-      if (meanings.length > 0) kanji.meanings = meanings;
-      if (nanori.length > 0) kanji.nanori = nanori;
-      if (onyomi.length > 0) kanji.onyomi = onyomi;
-      if (kunyomi.length > 0) kanji.kunyomi = kunyomi;
-    }
-
-    if (jmDict) {
-      let kanjiWords: readonly DictWord[] | Word[] | undefined = Array.isArray(
-        jmDict,
-      )
-        ? (jmDict as readonly DictWord[])
-        : (jmDict as KanjiWordsMap).get(kanji.kanji);
-
-      const firstKfWords: readonly DictWord[] | undefined = kanjiWords?.filter(
-        (word: DictWord) =>
-          word.kanjiForms && word.kanjiForms[0]!.form.includes(kanji.kanji),
-      );
-
-      if (firstKfWords && firstKfWords.length > 0) kanjiWords = firstKfWords;
-
-      if (kanjiWords) {
-        const validWords: Word[] = [];
-
-        for (const word of kanjiWords) {
-          const kanjiForm: string | undefined = (
-            firstKfWords && firstKfWords.length > 0
-              ? word.kanjiForms![0]
-              : word.kanjiForms!.find((kf: DictKanjiForm) =>
-                  kf.form.includes(kanji.kanji),
-                )
-          )?.form;
-
-          if (kanjiForm) {
-            const reading: string | undefined = (
-              firstKfWords && firstKfWords.length > 0
-                ? word.readings[0]
-                : word.readings.find(
-                    (reading: DictReading) =>
-                      reading.kanjiFormRestrictions &&
-                      reading.kanjiFormRestrictions.includes(kanjiForm),
-                  )
-            )?.reading;
-            if (!reading) continue;
-
-            const translation: DictTranslation | undefined = (
-              firstKfWords && firstKfWords.length > 0
-                ? word.meanings[0]
-                : word.meanings.find(
-                    (m: DictMeaning) =>
-                      m.translations &&
-                      m.kanjiFormRestrictions &&
-                      m.kanjiFormRestrictions.includes(kanjiForm),
-                  )
-            )?.translations!.map((t: DictTranslation) =>
-              typeof t === "string" ? t : t.translation,
-            )[0];
-            if (!translation) continue;
-
-            validWords.push({
-              kanjiForms: [{ kanjiForm: kanjiForm }],
-              readings: [{ reading: reading }],
-              translations: [
-                {
-                  translation: translation,
-                },
-              ],
-            });
-          }
-
-          if (validWords.length === 3) break;
-        }
-
-        if (validWords.length > 0) kanji.words = validWords;
-      }
-    }
-
-    if (svgList) {
-      const codePoint: string = kanji.kanji
-        .codePointAt(0)!
-        .toString(16)
-        .toLowerCase();
-
-      const svg: string | undefined = Array.isArray(svgList)
-        ? svgList.find((svgFile: string) =>
-            [`${codePoint}.svg`, `0${codePoint}.svg`].includes(
-              svgFile.toLowerCase(),
-            ),
-          )
-        : (svgList as KanjiSVGMap).get(kanji.kanji);
-
-      if (svg) kanji.svg = svg;
-    }
-
-    if (kanji.tags && dictKanji.isKokuji === true) {
-      kanji.kokuji = true;
-      kanji.tags.push("kanji::kokuji");
-    }
-
-    kanji.tags!.push(
-      `kanji::strokes::${kanji.strokes}`,
-      ...(kanji.frequency ? [`kanji::frequency::${kanji.frequency}`] : []),
-      ...(kanji.grade ? [`kanji::grade::${kanji.grade}`] : []),
-      ...(kanji.jlpt
-        ? [`kanji::pre-2010_jlpt::${kanji.jlpt.toLowerCase()}`]
-        : []),
-      `kanji::onyomi::${kanji.onyomi?.length ?? 0}`,
-      `kanji::kunyomi::${kanji.kunyomi?.length ?? 0}`,
-      `kanji::nanori::${kanji.nanori?.length ?? 0}`,
-      `kanji::words::${kanji.words?.length ?? 0}`,
-      ...(kanji.svg ? ["kanji::has_svg"] : []),
-    );
-
-    return kanji;
-  } else return undefined;
-}
-
-/**
- * Same as {@link getKanji}, but with possible extra info.
- * @param info Additional info for the kanji (mnemonic, components, words)
- * @param kanji The kanji character or a {@link DictKanji} object
- * @param dict An array of converted KANJIDIC entries or a {@link KanjiEntryMap} *(not needed if {@link kanji} is a {@link DictKanji} object)*
- * @param useWords Whether or not to use the words provided in the `info` object (if present) instead of other words from `JMdict`
- * @param jmDict An array of converted `JMdict` entries or a {@link KanjiWordsMap}
- * @param svgList An array of SVG file names or a {@link KanjiSVGMap}
- * @param noteTypeName The Anki note type name
- * @param deckPath The full Anki deck path
- * @param sourceURL A link leading to the source of {@link info}
- * @returns The transformed {@link DictKanji} object
- */
-export function getKanjiExtended(
-  info: Kanji,
-  kanji: string | DictKanji,
-  dict?: readonly DictKanji[] | KanjiEntryMap,
-  useWords?: true,
-  jmDict?: readonly DictWord[] | KanjiWordsMap,
-  svgList?: readonly string[] | KanjiSVGMap,
-  noteTypeName?: string,
-  deckPath?: string,
-  sourceURL?: string,
-): Kanji | undefined {
-  const kanjiObj: Kanji | undefined = getKanji(
-    kanji,
-    dict,
-    jmDict,
-    svgList,
-    noteTypeName,
-    deckPath,
-  );
-
-  if (kanjiObj) {
-    let usedInfo: boolean = false;
-
-    if (info.components) {
-      kanjiObj.components = info.components;
-      usedInfo = true;
-    }
-    if (info.mnemonic && info.mnemonic.length > 0) {
-      kanjiObj.mnemonic = info.mnemonic;
-      usedInfo = true;
-    }
-    if (useWords === true && info.words && info.words.length > 0) {
-      kanjiObj.words = info.words;
-      usedInfo = true;
-    }
-
-    if (kanjiObj.components)
-      kanjiObj.tags!.push(`kanji::components::${kanjiObj.components.length}`);
-
-    if (kanjiObj.mnemonic && kanjiObj.mnemonic.length > 0)
-      kanjiObj.tags!.push("kanji::has_mnemonic");
-
-    if (useWords === true && kanjiObj.words && info.words)
-      kanjiObj.tags!.forEach((tag: string, index: number) => {
-        if (tag.startsWith("kanji::words::") && kanjiObj.words) {
-          kanjiObj.tags!.splice(
-            index,
-            1,
-            `kanji::words::${kanjiObj.words.length}`,
-          );
-        }
-      });
-
-    if (sourceURL && info.externalInfo === true && usedInfo)
-      kanjiObj.source = sourceURL;
-
-    return kanjiObj;
-  } else return undefined;
-}
-
 export function isWord(entry: Result): entry is Word {
   return (
-    (entry as Word).translations !== undefined &&
-    (entry as Word).readings !== undefined
+    isObjectArray(Object.getOwnPropertyDescriptor(entry, "readings")?.value) &&
+    isObjectArray(Object.getOwnPropertyDescriptor(entry, "translations")?.value)
   );
 }
 
 export function isRadical(entry: Result): entry is Radical {
-  return (entry as Radical).radical !== undefined;
+  return (
+    typeof Object.getOwnPropertyDescriptor(entry, "radical")?.value === "string"
+  );
 }
 
 export function isKanji(entry: Result): entry is Kanji {
   return (
-    (entry as Word).translations === undefined &&
-    (entry as Word).readings === undefined &&
-    (entry as Radical).radical === undefined &&
-    (entry as Kanji).kanji !== undefined
+    !Object.hasOwn(entry, "translations") &&
+    !Object.hasOwn(entry, "readings") &&
+    !Object.hasOwn(entry, "radical") &&
+    typeof Object.getOwnPropertyDescriptor(entry, "kanji")?.value === "string"
   );
 }
 
 export function isKana(entry: Result): entry is Kana {
-  return (entry as Kana).kana !== undefined;
+  return (
+    typeof Object.getOwnPropertyDescriptor(entry, "kana")?.value === "string"
+  );
 }
 
 export function isGrammar(entry: Result): entry is Grammar {
-  return (entry as Grammar).point !== undefined;
+  return (
+    typeof Object.getOwnPropertyDescriptor(entry, "point")?.value === "string"
+  );
 }
 
 const createNotes: (notes: string[], phrase?: true) => string = (
@@ -2409,7 +2451,7 @@ const createEntry: (
   phrase?: true,
   glossSpecific?: true,
 ) =>
-  `<div class="entry${glossSpecific ? " gloss-specific" : ""}">${entry}${notes && notes.length > 0 ? createNotes(notes, phrase) : ""}</div>`;
+  `<div class="entry${glossSpecific === true ? " gloss-specific" : ""}">${entry}${notes !== undefined && notes.length > 0 ? createNotes(notes, phrase) : ""}</div>`;
 
 /**
  * Generates an array where each field holds an entry’s info wrapped in HTML tags.
@@ -2438,34 +2480,39 @@ export function generateAnkiNote(entry: Result): string[] {
         : "";
     const readingsField: string = `${firstReading}${otherReadings}`;
 
-    const firstKanjiForm: string | undefined = entry.kanjiForms
-      ? createEntry(
-          `<span class="word word-kanjiform"><ruby><rb>${entry.kanjiForms[0]!.kanjiForm}</rb><rt>${entry.readings[0]!.reading}</rt></ruby></span>`,
-          entry.kanjiForms[0]!.notes,
-        )
-      : undefined;
+    const firstKanjiForm: string | undefined =
+      entry.kanjiForms !== undefined
+        ? createEntry(
+            `<span class="word word-kanjiform"><ruby><rb>${entry.kanjiForms[0]!.kanjiForm}</rb><rt>${entry.readings[0]!.reading}</rt></ruby></span>`,
+            entry.kanjiForms[0]!.notes,
+          )
+        : undefined;
     const otherKanjiForms: string =
-      entry.kanjiForms && entry.kanjiForms.length > 1
+      entry.kanjiForms !== undefined && entry.kanjiForms.length > 1
         ? `<details><summary>Show other kanji forms</summary>${entry.kanjiForms
             .slice(1)
             .map((kanjiFormEntry: KanjiForm) => {
               const restrictedReading: Reading | undefined =
                 entry.readings.find(
                   (r: Reading) =>
-                    r.notes &&
+                    r.notes !== undefined &&
                     r.notes.includes(
                       `Reading restricted to ${kanjiFormEntry.kanjiForm}`,
                     ),
                 );
 
-              return `${createEntry(`<span class="word word-kanjiform">${restrictedReading ? "<ruby><rb>" : ""}${kanjiFormEntry.kanjiForm}${restrictedReading ? `</rb><rt>${restrictedReading.reading}</rt></ruby>` : ""}</span>`, kanjiFormEntry.notes)}`;
+              return createEntry(
+                `<span class="word word-kanjiform">${restrictedReading !== undefined ? "<ruby><rb>" : ""}${kanjiFormEntry.kanjiForm}${restrictedReading !== undefined ? `</rb><rt>${restrictedReading.reading}</rt></ruby>` : ""}</span>`,
+                kanjiFormEntry.notes,
+              );
             })
             .join("")}</details>`
         : "";
 
-    const kanjiFormsField: string = firstKanjiForm
-      ? `${firstKanjiForm}${otherKanjiForms}`
-      : '<span class="word word-kanjiform">(no kanji forms)</span>';
+    const kanjiFormsField: string =
+      firstKanjiForm !== undefined
+        ? `${firstKanjiForm}${otherKanjiForms}`
+        : '<span class="word word-kanjiform">(no kanji forms)</span>';
 
     const firstThreeTranslations: string = entry.translations
       .slice(0, 3)
@@ -2474,14 +2521,16 @@ export function generateAnkiNote(entry: Result): string[] {
           `<span class="word word-translation">${translationEntry.translation}</span>`,
           translationEntry.notes,
           undefined,
-          entry.phrases?.some(
-            (phrase: Phrase, index2: number) =>
-              index === index2 &&
-              phrase.glossNumber &&
-              phrase.glossNumber.wordId === entry.id &&
-              phrase.glossNumber.glossNumber === index + 1,
-          )
-            ? true
+          entry.phrases !== undefined
+            ? entry.phrases.some(
+                (phrase: Phrase, index2: number) =>
+                  index === index2 &&
+                  phrase.glossNumber !== undefined &&
+                  phrase.glossNumber.wordId === entry.id &&
+                  phrase.glossNumber.glossNumber === index + 1,
+              )
+              ? true
+              : undefined
             : undefined,
         ),
       )
@@ -2497,14 +2546,16 @@ export function generateAnkiNote(entry: Result): string[] {
                 `<span class="word word-translation">${translationEntry.translation}</span>`,
                 translationEntry.notes,
                 undefined,
-                entry.phrases?.some(
-                  (phrase: Phrase, index2: number) =>
-                    index === index2 &&
-                    phrase.glossNumber &&
-                    phrase.glossNumber.wordId === entry.id &&
-                    phrase.glossNumber.glossNumber === index + 1,
-                )
-                  ? true
+                entry.phrases !== undefined
+                  ? entry.phrases.some(
+                      (phrase: Phrase, index2: number) =>
+                        index === index2 &&
+                        phrase.glossNumber !== undefined &&
+                        phrase.glossNumber.wordId === entry.id &&
+                        phrase.glossNumber.glossNumber === index + 1,
+                    )
+                    ? true
+                    : undefined
                   : undefined,
               );
             })
@@ -2524,7 +2575,7 @@ export function generateAnkiNote(entry: Result): string[] {
           entry.translations.some(
             (_translation: Translation, index2: number) =>
               index === index2 &&
-              phraseEntry.glossNumber &&
+              phraseEntry.glossNumber !== undefined &&
               phraseEntry.glossNumber.wordId === entry.id &&
               phraseEntry.glossNumber.glossNumber === index2 + 1,
           )
@@ -2547,7 +2598,7 @@ export function generateAnkiNote(entry: Result): string[] {
                 entry.translations.some(
                   (_translation: Translation, index2: number) =>
                     index === index2 &&
-                    phraseEntry.glossNumber &&
+                    phraseEntry.glossNumber !== undefined &&
                     phraseEntry.glossNumber.wordId === entry.id &&
                     phraseEntry.glossNumber.glossNumber === index2 + 1,
                 )
@@ -2559,15 +2610,16 @@ export function generateAnkiNote(entry: Result): string[] {
             .join("")}</details>`
         : "";
 
-    const phrasesField: string = firstFivePhrases
-      ? `${firstFivePhrases}${otherPhrases}`
-      : '<span class="word word-phrase">(no phrases) (Search on dictionaries!)</span>';
+    const phrasesField: string =
+      firstFivePhrases !== undefined
+        ? `${firstFivePhrases}${otherPhrases}`
+        : '<span class="word word-phrase">(no phrases) (Search on dictionaries!)</span>';
 
     const firstThreeDefinitions: string | undefined = entry.definitions
       ?.slice(0, 3)
       .map((definitionEntry: Definition) =>
         createEntry(
-          `<span class="word word-definition${definitionEntry.mayNotBeAccurate === true ? " mnba" : ""}"><span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
+          `<span class="word word-definition${definitionEntry.mayNotBeAccurate === 2 ? " mnba2" : definitionEntry.mayNotBeAccurate === 1 ? " mnba1" : ""}"><span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
         ),
       )
       .join("");
@@ -2577,27 +2629,28 @@ export function generateAnkiNote(entry: Result): string[] {
         ? `<details><summary>Show other definitions</summary>${entry.definitions
             .map((definitionEntry: Definition, index: number) =>
               index > 2
-                ? `${createEntry(
-                    `<span class="word word-definition${definitionEntry.mayNotBeAccurate === true ? " mnba" : ""}"><span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
-                  )}`
+                ? createEntry(
+                    `<span class="word word-definition${definitionEntry.mayNotBeAccurate === 2 ? " mnba2" : definitionEntry.mayNotBeAccurate === 1 ? " mnba1" : ""}"><span class="word word-definition-original">${definitionEntry.definition}</span><span class="word word-definition-furigana">${definitionEntry.furigana ?? definitionEntry.definition}</span></span>`,
+                  )
                 : "null",
             )
             .filter((definition: string) => definition !== "null")
             .join("")}</details>`
         : "";
 
-    const definitionsField: string = firstThreeDefinitions
-      ? `${firstThreeDefinitions}${otherDefinitions}`
-      : '<span class="word word-definition">(no definitions)</span>';
+    const definitionsField: string =
+      firstThreeDefinitions !== undefined
+        ? `${firstThreeDefinitions}${otherDefinitions}`
+        : '<span class="word word-definition">(no definitions)</span>';
 
     fields.push(
-      ...(entry.kanjiForms && !entry.usuallyInKana
+      ...(entry.kanjiForms !== undefined && !entry.usuallyInKana
         ? [kanjiFormsField, readingsField]
         : [readingsField, kanjiFormsField]),
       translationsField,
       phrasesField,
       definitionsField,
-      entry.kanji
+      entry.kanji !== undefined
         ? entry.kanji
             .map((kanjiEntry: Kanji) =>
               createEntry(
@@ -2607,7 +2660,7 @@ export function generateAnkiNote(entry: Result): string[] {
             )
             .join("")
         : '<span class="word word-kanji">(no kanji)</span>',
-      ...(entry.tags && entry.tags.length > 0
+      ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags
               .map((tag: string) =>
@@ -2634,29 +2687,29 @@ export function generateAnkiNote(entry: Result): string[] {
           ),
         )
         .join(""),
-      entry.mnemonic
+      entry.mnemonic !== undefined
         ? createEntry(
             `<span class="radical radical-mnemonic">${entry.mnemonic}</span>`,
           )
         : '<span class="radical radical-mnemonic">(no mnemonic) (Come up with your own!)</span>',
-      entry.kanji
+      entry.kanji !== undefined
         ? entry.kanji
             .map((kanji: Kanji) =>
               createEntry(
-                `<span class="radical radical-kanji">${kanji.kanji}${kanji.meanings && kanji.meanings.length === 1 ? ` - ${kanji.meanings[0]}` : ""}</span>`,
+                `<span class="radical radical-kanji">${kanji.kanji}${kanji.meanings !== undefined && kanji.meanings.length > 0 ? ` - ${kanji.meanings[0]}` : ""}</span>`,
               ),
             )
             .join("")
         : '<span class="radical radical-kanji">(no "used-in" kanji)</span>',
-      entry.strokes
+      entry.strokes !== undefined
         ? createEntry(
-            `<span class="radical radical-strokes">${entry.strokes}<br>${entry.svg ? `<img class="radical radical-stroke-order" src="${entry.svg}" alt="${entry.radical} stroke order SVG">` : "(no stroke order SVG available)"}</span>`,
+            `<span class="radical radical-strokes">${entry.strokes}<br>${entry.svg !== undefined ? `<img class="radical radical-stroke-order" src="${entry.svg}" alt="${entry.radical} stroke order SVG">` : "(no stroke order SVG available)"}</span>`,
           )
         : '<span class="radical radical-strokes">(no stroke number)</span>',
-      entry.sources
+      entry.sources !== undefined
         ? `<span class="radical radical-source">${entry.sources.map((source: string, index: number) => `<a href="${source}" target="_blank">Source ${index + 1}</a>`).join("<br>")}</span>`
         : '<span class="radical radical-source">(no sources)</span>',
-      ...(entry.tags && entry.tags.length > 0
+      ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags
               .map((tag: string) =>
@@ -2670,7 +2723,7 @@ export function generateAnkiNote(entry: Result): string[] {
   if (isKanji(entry))
     fields.push(
       createEntry(`<span class="kanji kanji-character">${entry.kanji}</span>`),
-      entry.meanings
+      entry.meanings !== undefined
         ? entry.meanings
             .map((meaningEntry: string) =>
               createEntry(
@@ -2679,7 +2732,7 @@ export function generateAnkiNote(entry: Result): string[] {
             )
             .join("")
         : '<span class="kanji kanji-meaning">(no meanings)</span>',
-      entry.onyomi
+      entry.onyomi !== undefined
         ? entry.onyomi
             .map((onyomiEntry: string) =>
               createEntry(
@@ -2688,7 +2741,7 @@ export function generateAnkiNote(entry: Result): string[] {
             )
             .join("")
         : `<span class="kanji kanji-onyomi">(no onyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span>`,
-      entry.kunyomi
+      entry.kunyomi !== undefined
         ? entry.kunyomi
             .map((kunyomiEntry: string) =>
               createEntry(
@@ -2697,7 +2750,7 @@ export function generateAnkiNote(entry: Result): string[] {
             )
             .join("")
         : `<span class="kanji kanji-kunyomi">(no kunyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span>`,
-      entry.nanori
+      entry.nanori !== undefined
         ? entry.nanori
             .map((nanoriEntry: string) =>
               createEntry(
@@ -2706,38 +2759,38 @@ export function generateAnkiNote(entry: Result): string[] {
             )
             .join("")
         : '<span class="kanji kanji-nanori">(no nanori)</span>',
-      entry.components
+      entry.components !== undefined
         ? entry.components
             .map((componentEntry: KanjiComponent) =>
               createEntry(
-                `<span class="kanji kanji-component">${componentEntry.component}${componentEntry.meaning ? ` - ${componentEntry.meaning}` : ""}</span>`,
+                `<span class="kanji kanji-component">${componentEntry.component}${componentEntry.meaning !== undefined ? ` - ${componentEntry.meaning}` : ""}</span>`,
               ),
             )
             .join("")
         : '<span class="kanji kanji-component">(no components)</span>',
-      entry.mnemonic
+      entry.mnemonic !== undefined
         ? createEntry(
             `<span class="kanji kanji-mnemonic">${entry.mnemonic}</span>`,
           )
         : '<span class="kanji kanji-mnemonic">(no mnemonic) (Come up with your own!)</span>',
-      entry.words
+      entry.words !== undefined
         ? entry.words
             .map((word: Word) =>
               createEntry(
-                `<span class="kanji kanji-words">${word.kanjiForms![0]!.kanjiForm} / ${word.readings[0]!.reading} - ${word.translations[0]!.translation}</span>`,
+                `<span class="kanji kanji-words">${word.kanjiForms!.find((kf: KanjiForm) => kf.kanjiForm.includes(entry.kanji))!.kanjiForm} / ${word.readings[0]!.reading} - ${word.translations[0]!.translation}</span>`,
               ),
             )
             .join("")
         : '<span class="kanji kanji-words">(no words) (Search on dictionaries!)</span>',
-      entry.strokes
+      entry.strokes !== undefined
         ? createEntry(
-            `<span class="kanji kanji-strokes">${entry.strokes}<br>${entry.svg ? `<img class="kanji kanji-stroke-order" src="${entry.svg}" alt="${entry.kanji} stroke order SVG">` : "(no stroke order SVG available)"}</span>`,
+            `<span class="kanji kanji-strokes">${entry.strokes}<br>${entry.svg !== undefined ? `<img class="kanji kanji-stroke-order" src="${entry.svg}" alt="${entry.kanji} stroke order SVG">` : "(no stroke order SVG available)"}</span>`,
           )
         : '<span class="kanji kanji-strokes">(no stroke number)</span>',
-      entry.source
+      entry.source !== undefined
         ? `<span class="kanji kanji-source"><a href="${entry.source}" target="_blank">Source</a></span>`
         : '<span class="kanji kanji-source">(no components/mnemonic source)</span>',
-      ...(entry.tags && entry.tags.length > 0
+      ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags
               .map((tag: string) =>
@@ -2754,12 +2807,12 @@ export function generateAnkiNote(entry: Result): string[] {
       createEntry(
         `<span class="kana kana-reading">${entry.reading}${entry.audio !== undefined ? `<br>[sound:${entry.audio}]` : ""}</span>`,
       ),
-      entry.svg
+      entry.svg !== undefined
         ? createEntry(
             `<img class="kana kana-stroke-order" src="${entry.svg}" alt="${entry.kana} stroke order SVG">`,
           )
         : "(no stroke order SVG available)",
-      ...(entry.tags && entry.tags.length > 0
+      ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags
               .map((tag: string) =>
@@ -2773,7 +2826,7 @@ export function generateAnkiNote(entry: Result): string[] {
   if (isGrammar(entry))
     fields.push(
       createEntry(`<span class="grammar grammar-point">${entry.point}</span>`),
-      entry.readings
+      entry.readings !== undefined
         ? entry.readings
             .map((readingEntry: Reading) =>
               createEntry(
@@ -2783,18 +2836,18 @@ export function generateAnkiNote(entry: Result): string[] {
             .join("")
         : '<span class="grammar grammar-reading">(no additional readings)</span>',
       createEntry(
-        `<span class="grammar grammar-meaning">${entry.meaning.meaning}${entry.meaning.example && entry.meaning.example.length > 0 ? `<br><span class="grammar grammar-meaning-example">${entry.meaning.example}</span>` : ""}</span>`,
+        `<span class="grammar grammar-meaning">${entry.meaning.meaning}${entry.meaning.example !== undefined && entry.meaning.example.length > 0 ? `<br><span class="grammar grammar-meaning-example">${entry.meaning.example}</span>` : ""}</span>`,
       ),
-      entry.usages
+      entry.usages !== undefined
         ? entry.usages
-            .map((usage) =>
+            .map((usage: string) =>
               createEntry(
                 `<span class="grammar grammar-usage">${usage}</span>`,
               ),
             )
             .join("")
         : '<span class="grammar grammar-usage">(no usages)</span>',
-      entry.phrases
+      entry.phrases !== undefined
         ? entry.phrases
             .map((phraseEntry: Phrase) =>
               createEntry(
@@ -2805,10 +2858,10 @@ export function generateAnkiNote(entry: Result): string[] {
             )
             .join("")
         : '<span class="grammar grammar-phrase">(no phrases) (Search on dictionaries!)</span>',
-      entry.source
+      entry.source !== undefined
         ? `<span class="grammar grammar-source"><a href="${entry.source}" target="_blank">Source</a></span>`
         : '<span class="grammar grammar-source">(no source)</span>',
-      ...(entry.tags && entry.tags.length > 0
+      ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags
               .map((tag: string) =>
@@ -2830,27 +2883,53 @@ export function generateAnkiNote(entry: Result): string[] {
  */
 export function generateAnkiNotesFile(
   list: readonly Result[],
-  defaultNoteInfo?: DefaultNoteInfo | undefined,
+  defaultNoteInfo?: DefaultNoteInfo,
 ): string {
   const headers: string[] = [noteHeaderKeys.separator, noteHeaderKeys.html];
   let ankiNotes: string = "";
 
   if (list.length > 0) {
-    if (defaultNoteInfo === undefined) defaultNoteInfo = {};
+    let noteInfo: DefaultNoteInfo = {};
 
-    const infoValues: any[] = Object.values(defaultNoteInfo);
+    if (defaultNoteInfo !== undefined) noteInfo = { ...defaultNoteInfo };
+
+    const infoValues: any[] = Object.values(noteInfo);
 
     let invalidList: boolean = false;
 
     const firstEntry: Result = list[0]!;
     const firstEntryInfo: {
-      readonly guid: "string" | "undefined";
-      readonly noteType: "string" | "undefined";
-      readonly deckPath: "string" | "undefined";
+      readonly guid:
+        | "string"
+        | "number"
+        | "bigint"
+        | "boolean"
+        | "symbol"
+        | "undefined"
+        | "object"
+        | "function";
+      readonly noteType:
+        | "string"
+        | "number"
+        | "bigint"
+        | "boolean"
+        | "symbol"
+        | "undefined"
+        | "object"
+        | "function";
+      readonly deckPath:
+        | "string"
+        | "number"
+        | "bigint"
+        | "boolean"
+        | "symbol"
+        | "undefined"
+        | "object"
+        | "function";
     } = {
-      guid: typeof firstEntry.noteID as "string" | "undefined",
-      noteType: typeof firstEntry.noteTypeName as "string" | "undefined",
-      deckPath: typeof firstEntry.deckPath as "string" | "undefined",
+      guid: typeof firstEntry.noteID,
+      noteType: typeof firstEntry.noteTypeName,
+      deckPath: typeof firstEntry.deckPath,
     };
 
     if (
@@ -2859,15 +2938,14 @@ export function generateAnkiNotesFile(
     )
       for (const res of list)
         if (
-          (defaultNoteInfo.guid === true && res.noteID === undefined) ||
-          (defaultNoteInfo.noteType === true &&
-            res.noteTypeName === undefined) ||
-          (defaultNoteInfo.deckPath === true && res.deckPath === undefined) ||
-          (defaultNoteInfo.guid === undefined &&
+          (noteInfo.guid === true && res.noteID === undefined) ||
+          (noteInfo.noteType === true && res.noteTypeName === undefined) ||
+          (noteInfo.deckPath === true && res.deckPath === undefined) ||
+          (noteInfo.guid === undefined &&
             typeof res.noteID !== firstEntryInfo.guid) ||
-          (defaultNoteInfo.noteType === undefined &&
+          (noteInfo.noteType === undefined &&
             typeof res.noteTypeName !== firstEntryInfo.noteType) ||
-          (defaultNoteInfo.deckPath === undefined &&
+          (noteInfo.deckPath === undefined &&
             typeof res.deckPath !== firstEntryInfo.deckPath)
         ) {
           invalidList = true;
@@ -2887,37 +2965,38 @@ export function generateAnkiNotesFile(
     ankiNotes = list
       .filter((result: Result) => result.doNotCreateNote === undefined)
       .map((result: Result) => {
-        if (
-          typeof defaultNoteInfo!.guid === "string" &&
-          result.noteID === undefined
-        ) {
-          if (isWord(result) && result.id) result.noteID = result.id;
+        if (typeof noteInfo.guid === "string" && result.noteID === undefined) {
+          if (isWord(result) && result.id !== undefined)
+            result.noteID = result.id;
+
           if (isKanji(result)) result.noteID = result.kanji;
           if (isRadical(result)) result.noteID = result.radical;
           if (isKana(result)) result.noteID = result.kana;
-          if (isGrammar(result) && result.id) result.noteID = result.id;
+          if (isGrammar(result) && result.id !== undefined)
+            result.noteID = result.id;
         }
 
         if (
-          typeof defaultNoteInfo!.noteType === "string" &&
+          typeof noteInfo.noteType === "string" &&
           result.noteTypeName === undefined
         )
-          result.noteTypeName = defaultNoteInfo!.noteType;
+          result.noteTypeName = noteInfo.noteType;
+
         if (
-          typeof defaultNoteInfo!.deckPath === "string" &&
+          typeof noteInfo.deckPath === "string" &&
           result.deckPath === undefined
         )
-          result.deckPath = defaultNoteInfo!.deckPath;
+          result.deckPath = noteInfo.deckPath;
 
-        if (!hasHeader.guid && result.noteID) {
+        if (!hasHeader.guid && result.noteID !== undefined) {
           headers.push(`${noteHeaderKeys.guid}${++headerCount}`);
           hasHeader.guid = true;
         }
-        if (!hasHeader.noteType && result.noteTypeName) {
+        if (!hasHeader.noteType && result.noteTypeName !== undefined) {
           headers.push(`${noteHeaderKeys.notetype}${++headerCount}`);
           hasHeader.noteType = true;
         }
-        if (!hasHeader.deckPath && result.deckPath) {
+        if (!hasHeader.deckPath && result.deckPath !== undefined) {
           headers.push(`${noteHeaderKeys.deck}${++headerCount}`);
           hasHeader.deckPath = true;
         }
@@ -2929,7 +3008,7 @@ export function generateAnkiNotesFile(
           hasHeader.tags = true;
         }
 
-        return `${result.noteID ? `${result.noteID}\t` : ""}${result.noteTypeName ? `${result.noteTypeName}\t` : ""}${result.deckPath ? `${result.deckPath}\t` : ""}${note.join("\t")}`;
+        return `${result.noteID !== undefined ? `${result.noteID}\t` : ""}${result.noteTypeName !== undefined ? `${result.noteTypeName}\t` : ""}${result.deckPath !== undefined ? `${result.deckPath}\t` : ""}${note.join("\t")}`;
       })
       .join("\n")
       .trim();

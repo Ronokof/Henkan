@@ -1,7 +1,7 @@
 /**
  * JLPT levels
  */
-export type JLPT = "N5" | "N4" | "N3" | "N2" | "N1";
+export type JLPT = `N${number}`;
 
 /**
  * Japanese parts of speech (from the `pos_title` field of `ja.wiktionary.org` pages)
@@ -194,10 +194,6 @@ export interface DictWord {
    */
   readonly id: StringNumber;
   /**
-   * The word's kanji forms
-   */
-  kanjiForms?: DictKanjiForm[] | undefined;
-  /**
    * The word's readings
    */
   readings: DictReading[];
@@ -205,6 +201,10 @@ export interface DictWord {
    * The word's meanings/senses
    */
   meanings: DictMeaning[];
+  /**
+   * The word's kanji forms
+   */
+  kanjiForms?: DictKanjiForm[] | undefined;
   /**
    * Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
    */
@@ -514,13 +514,13 @@ export interface JaWiktionaryEntry {
    */
   word: string;
   /**
-   * The part of speech (in Japanese)
-   */
-  pos_title?: POS | undefined;
-  /**
    * The word senses
    */
   senses: JaWiktionaryEntrySense[];
+  /**
+   * The part of speech (in Japanese)
+   */
+  pos_title?: POS | undefined;
   /**
    * Other forms (as kanji form or kana) of the word
    */
@@ -541,8 +541,12 @@ export interface Definition {
   furigana?: string | undefined;
   /**
    * Whether or not the definition is associated with other words
+   *
+   * - `undefined` - accurate
+   * - `1` - maybe inaccurate
+   * - `2` - most likely inaccurate
    */
-  mayNotBeAccurate?: true | undefined;
+  mayNotBeAccurate?: 1 | 2 | undefined;
 }
 
 /**
@@ -584,11 +588,11 @@ export type EntryType = "word" | "kanji" | "radical" | "kana" | "grammar";
 /**
  * Basic Anki note information
  */
-export interface ResultEntry<EntryType extends string> {
+export interface ResultEntry<E extends EntryType> {
   /**
    * ID used for the resulting Anki note
    */
-  noteID?: `${`${EntryType}_` | ""}${string}` | undefined;
+  noteID?: `${`${E}_` | ""}${string}` | undefined;
   /**
    * ID used for the Anki note ID
    */

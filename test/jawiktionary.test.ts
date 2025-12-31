@@ -1,3 +1,11 @@
+import {
+  createReadStream,
+  existsSync,
+  mkdirSync,
+  rmSync,
+  writeFileSync,
+} from "fs";
+import path from "path";
 import { describe, it, expect, beforeAll, afterAll, inject } from "vitest";
 import {
   Definition,
@@ -12,14 +20,6 @@ import {
   getWordDefinitions,
   getWordDefinitionsWithFurigana,
 } from "../src/utils";
-import {
-  createReadStream,
-  existsSync,
-  mkdirSync,
-  rmSync,
-  writeFileSync,
-} from "fs";
-import path from "path";
 
 let convertedJmdict: DictWord[];
 
@@ -36,7 +36,9 @@ beforeAll(() => {
   convertedJmdict = convertJMdict(inject("JMdict_e"));
 });
 
-afterAll(() => rmSync(filesDir, { force: true, recursive: true }));
+afterAll(() => {
+  rmSync(filesDir, { force: true, recursive: true });
+});
 
 describe("Jawiktionary conversion", () => {
   it("sync conversion", () => {
@@ -123,10 +125,8 @@ describe("Jawiktionary conversion", () => {
     expect(
       pairs.every(
         (pair: WordDefinitionPair) =>
-          pair.wordID != undefined &&
           pair.wordID.length > 0 &&
           Number.isSafeInteger(Number.parseInt(pair.wordID)) &&
-          pair.definitions != undefined &&
           pair.definitions.length > 0 &&
           pair.definitions.every(
             (def: Definition) =>
@@ -136,8 +136,18 @@ describe("Jawiktionary conversion", () => {
     ).toBeTruthy();
     expect(
       pairs.some((pair: WordDefinitionPair) =>
+        pair.definitions.some((def: Definition) => def.mayNotBeAccurate === 2),
+      ),
+    ).toBeTruthy();
+    expect(
+      pairs.some((pair: WordDefinitionPair) =>
+        pair.definitions.some((def: Definition) => def.mayNotBeAccurate === 1),
+      ),
+    ).toBeTruthy();
+    expect(
+      pairs.some((pair: WordDefinitionPair) =>
         pair.definitions.some(
-          (def: Definition) => def.mayNotBeAccurate === true,
+          (def: Definition) => def.mayNotBeAccurate === undefined,
         ),
       ),
     ).toBeTruthy();

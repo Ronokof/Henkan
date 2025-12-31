@@ -44,7 +44,7 @@ The kanji grade level
 
 ### jlpt?
 
-> `optional` **jlpt**: [`JLPT`](../type-aliases/JLPT.md)
+> `optional` **jlpt**: `` `N${number}` ``
 
 Defined in: [types.ts:255](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L255)
 

@@ -6,15 +6,15 @@
 
 # Function: getWordDefinitions()
 
-> **getWordDefinitions**(`entryList`, `jmDict`): [`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
+> **getWordDefinitions**(`wiktionaryEntries`, `jmDict`): [`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
 
-Defined in: [utils.ts:1046](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1046)
+Defined in: [utils.ts:1086](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1086)
 
 Pairs Japanese definitions with JMdict word entries
 
 ## Parameters
 
-### entryList
+### wiktionaryEntries
 
 readonly [`JaWiktionaryEntry`](../interfaces/JaWiktionaryEntry.md)[]
 
@@ -30,4 +30,4 @@ An array of converted `JMdict` entries
 
 [`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
 
-A promise resolving with an array of [WordDefinitionPair](../interfaces/WordDefinitionPair.md) objects
+An array of [WordDefinitionPair](../interfaces/WordDefinitionPair.md) objects

@@ -1,9 +1,8 @@
-import type { TestProject } from "vitest/node";
-import { Grammar, Kana, Radical } from "../src/types";
-
 import { gunzip as _gunzip, InputType, ZlibOptions } from "zlib";
-import { unzipSync, UnzipFileInfo, Unzipped } from "fflate";
 import { promisify } from "util";
+import type { TestProject } from "vitest/node";
+import { unzipSync, UnzipFileInfo, Unzipped } from "fflate";
+import { Grammar, Kana, Radical } from "../src/types";
 
 const gunzip: (
   buffer: InputType,
@@ -120,58 +119,54 @@ declare module "vitest" {
   }
 }
 
-export default async function setup(project: TestProject) {
-  for await (const [dict, url] of dictURLs.entries()) {
-    if (url) {
-      const urlSplit: string[] = url.split("/");
-      let filename: string | undefined = urlSplit[urlSplit.length - 1];
-      if (!filename) throw new Error("Invalid filename");
+export default async function setup(project: TestProject): Promise<void> {
+  for (const [dict, url] of dictURLs.entries()) {
+    const urlSplit: string[] = url.split("/");
+    let filename: string | undefined = urlSplit[urlSplit.length - 1];
+    if (filename === undefined) throw new Error("Invalid filename");
 
-      if (url.endsWith(".gz")) filename = filename.replace(".gz", "");
-      else if (url.endsWith(".zip")) filename = filename.replace(".zip", "");
+    if (url.endsWith(".gz")) filename = filename.replace(".gz", "");
+    else if (url.endsWith(".zip")) filename = filename.replace(".zip", "");
 
-      const res: Response = await fetch(url);
-      const res2: Response | undefined = url.endsWith(".json")
-        ? res.clone()
-        : undefined;
+    const res: Response = await fetch(url);
+    const res2: Response | undefined = url.endsWith(".json")
+      ? res.clone()
+      : undefined;
 
-      const buf = Buffer.from(await res.arrayBuffer());
+    const buf: Buffer<ArrayBuffer> = Buffer.from(await res.arrayBuffer());
 
-      if (url.endsWith(".gz")) {
-        const file: string = (await gunzip(buf)).toString("utf-8");
+    if (url.endsWith(".gz")) {
+      const file: string = (await gunzip(buf)).toString("utf-8");
 
-        project.provide(dict, file);
-      } else if (url.endsWith(".zip")) {
-        const files: Unzipped = unzipSync(buf, {
-          filter: (file: UnzipFileInfo) =>
-            ["kradfile2", "radkfile2"].includes(file.name) ||
-            file.name.endsWith(".svg"),
-        });
+      project.provide(dict, file);
+    } else if (url.endsWith(".zip")) {
+      const files: Unzipped = unzipSync(buf, {
+        filter: (file: UnzipFileInfo) =>
+          ["kradfile2", "radkfile2"].includes(file.name) ||
+          file.name.endsWith(".svg"),
+      });
 
-        if (filename === "kanjivg-20250816-all") {
-          const list: string[] = [];
+      if (filename === "kanjivg-20250816-all") {
+        const list: string[] = [];
 
-          for (const key of Object.keys(files))
-            list.push(key.replace("kanji/", ""));
+        for (const key of Object.keys(files))
+          list.push(key.replace("kanji/", ""));
 
-          const svgs: readonly string[] = [...list];
+        const svgs: readonly string[] = [...list];
 
-          project.provide(dict, svgs);
-        } else if (filename === "kradzip") {
-          const krad: Uint8Array<ArrayBufferLike> | undefined =
-            files["kradfile2"];
-          const radk: Uint8Array<ArrayBufferLike> | undefined =
-            files["radkfile2"];
+        project.provide(dict, svgs);
+      } else if (filename === "kradzip") {
+        const krad: Uint8Array | undefined = files["kradfile2"];
+        const radk: Uint8Array | undefined = files["radkfile2"];
 
-          if (krad && radk) {
-            project.provide("kradfile2", Buffer.from(krad));
-            project.provide("radkfile2", Buffer.from(radk));
-          }
+        if (krad !== undefined && radk !== undefined) {
+          project.provide("kradfile2", Buffer.from(krad));
+          project.provide("radkfile2", Buffer.from(radk));
         }
-      } else if (url.endsWith(".json") && res2) {
-        const json: readonly any[] = await res2.json();
-        project.provide(dict, json);
-      } else if (url.endsWith(".jsonl")) project.provide(dict, buf);
-    }
+      }
+    } else if (url.endsWith(".json") && res2 !== undefined) {
+      const json: readonly any[] = await res2.json();
+      project.provide(dict, json);
+    } else if (url.endsWith(".jsonl")) project.provide(dict, buf);
   }
 }

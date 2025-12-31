@@ -28,9 +28,9 @@ function checkTransformedEntry(
   dictEntry: DictWord,
   noteTypeName: string,
   deckPath: string,
-  checkKanji?: true | undefined,
-  checkPhrases?: true | undefined,
-  ignoreTags?: true | undefined,
+  checkKanji?: true,
+  checkPhrases?: true,
+  ignoreTags?: true,
 ): void {
   expect(isWord(transformedEntry)).toBeTruthy();
   expect(
@@ -47,7 +47,7 @@ function checkTransformedEntry(
 
   if (ignoreTags === undefined) expect(transformedEntry.tags).toBeDefined();
 
-  if (transformedEntry.tags)
+  if (transformedEntry.tags !== undefined)
     expect(transformedEntry.tags.length).toBeGreaterThan(0);
 
   expect(transformedEntry.common === dictEntry.isCommon).toBeTruthy();
@@ -60,23 +60,25 @@ function checkTransformedEntry(
   );
 
   if (checkKanji === true)
-    if (transformedEntry.kanjiForms)
+    if (transformedEntry.kanjiForms !== undefined)
       expect(
-        transformedEntry.kanjiForms.length > 0 && dictEntry.kanjiForms,
+        transformedEntry.kanjiForms.length > 0 &&
+          dictEntry.kanjiForms !== undefined,
       ).toBeTruthy();
-  if (transformedEntry.kanji)
+
+  if (transformedEntry.kanji !== undefined)
     expect(
-      transformedEntry.kanjiForms &&
+      transformedEntry.kanjiForms !== undefined &&
         transformedEntry.kanji.every(
           (kanji: Kanji) =>
-            transformedEntry.kanjiForms &&
+            transformedEntry.kanjiForms !== undefined &&
             transformedEntry.kanjiForms.some((kf: KanjiForm) =>
               kf.kanjiForm.includes(kanji.kanji),
             ),
         ),
     ).toBeTruthy();
 
-  if (checkPhrases === true && transformedEntry.phrases)
+  if (checkPhrases === true && transformedEntry.phrases !== undefined)
     expect(transformedEntry.phrases.length).toBeGreaterThan(0);
 }
 
@@ -116,8 +118,8 @@ beforeAll(async () => {
 
   for (const id of entryMaps.wordExamplesMap!.keys())
     if (
-      entryMaps.wordIDEntryMap?.get(id)?.kanjiForms !== undefined &&
-      entryMaps.wordDefinitionsMap?.has(id)
+      entryMaps.wordIDEntryMap!.get(id)?.kanjiForms !== undefined &&
+      entryMaps.wordDefinitionsMap!.has(id)
     ) {
       randomWordID = id;
       break;
@@ -148,7 +150,7 @@ describe("DictWord transformation to Word", () => {
 
       expect(transformedEntry).toBeDefined();
 
-      if (transformedEntry) {
+      if (transformedEntry !== undefined) {
         checkTransformedEntry(
           transformedEntry,
           entry,
@@ -157,8 +159,8 @@ describe("DictWord transformation to Word", () => {
           true,
         );
 
-        for (let i: number = 0; i < transformedEntry.readings.length; i++)
-          transformedEntry.readings[i]!.audio = crypto.randomUUID();
+        for (let j: number = 0; j < transformedEntry.readings.length; j++)
+          transformedEntry.readings[j]!.audio = crypto.randomUUID();
 
         entries.push(transformedEntry);
       }
@@ -191,7 +193,7 @@ describe("DictWord transformation to Word", () => {
 
       expect(transformedEntry).toBeDefined();
 
-      if (transformedEntry) {
+      if (transformedEntry !== undefined) {
         checkTransformedEntry(
           transformedEntry,
           entry,
@@ -201,8 +203,8 @@ describe("DictWord transformation to Word", () => {
           true,
         );
 
-        for (let i: number = 0; i < transformedEntry.readings.length; i++)
-          transformedEntry.readings[i]!.audio = crypto.randomUUID();
+        for (let j: number = 0; j < transformedEntry.readings.length; j++)
+          transformedEntry.readings[j]!.audio = crypto.randomUUID();
 
         entries.push(transformedEntry);
       }
@@ -239,7 +241,7 @@ describe("DictWord transformation to Word", () => {
 
       expect(transformedEntry).toBeDefined();
 
-      if (transformedEntry) {
+      if (transformedEntry !== undefined) {
         if (i === randomIndex) transformedEntry.tags = undefined;
 
         checkTransformedEntry(
@@ -252,8 +254,8 @@ describe("DictWord transformation to Word", () => {
           i !== randomIndex ? undefined : true,
         );
 
-        for (let i: number = 0; i < transformedEntry.readings.length; i++)
-          transformedEntry.readings[i]!.audio = crypto.randomUUID();
+        for (let j: number = 0; j < transformedEntry.readings.length; j++)
+          transformedEntry.readings[j]!.audio = crypto.randomUUID();
 
         entries.push(transformedEntry);
       }
@@ -363,10 +365,14 @@ describe("DictWord transformation to Word", () => {
 
     expect(testWord).toBeDefined();
     expect(testWord2).toBeDefined();
-    expect(testWord && testWord2 && testWord.id === testWord2.id).toBeTruthy();
+    expect(
+      testWord !== undefined &&
+        testWord2 !== undefined &&
+        testWord.id === testWord2.id,
+    ).toBeTruthy();
     expect(testWord3).toBeUndefined();
 
-    if (testWord) {
+    if (testWord !== undefined) {
       testWord.tags = undefined;
 
       expect(testWord.definitions).toBeUndefined();

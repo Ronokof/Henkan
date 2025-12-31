@@ -6,7 +6,7 @@ let radicals: readonly Radical[];
 
 beforeAll(() => (radicals = inject("radicals.json")));
 
-describe("radicals note generation", () =>
+describe("radicals note generation", () => {
   it("note generation", () => {
     const randomIndex: number = Math.floor(Math.random() * radicals.length);
 
@@ -94,4 +94,5 @@ describe("radicals note generation", () =>
         }),
       ).split("\n").length,
     ).toBe(radicals.length + 4);
-  }));
+  });
+});

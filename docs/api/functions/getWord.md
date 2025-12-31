@@ -6,15 +6,15 @@
 
 # Function: getWord()
 
-> **getWord**(`word`, `dict?`, `kanjiDic?`, `examples?`, `definitions?`, `noteTypeName?`, `deckPath?`): [`Word`](../interfaces/Word.md) \| `undefined`
+> **getWord**(`searchedWord`, `dict?`, `kanjiDic?`, `examples?`, `definitions?`, `noteTypeName?`, `deckPath?`): [`Word`](../interfaces/Word.md) \| `undefined`
 
-Defined in: [utils.ts:1725](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1725)
+Defined in: [utils.ts:2021](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2021)
 
 Transforms a converted `JMdict` entry into a more readable format, by providing either its JMdict entry ID or the [DictWord](../interfaces/DictWord.md) object directly.
 
 ## Parameters
 
-### word
+### searchedWord
 
 The ID of the `JMdict` entry (requires [dict](#getword)) or a [DictWord](../interfaces/DictWord.md) object
 
@@ -22,7 +22,7 @@ The ID of the `JMdict` entry (requires [dict](#getword)) or a [DictWord](../inte
 
 ### dict?
 
-An array converted `JMdict` entries or a [WordIDEntryMap](../type-aliases/WordIDEntryMap.md) *(not needed if [word](#getword) is a [DictWord](../interfaces/DictWord.md) object)*
+An array converted `JMdict` entries or a [WordIDEntryMap](../type-aliases/WordIDEntryMap.md) *(not needed if [searchedWord](#getword) is a [DictWord](../interfaces/DictWord.md) object)*
 
 [`WordIDEntryMap`](../type-aliases/WordIDEntryMap.md) | readonly [`DictWord`](../interfaces/DictWord.md)[]
 

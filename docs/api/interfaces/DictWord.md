@@ -50,7 +50,7 @@ Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
 
 > `optional` **kanjiForms**: [`DictKanjiForm`](DictKanjiForm.md)[]
 
-Defined in: [types.ts:199](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L199)
+Defined in: [types.ts:207](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L207)
 
 The word's kanji forms
 
@@ -60,7 +60,7 @@ The word's kanji forms
 
 > **meanings**: [`DictMeaning`](DictMeaning.md)[]
 
-Defined in: [types.ts:207](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L207)
+Defined in: [types.ts:203](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L203)
 
 The word's meanings/senses
 
@@ -70,7 +70,7 @@ The word's meanings/senses
 
 > **readings**: [`DictReading`](DictReading.md)[]
 
-Defined in: [types.ts:203](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L203)
+Defined in: [types.ts:199](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L199)
 
 The word's readings
 

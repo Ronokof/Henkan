@@ -2,7 +2,7 @@ import { describe, it, expect, inject } from "vitest";
 import { Grammar } from "../src/types";
 import { generateAnkiNote, generateAnkiNotesFile } from "../src/utils";
 
-describe("grammar note generation", () =>
+describe("grammar note generation", () => {
   it("note generation", () => {
     const grammarPoints: readonly Grammar[] = [
       ...inject("grammar_n5.json"),
@@ -100,4 +100,5 @@ describe("grammar note generation", () =>
         }),
       ).split("\n").length,
     ).toBe(grammarPoints.length + 4);
-  }));
+  });
+});

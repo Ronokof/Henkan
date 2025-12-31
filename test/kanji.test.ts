@@ -31,10 +31,10 @@ function checkTransformedEntry(
   dictEntry: DictKanji,
   noteTypeName: string,
   deckPath: string,
-  checkWords?: true | undefined,
+  checkWords?: true,
   kanjiInfo?: Kanji,
   sourceURL?: string,
-  ignoreExtraInfo?: true | undefined,
+  ignoreExtraInfo?: true,
 ): void {
   expect(isKanji(transformedEntry)).toBeTruthy();
   expect(
@@ -59,7 +59,7 @@ function checkTransformedEntry(
 
   expect(
     dictEntry.misc !== undefined &&
-      transformedEntry.frequency == dictEntry.misc.frequency,
+      transformedEntry.frequency === dictEntry.misc.frequency,
   ).toBeTruthy();
   expect(
     dictEntry.misc !== undefined &&
@@ -73,8 +73,7 @@ function checkTransformedEntry(
     transformedEntry.strokes !== undefined &&
       transformedEntry.strokes.length > 0 &&
       Number.isSafeInteger(Number.parseInt(transformedEntry.strokes)) &&
-      dictEntry.misc &&
-      transformedEntry.strokes === dictEntry.misc.strokeNumber,
+      transformedEntry.strokes === dictEntry.misc?.strokeNumber,
   ).toBeTruthy();
 
   if (
@@ -86,7 +85,7 @@ function checkTransformedEntry(
         let nanori: boolean = false;
         let groups: boolean = false;
 
-        if (rm.nanori && rm.nanori.length > 0)
+        if (rm.nanori !== undefined && rm.nanori.length > 0)
           nanori = transformedEntry.nanori !== undefined;
         else if (transformedEntry.nanori === undefined) nanori = true;
 
@@ -103,12 +102,12 @@ function checkTransformedEntry(
                   group.readings !== undefined &&
                   group.readings.some(
                     (kr: DictKanjiReading) =>
-                      (transformedEntry.onyomi &&
+                      (transformedEntry.onyomi !== undefined &&
                         kr.type === "ja_on" &&
                         transformedEntry.onyomi.some(
                           (on: string) => on === kr.reading,
                         )) ||
-                      (transformedEntry.kunyomi &&
+                      (transformedEntry.kunyomi !== undefined &&
                         kr.type === "ja_kun" &&
                         transformedEntry.kunyomi.some(
                           (kun: string) => kun === kr.reading,
@@ -118,7 +117,7 @@ function checkTransformedEntry(
                   group.meanings !== undefined &&
                   group.meanings.some(
                     (meaning: string) =>
-                      transformedEntry.meanings &&
+                      transformedEntry.meanings !== undefined &&
                       (dictEntry.isKokuji === true ||
                         transformedEntry.meanings.some(
                           (m: string) => m === meaning,
@@ -138,28 +137,28 @@ function checkTransformedEntry(
 
   expect(transformedEntry.tags).toBeDefined();
 
-  if (transformedEntry.tags)
+  if (transformedEntry.tags !== undefined)
     expect(transformedEntry.tags.length).toBeGreaterThan(0);
 
   expect(generateAnkiNote(transformedEntry).length).toBe(11);
 
-  if (checkWords && transformedEntry.words)
+  if (checkWords === true && transformedEntry.words !== undefined)
     expect(
       transformedEntry.words.some(
         (word: Word) =>
-          word.kanjiForms &&
+          word.kanjiForms !== undefined &&
           word.kanjiForms.some((kf: KanjiForm) =>
             kf.kanjiForm.includes(transformedEntry.kanji),
           ),
       ),
     ).toBeTruthy();
 
-  if (kanjiInfo && ignoreExtraInfo === undefined) {
+  if (kanjiInfo !== undefined && ignoreExtraInfo === undefined) {
     expect(
       transformedEntry.components !== undefined &&
         transformedEntry.components.every(
           (component: KanjiComponent) =>
-            kanjiInfo.components &&
+            kanjiInfo.components !== undefined &&
             kanjiInfo.components.some(
               (comp: KanjiComponent) =>
                 comp.component === component.component &&
@@ -172,13 +171,13 @@ function checkTransformedEntry(
       transformedEntry.words !== undefined &&
         transformedEntry.words.every(
           (word: Word) =>
-            kanjiInfo.words &&
+            kanjiInfo.words !== undefined &&
             kanjiInfo.words.some(
               (w: Word) =>
-                w.kanjiForms &&
+                w.kanjiForms !== undefined &&
                 w.kanjiForms.some(
                   (kf: KanjiForm) =>
-                    word.kanjiForms &&
+                    word.kanjiForms !== undefined &&
                     word.kanjiForms.some(
                       (kf2: KanjiForm) =>
                         kf.kanjiForm === kf2.kanjiForm &&
@@ -206,7 +205,7 @@ function checkTransformedEntry(
           `kanji::words::${transformedEntry.words!.length}`,
         ].every(
           (tag: string) =>
-            transformedEntry.tags &&
+            transformedEntry.tags !== undefined &&
             transformedEntry.tags.some((tag2: string) => tag2 === tag),
         ),
     ).toBeTruthy();
@@ -262,7 +261,7 @@ describe("DictKanji transformation to Kanji", () => {
 
       expect(transformedEntry).toBeDefined();
 
-      if (transformedEntry) {
+      if (transformedEntry !== undefined) {
         checkTransformedEntry(transformedEntry, entry, noteTypeName, deckPath);
 
         entries.push(transformedEntry);
@@ -332,7 +331,7 @@ describe("DictKanji transformation to Kanji", () => {
 
       expect(transformedEntry).toBeDefined();
 
-      if (transformedEntry) {
+      if (transformedEntry !== undefined) {
         checkTransformedEntry(
           transformedEntry,
           entry,
@@ -375,7 +374,7 @@ describe("DictKanji transformation to Kanji", () => {
 
       expect(transformedEntry).toBeDefined();
 
-      if (transformedEntry) {
+      if (transformedEntry !== undefined) {
         checkTransformedEntry(
           transformedEntry,
           entry,
@@ -491,14 +490,16 @@ describe("DictKanji transformation to Kanji", () => {
 
     expect(kokuji).toBeDefined();
 
-    if (kokuji) {
+    if (kokuji !== undefined) {
       kokuji.strokes = undefined;
       kokuji.tags = undefined;
 
       expect(kokuji.kokuji === true).toBeTruthy();
-      expect(kokuji.meanings && kokuji.meanings.length > 0).toBeTruthy();
       expect(
-        kokuji.meanings && !kokuji.meanings.includes("(kokuji)"),
+        kokuji.meanings !== undefined && kokuji.meanings.length > 0,
+      ).toBeTruthy();
+      expect(
+        kokuji.meanings !== undefined && !kokuji.meanings.includes("(kokuji)"),
       ).toBeTruthy();
       expect(generateAnkiNote(kokuji).length).toBe(10);
     }

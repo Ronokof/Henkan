@@ -34,8 +34,12 @@ The definition with furigana attached
 
 ### mayNotBeAccurate?
 
-> `optional` **mayNotBeAccurate**: `true`
+> `optional` **mayNotBeAccurate**: `1` \| `2`
 
-Defined in: [types.ts:545](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L545)
+Defined in: [types.ts:549](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L549)
 
 Whether or not the definition is associated with other words
+
+- `undefined` - accurate
+- `1` - maybe inaccurate
+- `2` - most likely inaccurate

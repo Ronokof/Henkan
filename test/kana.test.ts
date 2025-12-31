@@ -2,7 +2,7 @@ import { describe, it, expect, inject } from "vitest";
 import { Kana } from "../src/types";
 import { generateAnkiNote, generateAnkiNotesFile } from "../src/utils";
 
-describe("kana note generation", () =>
+describe("kana note generation", () => {
   it("note generation", () => {
     const kana: readonly Kana[] = [
       ...inject("hiragana.json"),
@@ -96,4 +96,5 @@ describe("kana note generation", () =>
         }),
       ).split("\n").length,
     ).toBe(kana.length + 4);
-  }));
+  });
+});

@@ -1,6 +1,6 @@
 {
   "name": "henkan",
-  "version": "2.2.5",
+  "version": "2.3.0",
   "description": "A Node.JS library that helps you convert any dictionary from EDRDG, transform their entries into more user-friendly schemas and create Anki notes from them.",
   "keywords": [
     "fjsd",
@@ -43,6 +43,7 @@
   },
   "files": [
     "dist/**/*",
+    "src/**/*",
     "docs/**/*",
     "README.md",
     "LICENSE.md",
@@ -58,7 +59,7 @@
     "build:cjs": "node ./scripts/build-esbuild.cjs cjs",
     "build:esm": "node ./scripts/build-esbuild.cjs esm",
     "build": "npm run clean && npm run build:types && npm run build:esm && npm run build:cjs",
-    "lint": "eslint src --ext .ts,.tsx --fix --fix-type problem,suggestion,layout && eslint test --ext .ts,.tsx --fix --fix-type problem,suggestion,layout",
+    "lint": "eslint --fix --fix-type problem,suggestion,layout",
     "prepare": "npm run lint && npm run build && npm run docs:api",
     "docs:api": "typedoc --plugin typedoc-plugin-markdown --out docs/api src/index.ts --readme none --excludePrivate --excludeProtected --excludeNotDocumented --hideGenerator --sourceLinkTemplate \"https://github.com/Ronokof/Henkan/blob/{gitRevision}/{path}#L{line}\" --gitRevision main",
     "update:pkgs": "node ./scripts/update-packages.cjs"
@@ -66,11 +67,13 @@
   "devDependencies": {
     "@types/node": "^24.10.4",
     "@types/xml2js": "^0.4.14",
-    "@typescript-eslint/eslint-plugin": "^8.50.1",
-    "@typescript-eslint/parser": "^8.50.1",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
     "@vitest/coverage-v8": "^4.0.16",
     "esbuild": "^0.27.2",
     "eslint": "^9.39.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsdoc": "^61.5.0",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.7.4",
     "rimraf": "^6.1.2",

@@ -16,11 +16,9 @@ describe("KANJIDIC conversion", () => {
     expect(
       convertedKanjidic.every(
         (kanji: DictKanji) =>
-          kanji.kanji != undefined &&
           kanji.kanji.length === 1 &&
           regexps.kanji.test(kanji.kanji) &&
-          kanji.misc !== undefined &&
-          kanji.misc.strokeNumber != undefined &&
+          kanji.misc?.strokeNumber !== undefined &&
           kanji.misc.strokeNumber.length > 0 &&
           Number.isSafeInteger(Number.parseInt(kanji.misc.strokeNumber)),
       ),
@@ -37,9 +35,9 @@ describe("KANJIDIC conversion", () => {
               rm.groups !== undefined &&
               rm.groups.some(
                 (group: DictKanjiReadingMeaningGroup) =>
-                  group.meanings != undefined &&
+                  group.meanings !== undefined &&
                   group.meanings.length > 0 &&
-                  group.readings != undefined &&
+                  group.readings !== undefined &&
                   group.readings.length > 0,
               ),
           ),
@@ -48,8 +46,7 @@ describe("KANJIDIC conversion", () => {
     expect(
       convertedKanjidic.some(
         (kanji: DictKanji) =>
-          kanji.misc !== undefined &&
-          kanji.misc.strokeNumber != undefined &&
+          kanji.misc?.strokeNumber !== undefined &&
           kanji.misc.strokeNumber.length > 0 &&
           Number.isSafeInteger(Number.parseInt(kanji.misc.strokeNumber)) &&
           kanji.misc.frequency !== undefined &&
@@ -58,8 +55,7 @@ describe("KANJIDIC conversion", () => {
           kanji.misc.grade !== undefined &&
           kanji.misc.grade.length > 0 &&
           Number.isSafeInteger(Number.parseInt(kanji.misc.grade)) &&
-          kanji.misc.jlpt !== undefined &&
-          kanji.misc.jlpt.length === 2 &&
+          kanji.misc.jlpt?.length === 2 &&
           kanji.misc.jlpt.charAt(0) === "N" &&
           ["5", "4", "3", "2", "1"].includes(kanji.misc.jlpt.charAt(1)),
       ),

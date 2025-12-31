@@ -6,15 +6,15 @@
 
 # Function: getKanji()
 
-> **getKanji**(`kanji`, `dict?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md) \| `undefined`
+> **getKanji**(`searchedKanji`, `dict?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
-Defined in: [utils.ts:2114](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2114)
+Defined in: [utils.ts:1750](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1750)
 
 Transforms a converted `KANJIDIC` entry into a more readable format, by providing either the kanji or the [DictKanji](../interfaces/DictKanji.md) object directly.
 
 ## Parameters
 
-### kanji
+### searchedKanji
 
 The kanji character (requires [dict](#getkanji)) or a [DictKanji](../interfaces/DictKanji.md) object
 
@@ -22,7 +22,7 @@ The kanji character (requires [dict](#getkanji)) or a [DictKanji](../interfaces/
 
 ### dict?
 
-An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md) (not needed if [kanji](#getkanji) is a [DictKanji](../interfaces/DictKanji.md) object)
+An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md) (not needed if [searchedKanji](#getkanji) is a [DictKanji](../interfaces/DictKanji.md) object)
 
 [`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) | readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 

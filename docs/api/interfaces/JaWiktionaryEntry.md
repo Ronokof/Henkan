@@ -26,7 +26,7 @@ Other forms (as kanji form or kana) of the word
 
 > `optional` **pos\_title**: [`POS`](../type-aliases/POS.md)
 
-Defined in: [types.ts:519](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L519)
+Defined in: [types.ts:523](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L523)
 
 The part of speech (in Japanese)
 
@@ -36,7 +36,7 @@ The part of speech (in Japanese)
 
 > **senses**: `JaWiktionaryEntrySense`[]
 
-Defined in: [types.ts:523](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L523)
+Defined in: [types.ts:519](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L519)
 
 The word senses
 

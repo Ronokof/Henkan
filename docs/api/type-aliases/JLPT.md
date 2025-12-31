@@ -6,7 +6,7 @@
 
 # Type Alias: JLPT
 
-> **JLPT** = `"N5"` \| `"N4"` \| `"N3"` \| `"N2"` \| `"N1"`
+> **JLPT** = `` `N${number}` ``
 
 Defined in: [types.ts:4](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L4)
 
