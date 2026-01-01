@@ -514,13 +514,13 @@ export interface JaWiktionaryEntry {
    */
   word: string;
   /**
+   * The part of speech (in Japanese)
+   */
+  pos_title: POS;
+  /**
    * The word senses
    */
   senses: JaWiktionaryEntrySense[];
-  /**
-   * The part of speech (in Japanese)
-   */
-  pos_title?: POS | undefined;
   /**
    * Other forms (as kanji form or kana) of the word
    */

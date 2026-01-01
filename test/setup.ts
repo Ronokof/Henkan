@@ -165,7 +165,9 @@ export default async function setup(project: TestProject): Promise<void> {
         }
       }
     } else if (url.endsWith(".json") && res2 !== undefined) {
-      const json: readonly any[] = await res2.json();
+      const json: readonly any[] = Array.from(
+        JSON.parse(JSON.stringify(await res2.json())),
+      );
       project.provide(dict, json);
     } else if (url.endsWith(".jsonl")) project.provide(dict, buf);
   }

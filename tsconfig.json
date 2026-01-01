@@ -2,8 +2,9 @@
     "compilerOptions": {
         // Modules
         "target": "esnext",
-        "module": "node20",
-        "moduleResolution": "node16",
+        "lib": ["ESNext"],
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
         "allowUmdGlobalAccess": true,
         "resolveJsonModule": true,
         "rootDir": "src",

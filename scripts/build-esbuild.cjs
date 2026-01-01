@@ -2,11 +2,9 @@ const { builtinModules } = require("module");
 const esbuild = require("esbuild");
 const pkg = require("../package.json");
 
-const deps = pkg.dependencies ? Object.keys(pkg.dependencies) : [];
-const peerDeps = pkg.peerDependencies ? Object.keys(pkg.peerDependencies) : [];
-const optionalDeps = pkg.optionalDependencies
-  ? Object.keys(pkg.optionalDependencies)
-  : [];
+const deps = Object.keys(pkg.dependencies);
+const peerDeps = Object.keys(pkg.peerDependencies ?? {});
+const optionalDeps = Object.keys(pkg.optionalDependencies ?? {});
 
 const external = [...builtinModules, ...deps, ...peerDeps, ...optionalDeps];
 
@@ -23,5 +21,5 @@ const build = (format, outfile, target) =>
   });
 
 const mode = process.argv[2] || "esm";
-if (mode === "esm") build("esm", "dist/index.mjs", ["node16"]);
-else build("cjs", "dist/index.cjs.js", ["node12"]);
+if (mode === "esm") build("esm", "dist/index.mjs", "node24");
+else build("cjs", "dist/index.cjs.js", "node24");

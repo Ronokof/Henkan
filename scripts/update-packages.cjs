@@ -11,18 +11,10 @@ const majorNodeVer = Number(
 if (!Number.isSafeInteger(majorNodeVer))
   throw new Error("Invalid Node version");
 
-const deps = pkg.dependencies
-  ? Object.keys(pkg.dependencies).map((dep) => `${dep}@latest`)
-  : [];
-const devDeps = pkg.devDependencies
-  ? Object.keys(pkg.devDependencies).map(
-      (dep) =>
-        `${dep}${dep !== "@types/node" ? "@latest" : `@^${majorNodeVer}`}`,
-    )
-  : [];
-const optionalDeps = pkg.optionalDependencies
-  ? Object.keys(pkg.optionalDependencies).map((dep) => `${dep}@latest`)
-  : [];
+const deps = Object.keys(pkg.dependencies).map((dep) => `${dep}@latest`);
+const devDeps = Object.keys(pkg.devDependencies).map(
+  (dep) => `${dep}${dep !== "@types/node" ? "@latest" : `@^${majorNodeVer}`}`,
+);
 
 if (
   process.argv[2] === undefined ||
@@ -42,16 +34,6 @@ if (
     });
 
     if (devDepsCmd.error) throw devDepsCmd.error;
-  }
-
-  if (optionalDeps.length > 0) {
-    const optionalDepsCmd = spawnSync(
-      "npm",
-      ["i", "--save-optional", ...optionalDeps],
-      { stdio: "inherit" },
-    );
-
-    if (optionalDepsCmd.error) throw optionalDepsCmd.error;
   }
 } else {
   const nodeTypesCmd = spawnSync(
