@@ -8,9 +8,11 @@
 
 > **generateFurigana**(`text`, `bindedFunction`): `Promise`\<`string`\>
 
-Defined in: [utils.ts:175](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L175)
+Defined in: [utils.ts:177](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L177)
 
-Generated furigana for Japanese text.
+Generates furigana for Japanese text.
+
+This a workaround function for some cases in which text contains `・` and `Kuroshiro` fails to parse it.
 
 ## Parameters
 
@@ -22,7 +24,7 @@ The text
 
 ### bindedFunction
 
-`Function`
+(`text`, `options?`) => `Promise`\<`string`\>
 
 The `Kuroshiro` convert function
 

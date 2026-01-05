@@ -124,6 +124,7 @@ const rules = {
   "@typescript-eslint/no-unnecessary-type-constraint": "error",
   "@typescript-eslint/no-unnecessary-type-conversion": "error",
   "@typescript-eslint/no-unsafe-enum-comparison": "error",
+  "@typescript-eslint/no-unsafe-function-type": "error",
   "@typescript-eslint/no-unsafe-return": "error",
   "@typescript-eslint/no-unsafe-type-assertion": "error",
   "@typescript-eslint/no-unused-expressions": "error",

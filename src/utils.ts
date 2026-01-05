@@ -167,32 +167,38 @@ export function katakanaToHiragana(input: string): string {
 }
 
 /**
- * Generated furigana for Japanese text.
+ * Generates furigana for Japanese text.
+ *
+ * This a workaround function for some cases in which text contains `・` and `Kuroshiro` fails to parse it.
  * @param text The text
  * @param bindedFunction The `Kuroshiro` convert function
  * @returns The `<ruby>`-formatted furigana text
  */
 export async function generateFurigana(
   text: string,
-  bindedFunction: Function,
+  bindedFunction: (text: string, options?: any) => Promise<string>,
 ): Promise<string> {
-  if (!text.includes("・"))
-    return String(
-      await bindedFunction(text, {
-        to: "hiragana",
-        mode: "furigana",
-      }),
-    );
-  else
-    return (
-      await Promise.all(
-        text.split("・").map(async (t: string) => {
-          const tFurigana: string = await generateFurigana(t, bindedFunction);
+  if (!text.includes("・")) {
+    const furigana: string = await bindedFunction(text, {
+      to: "hiragana",
+      mode: "furigana",
+    });
 
-          return tFurigana;
-        }),
-      )
-    ).join("");
+    return furigana;
+  }
+
+  return (
+    await Promise.all(
+      text.split("・").map(async (part: string) => {
+        const tFurigana: string = await bindedFunction(part, {
+          to: "hiragana",
+          mode: "furigana",
+        });
+
+        return tFurigana;
+      }),
+    )
+  ).join("・");
 }
 
 /**
