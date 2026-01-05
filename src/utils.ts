@@ -2279,9 +2279,12 @@ export function getWord(
       }[] = [];
       const readingExamples: { ex: TanakaExample; partIndex: number }[] = [];
       const readingMatchingKanjiForms: Set<string> = new Set<string>();
+      const seenPhrases: Set<string> = new Set<string>();
 
       for (const example of exampleList)
         for (let i: number = 0; i < example.parts.length; i++) {
+          if (seenPhrases.has(example.phrase)) break;
+
           const part: ExamplePart = example.parts[i]!;
 
           const readingAsReadingMatch: boolean =
@@ -2310,6 +2313,8 @@ export function getWord(
                 form: part.baseForm,
               });
 
+            seenPhrases.add(example.phrase);
+
             break;
           }
 
@@ -2317,6 +2322,8 @@ export function getWord(
 
           if (readingAsBaseFormMatch && kanjiForms === undefined) {
             readingExamples.push({ ex: example, partIndex: i });
+
+            seenPhrases.add(example.phrase);
 
             break;
           }
@@ -2337,9 +2344,7 @@ export function getWord(
         ...(includeKanjiFormExamples
           ? [...readingMatchingKanjiFormExamples, ...kanjiFormExamples]
           : readingExamples),
-      ];
-
-      wordExamples.sort(
+      ].toSorted(
         (
           a: { ex: TanakaExample; partIndex: number },
           b: { ex: TanakaExample; partIndex: number },
@@ -2347,12 +2352,12 @@ export function getWord(
       );
 
       readingMatchingKanjiForms.clear();
+      seenPhrases.clear();
 
       const glossSpecificExamples: {
         ex: TanakaExample;
         partIndex: number;
       }[] = [];
-      const seenPhrases: Set<string> = new Set<string>();
 
       for (let i: number = 0; i < word.translations.length; i++)
         outer: for (const example of wordExamples) {
