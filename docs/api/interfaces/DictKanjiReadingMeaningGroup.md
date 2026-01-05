@@ -6,7 +6,7 @@
 
 # Interface: DictKanjiReadingMeaningGroup
 
-Defined in: [types.ts:277](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L277)
+Defined in: [types.ts:275](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L275)
 
 Kanji "readings-meanings" pair
 
@@ -18,7 +18,7 @@ Equivalent to the `rmgroup` KANJIDIC2 element
 
 > `optional` **meanings**: `string`[]
 
-Defined in: [types.ts:285](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L285)
+Defined in: [types.ts:283](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L283)
 
 The kanji meanings
 
@@ -28,6 +28,6 @@ The kanji meanings
 
 > `optional` **readings**: [`DictKanjiReading`](DictKanjiReading.md)[]
 
-Defined in: [types.ts:281](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L281)
+Defined in: [types.ts:279](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L279)
 
 The kanji readings

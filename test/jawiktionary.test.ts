@@ -11,6 +11,7 @@ import {
   Definition,
   DictWord,
   JaWiktionaryEntry,
+  JaWiktionaryEntrySense,
   WordDefinitionPair,
 } from "../src/types";
 import {
@@ -50,23 +51,36 @@ describe("Jawiktionary conversion", () => {
     expect(
       entries.every(
         (entry: JaWiktionaryEntry) =>
-          typeof entry === "object" && typeof entry.word === "string",
+          entry.word.length > 0 && entry.pos_title.length > 0,
       ),
     ).toBeTruthy();
     expect(
       entries.some(
-        (entry: JaWiktionaryEntry) => typeof entry.forms === "object",
+        (entry: JaWiktionaryEntry) =>
+          entry.senses !== undefined &&
+          entry.senses.every(
+            (s: JaWiktionaryEntrySense) =>
+              s.glosses.length > 0 &&
+              s.glosses.every((g: string) => g.length > 0) &&
+              (s.form_of === undefined ||
+                (s.form_of.length > 0 &&
+                  s.form_of.every((f: string) => f.length > 0))),
+          ),
       ),
     ).toBeTruthy();
     expect(
-      entries.some(
-        (entry: JaWiktionaryEntry) => typeof entry.pos_title === "string",
-      ),
+      entries.some((entry: JaWiktionaryEntry) => entry.senses === undefined),
     ).toBeTruthy();
     expect(
       entries.some(
-        (entry: JaWiktionaryEntry) => typeof entry.senses === "object",
+        (entry: JaWiktionaryEntry) =>
+          entry.forms !== undefined &&
+          entry.forms.length > 0 &&
+          entry.forms.every((f: string) => f.length > 0),
       ),
+    ).toBeTruthy();
+    expect(
+      entries.some((entry: JaWiktionaryEntry) => entry.forms === undefined),
     ).toBeTruthy();
 
     entries.length = 0;
@@ -81,23 +95,36 @@ describe("Jawiktionary conversion", () => {
     expect(
       entries.every(
         (entry: JaWiktionaryEntry) =>
-          typeof entry === "object" && typeof entry.word === "string",
+          entry.word.length > 0 && entry.pos_title.length > 0,
       ),
     ).toBeTruthy();
     expect(
       entries.some(
-        (entry: JaWiktionaryEntry) => typeof entry.forms === "object",
+        (entry: JaWiktionaryEntry) =>
+          entry.senses !== undefined &&
+          entry.senses.every(
+            (s: JaWiktionaryEntrySense) =>
+              s.glosses.length > 0 &&
+              s.glosses.every((g: string) => g.length > 0) &&
+              (s.form_of === undefined ||
+                (s.form_of.length > 0 &&
+                  s.form_of.every((f: string) => f.length > 0))),
+          ),
       ),
     ).toBeTruthy();
     expect(
-      entries.some(
-        (entry: JaWiktionaryEntry) => typeof entry.pos_title === "string",
-      ),
+      entries.some((entry: JaWiktionaryEntry) => entry.senses === undefined),
     ).toBeTruthy();
     expect(
       entries.some(
-        (entry: JaWiktionaryEntry) => typeof entry.senses === "object",
+        (entry: JaWiktionaryEntry) =>
+          entry.forms !== undefined &&
+          entry.forms.length > 0 &&
+          entry.forms.every((f: string) => f.length > 0),
       ),
+    ).toBeTruthy();
+    expect(
+      entries.some((entry: JaWiktionaryEntry) => entry.forms === undefined),
     ).toBeTruthy();
 
     entries.length = 0;
@@ -152,8 +179,8 @@ describe("Jawiktionary conversion", () => {
       ),
     ).toBeTruthy();
     expect(
-      pairs.some((pair: WordDefinitionPair) =>
-        pair.definitions.some(
+      pairs.every((pair: WordDefinitionPair) =>
+        pair.definitions.every(
           (def: Definition) =>
             def.furigana !== undefined && def.furigana.length > 0,
         ),

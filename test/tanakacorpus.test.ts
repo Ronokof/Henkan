@@ -23,7 +23,7 @@ function checkCorpus(
 
   if (withFurigana === true)
     expect(
-      convertedTanakaCorpus.some(
+      convertedTanakaCorpus.every(
         (ex: TanakaExample) =>
           ex.furigana !== undefined && ex.furigana.length > 0,
       ),

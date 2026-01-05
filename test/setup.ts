@@ -156,8 +156,8 @@ export default async function setup(project: TestProject): Promise<void> {
 
         project.provide(dict, svgs);
       } else if (filename === "kradzip") {
-        const krad: Uint8Array | undefined = files["kradfile2"];
-        const radk: Uint8Array | undefined = files["radkfile2"];
+        const krad: Uint8Array | undefined = files.kradfile2;
+        const radk: Uint8Array | undefined = files.radkfile2;
 
         if (krad !== undefined && radk !== undefined) {
           project.provide("kradfile2", Buffer.from(krad));

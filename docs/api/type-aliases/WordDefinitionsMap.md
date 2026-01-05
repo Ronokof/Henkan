@@ -8,6 +8,6 @@
 
 > **WordDefinitionsMap** = `Map`\<[`StringNumber`](StringNumber.md), [`Definition`](../interfaces/Definition.md)[]\>
 
-Defined in: [types.ts:465](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L465)
+Defined in: [types.ts:463](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L463)
 
 A `JMdict entry ID` ---> `Japanese definitions associated with the JMdict entry` map

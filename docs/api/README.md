@@ -73,6 +73,7 @@
 - [createEntryMaps](functions/createEntryMaps.md)
 - [generateAnkiNote](functions/generateAnkiNote.md)
 - [generateAnkiNotesFile](functions/generateAnkiNotesFile.md)
+- [generateFurigana](functions/generateFurigana.md)
 - [getKanji](functions/getKanji.md)
 - [getKanjiExtended](functions/getKanjiExtended.md)
 - [getValidForms](functions/getValidForms.md)

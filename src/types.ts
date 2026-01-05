@@ -123,9 +123,7 @@ export interface ReadingsKanjiFormsPair {
 /**
  * A JMdict sense translation
  */
-export type DictTranslation =
-  | string
-  | { translation: string; type: "lit" | "expl" | "tm" };
+export type DictTranslation = string | { translation: string; type: string };
 
 /**
  * Word meaning/sense information
@@ -520,7 +518,7 @@ export interface JaWiktionaryEntry {
   /**
    * The word senses
    */
-  senses: JaWiktionaryEntrySense[];
+  senses?: JaWiktionaryEntrySense[] | undefined;
   /**
    * Other forms (as kanji form or kana) of the word
    */

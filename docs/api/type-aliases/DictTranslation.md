@@ -6,7 +6,7 @@
 
 # Type Alias: DictTranslation
 
-> **DictTranslation** = `string` \| \{ `translation`: `string`; `type`: `"lit"` \| `"expl"` \| `"tm"`; \}
+> **DictTranslation** = `string` \| \{ `translation`: `string`; `type`: `string`; \}
 
 Defined in: [types.ts:126](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L126)
 

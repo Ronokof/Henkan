@@ -6,7 +6,7 @@
 
 # Interface: Reading
 
-Defined in: [types.ts:657](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L657)
+Defined in: [types.ts:655](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L655)
 
 A reading of the word
 
@@ -18,7 +18,7 @@ Converted from [DictReading](DictReading.md)
 
 > `optional` **audio**: `string`
 
-Defined in: [types.ts:673](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L673)
+Defined in: [types.ts:671](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L671)
 
 The filename of an audio file for the reading
 
@@ -28,7 +28,7 @@ The filename of an audio file for the reading
 
 > `optional` **common**: `true`
 
-Defined in: [types.ts:669](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L669)
+Defined in: [types.ts:667](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L667)
 
 Whether or not the reading is common
 
@@ -38,7 +38,7 @@ Whether or not the reading is common
 
 > `optional` **notes**: `string`[]
 
-Defined in: [types.ts:665](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L665)
+Defined in: [types.ts:663](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L663)
 
 Optional notes for the reading
 
@@ -48,6 +48,6 @@ Optional notes for the reading
 
 > `readonly` **reading**: `string`
 
-Defined in: [types.ts:661](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L661)
+Defined in: [types.ts:659](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L659)
 
 The reading (in kana)

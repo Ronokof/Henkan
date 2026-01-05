@@ -167,6 +167,35 @@ export function katakanaToHiragana(input: string): string {
 }
 
 /**
+ * Generated furigana for Japanese text.
+ * @param text The text
+ * @param bindedFunction The `Kuroshiro` convert function
+ * @returns The `<ruby>`-formatted furigana text
+ */
+export async function generateFurigana(
+  text: string,
+  bindedFunction: Function,
+): Promise<string> {
+  if (!text.includes("・"))
+    return String(
+      await bindedFunction(text, {
+        to: "hiragana",
+        mode: "furigana",
+      }),
+    );
+  else
+    return (
+      await Promise.all(
+        text.split("・").map(async (t: string) => {
+          const tFurigana: string = await generateFurigana(t, bindedFunction);
+
+          return tFurigana;
+        }),
+      )
+    ).join("");
+}
+
+/**
  * Filters out all the old/rare or (if {@link wordIsCommon} is `true`) uncommon readings and kanji forms of a JMdict entry.
  * @param readings The word's readings
  * @param kanjiForms The word's kanji forms
@@ -328,20 +357,20 @@ export function convertJMdict(
 
         meaningObj.translations = [];
 
-        for (const gloss of meaning.gloss)
-          if (typeof gloss === "string") meaningObj.translations.push(gloss);
-          else if (
-            typeof gloss === "object" &&
-            typeof gloss._ === "string" &&
-            typeof gloss.$ === "object" &&
-            (gloss.$.g_type === "lit" ||
-              gloss.$.g_type === "expl" ||
-              gloss.$.g_type === "tm")
-          )
+        for (const gloss of meaning.gloss) {
+          const translation: string = String(gloss._ ?? gloss).trim();
+          const type: string | undefined =
+            typeof gloss.$ === "object" && typeof gloss.$.g_type === "string"
+              ? gloss.$.g_type
+              : undefined;
+
+          if (translation.length > 0 && type !== undefined && type.length > 0)
             meaningObj.translations.push({
-              translation: gloss._,
-              type: gloss.$.g_type,
+              translation: translation,
+              type: type,
             });
+          else meaningObj.translations.push(translation);
+        }
 
         if (isStringArray(meaning.xref)) meaningObj.references = meaning.xref;
         if (isStringArray(meaning.stagk))
@@ -547,7 +576,7 @@ export function convertTanakaCorpus(tanakaString: string): TanakaExample[] {
 
       const idMatch: string | undefined = regexps.tanakaID
         .exec(a)
-        ?.groups!["id"]?.trim();
+        ?.groups!.id?.trim();
       const idParts: string[] = String(idMatch).split("_");
       const id: TanakaID = `${Number(idParts[0])}_${Number(idParts[1])}`;
 
@@ -563,24 +592,21 @@ export function convertTanakaCorpus(tanakaString: string): TanakaExample[] {
         const partMatches: RegExpExecArray | null =
           regexps.tanakaPart.exec(part);
 
-        const baseForm: string = partMatches?.groups!["base"]!;
+        const baseForm: string = partMatches?.groups!.base!;
 
         const examplePart: ExamplePart = { baseForm: baseForm };
 
-        const reading: string | undefined = partMatches?.groups!["reading"];
-        const glossNumber: string | undefined =
-          partMatches?.groups!["glossnum"];
+        const reading: string | undefined = partMatches?.groups!.reading;
+        const glossNumber: string | undefined = partMatches?.groups!.glossnum;
         const inflectedForm: string | undefined =
-          partMatches?.groups!["inflection"];
+          partMatches?.groups!.inflection;
 
         if (reading !== undefined)
           if (regexps.tanakaReferenceID.test(reading)) {
             const referenceID: RegExpExecArray | null =
               regexps.tanakaReferenceID.exec(reading);
 
-            examplePart.referenceID = `${Number(
-              referenceID?.groups!["entryid"],
-            )}`;
+            examplePart.referenceID = `${Number(referenceID?.groups!.entryid)}`;
           } else examplePart.reading = reading;
 
         if (glossNumber !== undefined)
@@ -630,13 +656,10 @@ export async function convertTanakaCorpusWithFurigana(
   const convert: any = kuroshiro.convert.bind(kuroshiro);
 
   for (let i: number = 0; i < tanakaArray.length; i++)
-    if (!tanakaArray[i]!.phrase.includes("・"))
-      tanakaArray[i]!.furigana = String(
-        await convert(tanakaArray[i]!.phrase, {
-          to: "hiragana",
-          mode: "furigana",
-        }),
-      );
+    tanakaArray[i]!.furigana = await generateFurigana(
+      tanakaArray[i]!.phrase,
+      convert,
+    );
 
   return tanakaArray;
 }
@@ -972,25 +995,31 @@ export function createEntryMaps(
 }
 
 function mapEntry(entry: any): JaWiktionaryEntry {
+  const senses: unknown[] = Array.from(
+    entry.senses.filter(
+      (sense: any) =>
+        (isObjectArray(sense.form_of) &&
+          sense.form_of.every((form: any) => typeof form.word === "string") ===
+            true) ||
+        isStringArray(sense.glosses),
+    ),
+  );
+
   return {
     word: entry.word,
     pos_title: entry.pos_title,
-    senses: entry.senses
-      .filter(
-        (sense: any) =>
-          (isObjectArray(sense.form_of)
-            ? sense.form_of.every((form: any) => typeof form.word === "string")
-            : isStringArray(sense.glosses)) === true ||
-          isStringArray(sense.glosses),
-      )
-      .map((sense: any) => ({
-        ...(isObjectArray(sense.form_of)
-          ? {
-              form_of: sense.form_of.map((form: any) => String(form.word)),
-            }
-          : {}),
-        glosses: sense.glosses,
-      })),
+    ...(senses.length > 0
+      ? {
+          senses: entry.senses.map((sense: any) => ({
+            ...(isObjectArray(sense.form_of)
+              ? {
+                  form_of: sense.form_of.map((form: any) => String(form.word)),
+                }
+              : {}),
+            glosses: sense.glosses,
+          })),
+        }
+      : {}),
     ...(isObjectArray(entry.forms) &&
     entry.forms.every((form: any) => typeof form.form === "string") === true
       ? { forms: entry.forms.map((form: any) => String(form.form)) }
@@ -1064,17 +1093,20 @@ function parseEntry(
   definitions: Definition[],
   definitionMap: Map<string, { count: number }>,
 ): void {
-  for (const sense of entry.senses) {
-    const definition: string = sense.glosses.join("");
+  if (entry.senses !== undefined)
+    for (const sense of entry.senses) {
+      const definition: string = sense.glosses.join("");
 
-    if (!definitions.some((def: Definition) => def.definition === definition)) {
-      if (!definitionMap.has(definition))
-        definitionMap.set(definition, { count: 1 });
-      else definitionMap.get(definition)!.count++;
+      if (
+        !definitions.some((def: Definition) => def.definition === definition)
+      ) {
+        if (!definitionMap.has(definition))
+          definitionMap.set(definition, { count: 1 });
+        else definitionMap.get(definition)!.count++;
 
-      definitions.push({ definition: definition });
+        definitions.push({ definition: definition });
+      }
     }
-  }
 }
 
 /**
@@ -1168,25 +1200,26 @@ export function getWordDefinitions(
     if (validKanjiForms.has(entry.word)) {
       valid = true;
 
-      for (const sense of entry.senses) {
-        if (
-          sense.form_of !== undefined &&
-          sense.form_of.some((form: string) => validForms.has(form))
-        )
-          validFormOfEntries.add(entry.word);
+      if (entry.senses !== undefined)
+        for (const sense of entry.senses) {
+          if (
+            sense.form_of !== undefined &&
+            sense.form_of.some((form: string) => validForms.has(form))
+          )
+            validFormOfEntries.add(entry.word);
 
-        for (const gloss of sense.glosses) {
-          let hasForm: boolean = false;
+          for (const gloss of sense.glosses) {
+            let hasForm: boolean = false;
 
-          for (const r of validForms)
-            if (gloss.includes(r)) {
-              hasForm = true;
-              break;
-            }
+            for (const r of validForms)
+              if (gloss.includes(r)) {
+                hasForm = true;
+                break;
+              }
 
-          if (hasForm) validGlossesEntries.add(entry.word);
+            if (hasForm) validGlossesEntries.add(entry.word);
+          }
         }
-      }
 
       if (entry.forms !== undefined)
         for (const form of entry.forms)
@@ -1551,27 +1584,28 @@ export function getWordDefinitions(
       if (pair.kanjiForms !== undefined && pair.kanjiForms.has(ent.word)) {
         kanjiFormEntries.push(ent);
 
-        for (const sense of ent.senses) {
-          if (hasValidFormOf && sense.form_of !== undefined)
-            for (const form of sense.form_of)
-              if (pair.forms.has(form)) {
-                const elem: Set<string> | undefined = titleFormMap.get(form);
+        if (ent.senses !== undefined)
+          for (const sense of ent.senses) {
+            if (hasValidFormOf && sense.form_of !== undefined)
+              for (const form of sense.form_of)
+                if (pair.forms.has(form)) {
+                  const elem: Set<string> | undefined = titleFormMap.get(form);
 
-                if (elem === undefined)
-                  titleFormMap.set(form, new Set<string>([ent.word]));
-                else elem.add(ent.word);
-              }
+                  if (elem === undefined)
+                    titleFormMap.set(form, new Set<string>([ent.word]));
+                  else elem.add(ent.word);
+                }
 
-          for (const gloss of sense.glosses)
-            for (const f of pair.forms)
-              if (gloss.includes(f)) {
-                const elem: Set<string> | undefined = refsMap.get(f);
+            for (const gloss of sense.glosses)
+              for (const f of pair.forms)
+                if (gloss.includes(f)) {
+                  const elem: Set<string> | undefined = refsMap.get(f);
 
-                if (elem === undefined)
-                  refsMap.set(f, new Set<string>([ent.word]));
-                else elem.add(ent.word);
-              }
-        }
+                  if (elem === undefined)
+                    refsMap.set(f, new Set<string>([ent.word]));
+                  else elem.add(ent.word);
+                }
+          }
 
         if (hasValidForms && ent.forms !== undefined)
           for (const form of ent.forms)
@@ -1690,13 +1724,10 @@ export async function getWordDefinitionsWithFurigana(
     const pair: WordDefinitionPair = japaneseDefinitions[i]!;
 
     for (let j: number = 0; j < pair.definitions.length; j++)
-      if (!pair.definitions[j]!.definition.includes("・"))
-        pair.definitions[j]!.furigana = String(
-          await convert(pair.definitions[j]!.definition, {
-            to: "hiragana",
-            mode: "furigana",
-          }),
-        );
+      pair.definitions[j]!.furigana = await generateFurigana(
+        pair.definitions[j]!.definition,
+        convert,
+      );
 
     japaneseDefinitions[i] = pair;
   }
@@ -2117,11 +2148,7 @@ export function getWord(
     for (const dictMeaning of dictWord.meanings) {
       const translationTypes: string[] = [];
       const translations: string[] = dictMeaning.translations.map(
-        (
-          translation:
-            | string
-            | { translation: string; type: "lit" | "expl" | "tm" },
-        ) => {
+        (translation: string | { translation: string; type: string }) => {
           if (typeof translation === "string") return translation;
           else {
             const translationNoteAndTag:

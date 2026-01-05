@@ -6,7 +6,7 @@
 
 # Interface: ExamplePart
 
-Defined in: [types.ts:365](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L365)
+Defined in: [types.ts:363](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L363)
 
 A word/part from the `B` section of a Tanaka Corpus `examples.utf` entry
 
@@ -16,7 +16,7 @@ A word/part from the `B` section of a Tanaka Corpus `examples.utf` entry
 
 > **baseForm**: `string`
 
-Defined in: [types.ts:369](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L369)
+Defined in: [types.ts:367](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L367)
 
 The common form in which the word is found in JMdict
 
@@ -26,7 +26,7 @@ The common form in which the word is found in JMdict
 
 > `optional` **edited**: `true`
 
-Defined in: [types.ts:393](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L393)
+Defined in: [types.ts:391](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L391)
 
 Whether or not the word is part of an entry that has been edited and adapted
 
@@ -40,7 +40,7 @@ Whether or not the word is part of an entry that has been edited and adapted
 
 > `optional` **glossNumber**: `number`
 
-Defined in: [types.ts:377](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L377)
+Defined in: [types.ts:375](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L375)
 
 The JMdict sense number corresponding to the word’s usage in the phrase
 
@@ -50,7 +50,7 @@ The JMdict sense number corresponding to the word’s usage in the phrase
 
 > `optional` **inflectedForm**: `string`
 
-Defined in: [types.ts:381](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L381)
+Defined in: [types.ts:379](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L379)
 
 The actual form in which the word is used in the phrase
 
@@ -60,7 +60,7 @@ The actual form in which the word is used in the phrase
 
 > `optional` **reading**: `string`
 
-Defined in: [types.ts:373](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L373)
+Defined in: [types.ts:371](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L371)
 
 The reading (in kana) of the word
 
@@ -70,6 +70,6 @@ The reading (in kana) of the word
 
 > `optional` **referenceID**: `` `${number}` ``
 
-Defined in: [types.ts:385](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L385)
+Defined in: [types.ts:383](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L383)
 
 A sequence number that references a JMdict entry associated with the word

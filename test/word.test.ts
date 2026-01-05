@@ -13,11 +13,13 @@ import {
   convertJawiktionarySync,
   convertJMdict,
   convertKanjiDic,
+  convertTanakaCorpus,
   convertTanakaCorpusWithFurigana,
   createEntryMaps,
   generateAnkiNote,
   generateAnkiNotesFile,
   getWord,
+  getWordDefinitions,
   getWordDefinitionsWithFurigana,
   isWord,
   shuffleArray,
@@ -84,13 +86,16 @@ function checkTransformedEntry(
 
 let convertedJMdict: DictWord[];
 let convertedKanjiDic: DictKanji[];
-let convertedTanakaCorpus: TanakaExample[];
-let wordDefs: WordDefinitionPair[];
+let convertedTanakaCorpusWithoutFurigana: TanakaExample[];
+let wordDefsWithoutFurigana: WordDefinitionPair[];
 let entryMaps: EntryMaps;
 let randomWordID: string;
 
 beforeAll(async () => {
-  convertedTanakaCorpus = await convertTanakaCorpusWithFurigana(
+  const convertedTanakaCorpus: TanakaExample[] =
+    await convertTanakaCorpusWithFurigana(inject("examples.utf"));
+
+  convertedTanakaCorpusWithoutFurigana = convertTanakaCorpus(
     inject("examples.utf"),
   );
 
@@ -102,7 +107,12 @@ beforeAll(async () => {
     convertJMdict(inject("JMdict_e"), convertedTanakaCorpus),
   );
 
-  wordDefs = await getWordDefinitionsWithFurigana(
+  const wordDefs: WordDefinitionPair[] = await getWordDefinitionsWithFurigana(
+    convertJawiktionarySync(inject("raw-wiktextract-data")),
+    convertedJMdict,
+  );
+
+  wordDefsWithoutFurigana = getWordDefinitions(
     convertJawiktionarySync(inject("raw-wiktextract-data")),
     convertedJMdict,
   );
@@ -119,7 +129,8 @@ beforeAll(async () => {
   for (const id of entryMaps.wordExamplesMap!.keys())
     if (
       entryMaps.wordIDEntryMap!.get(id)?.kanjiForms !== undefined &&
-      entryMaps.wordDefinitionsMap!.has(id)
+      entryMaps.wordDefinitionsMap!.has(id) &&
+      entryMaps.wordDefinitionsMap!.get(id)!.length > 3
     ) {
       randomWordID = id;
       break;
@@ -143,7 +154,9 @@ describe("DictWord transformation to Word", () => {
         undefined,
         entry.id !== randomWordID ? entryMaps.kanjiEntryMap : convertedKanjiDic,
         undefined,
-        entry.id !== randomWordID ? entryMaps.wordDefinitionsMap : wordDefs,
+        entry.id !== randomWordID
+          ? entryMaps.wordDefinitionsMap
+          : wordDefsWithoutFurigana,
         noteTypeName,
         deckPath,
       );
@@ -185,8 +198,10 @@ describe("DictWord transformation to Word", () => {
         undefined,
         entry.id !== randomWordID
           ? entryMaps.wordExamplesMap
-          : convertedTanakaCorpus,
-        entry.id !== randomWordID ? entryMaps.wordDefinitionsMap : wordDefs,
+          : convertedTanakaCorpusWithoutFurigana,
+        entry.id !== randomWordID
+          ? entryMaps.wordDefinitionsMap
+          : wordDefsWithoutFurigana,
         noteTypeName,
         deckPath,
       );
@@ -233,8 +248,10 @@ describe("DictWord transformation to Word", () => {
         entry.id !== randomWordID ? entryMaps.kanjiEntryMap : convertedKanjiDic,
         entry.id !== randomWordID
           ? entryMaps.wordExamplesMap
-          : convertedTanakaCorpus,
-        entry.id !== randomWordID ? entryMaps.wordDefinitionsMap : wordDefs,
+          : convertedTanakaCorpusWithoutFurigana,
+        entry.id !== randomWordID
+          ? entryMaps.wordDefinitionsMap
+          : wordDefsWithoutFurigana,
         noteTypeName,
         deckPath,
       );
@@ -342,7 +359,8 @@ describe("DictWord transformation to Word", () => {
       "1002080",
       entryMaps.wordIDEntryMap,
       convertedKanjiDic,
-      convertedTanakaCorpus,
+      convertedTanakaCorpusWithoutFurigana,
+      wordDefsWithoutFurigana,
     );
 
     entryMaps.wordExamplesMap?.delete("1002080");
@@ -372,10 +390,10 @@ describe("DictWord transformation to Word", () => {
     ).toBeTruthy();
     expect(testWord3).toBeUndefined();
 
-    if (testWord !== undefined) {
+    if (testWord !== undefined && testWord2 !== undefined) {
       testWord.tags = undefined;
 
-      expect(testWord.definitions).toBeUndefined();
+      expect(testWord2.definitions).toBeUndefined();
 
       expect(generateAnkiNote(testWord).length).toBe(6);
       expect(generateAnkiNotesFile([]).split("\n").length).toBe(4);

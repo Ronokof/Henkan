@@ -8,7 +8,7 @@
 
 > **getWordDefinitionsWithFurigana**(`entryList`, `jmDict`): `Promise`\<[`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]\>
 
-Defined in: [utils.ts:1675](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1675)
+Defined in: [utils.ts:1709](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1709)
 
 Pairs Japanese definitions with JMdict word entries (with furigana)
 

@@ -6,7 +6,7 @@
 
 # Interface: GrammarMeaning
 
-Defined in: [types.ts:909](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L909)
+Defined in: [types.ts:907](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L907)
 
 Grammar point meaning
 
@@ -16,7 +16,7 @@ Grammar point meaning
 
 > `optional` **example**: `string`
 
-Defined in: [types.ts:917](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L917)
+Defined in: [types.ts:915](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L915)
 
 An example phrase using the grammar point
 
@@ -26,6 +26,6 @@ An example phrase using the grammar point
 
 > **meaning**: `string`
 
-Defined in: [types.ts:913](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L913)
+Defined in: [types.ts:911](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L911)
 
 The meaning of the grammar point

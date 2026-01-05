@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, inject } from "vitest";
-import { DictWord, TanakaExample } from "../src/types";
+import { DictMeaning, DictWord, TanakaExample } from "../src/types";
 import { convertJMdict, convertTanakaCorpus } from "../src/utils";
 
 function checkDict(arr: DictWord[], checkPhrases?: true): void {
@@ -9,7 +9,11 @@ function checkDict(arr: DictWord[], checkPhrases?: true): void {
       (word: DictWord) =>
         word.id.length > 0 &&
         word.meanings.length > 0 &&
-        word.readings.length > 0,
+        word.readings.length > 0 &&
+        word.meanings.every(
+          (m: DictMeaning) =>
+            m.translations.length > 0 && m.partOfSpeech.length > 0,
+        ),
     ),
   ).toBeTruthy();
   expect(

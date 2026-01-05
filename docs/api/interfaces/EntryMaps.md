@@ -6,7 +6,7 @@
 
 # Interface: EntryMaps
 
-Defined in: [types.ts:470](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L470)
+Defined in: [types.ts:468](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L468)
 
 Maps with various entry associations
 
@@ -16,7 +16,7 @@ Maps with various entry associations
 
 > `optional` **kanjiEntryMap**: [`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md)
 
-Defined in: [types.ts:482](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L482)
+Defined in: [types.ts:480](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L480)
 
 #### See
 
@@ -28,7 +28,7 @@ Defined in: [types.ts:482](https://github.com/Ronokof/Henkan/blob/main/src/types
 
 > `optional` **kanjiSVGMap**: [`KanjiSVGMap`](../type-aliases/KanjiSVGMap.md)
 
-Defined in: [types.ts:494](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L494)
+Defined in: [types.ts:492](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L492)
 
 #### See
 
@@ -40,7 +40,7 @@ Defined in: [types.ts:494](https://github.com/Ronokof/Henkan/blob/main/src/types
 
 > `optional` **kanjiWordsMap**: [`KanjiWordsMap`](../type-aliases/KanjiWordsMap.md)
 
-Defined in: [types.ts:478](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L478)
+Defined in: [types.ts:476](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L476)
 
 #### See
 
@@ -52,7 +52,7 @@ Defined in: [types.ts:478](https://github.com/Ronokof/Henkan/blob/main/src/types
 
 > `optional` **wordDefinitionsMap**: [`WordDefinitionsMap`](../type-aliases/WordDefinitionsMap.md)
 
-Defined in: [types.ts:490](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L490)
+Defined in: [types.ts:488](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L488)
 
 #### See
 
@@ -64,7 +64,7 @@ Defined in: [types.ts:490](https://github.com/Ronokof/Henkan/blob/main/src/types
 
 > `optional` **wordExamplesMap**: [`WordExamplesMap`](../type-aliases/WordExamplesMap.md)
 
-Defined in: [types.ts:486](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L486)
+Defined in: [types.ts:484](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L484)
 
 #### See
 
@@ -76,7 +76,7 @@ Defined in: [types.ts:486](https://github.com/Ronokof/Henkan/blob/main/src/types
 
 > `optional` **wordIDEntryMap**: [`WordIDEntryMap`](../type-aliases/WordIDEntryMap.md)
 
-Defined in: [types.ts:474](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L474)
+Defined in: [types.ts:472](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L472)
 
 #### See
 
