@@ -8,7 +8,7 @@
 
 > **generateAnkiNote**(`entry`): `string`[]
 
-Defined in: [utils.ts:2499](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2499)
+Defined in: [utils.ts:2493](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2493)
 
 Generates an array where each field holds an entry’s info wrapped in HTML tags.
 

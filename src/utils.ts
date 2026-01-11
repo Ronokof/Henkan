@@ -914,55 +914,45 @@ export function createEntryMaps(
       for (const ex of tanakaExamples)
         for (const part of ex.parts) {
           if (entryParts.has(part.baseForm)) {
-            let exList: TanakaExample[] | undefined = partExamplesMap.get(
+            const exList: TanakaExample[] | undefined = partExamplesMap.get(
               part.baseForm,
             );
-            if (exList === undefined) {
-              exList = [];
-              partExamplesMap.set(part.baseForm, exList);
-            }
 
-            exList.push(ex);
+            if (exList === undefined) partExamplesMap.set(part.baseForm, [ex]);
+            else exList.push(ex);
           }
           if (part.reading !== undefined && entryParts.has(part.reading)) {
-            let exList: TanakaExample[] | undefined = partExamplesMap.get(
+            const exList: TanakaExample[] | undefined = partExamplesMap.get(
               part.reading,
             );
-            if (exList === undefined) {
-              exList = [];
-              partExamplesMap.set(part.reading, exList);
-            }
 
-            exList.push(ex);
+            if (exList === undefined) partExamplesMap.set(part.reading, [ex]);
+            else exList.push(ex);
           }
           if (
             part.inflectedForm !== undefined &&
             entryParts.has(part.inflectedForm)
           ) {
-            let exList: TanakaExample[] | undefined = partExamplesMap.get(
+            const exList: TanakaExample[] | undefined = partExamplesMap.get(
               part.inflectedForm,
             );
-            if (exList === undefined) {
-              exList = [];
-              partExamplesMap.set(part.inflectedForm, exList);
-            }
 
-            exList.push(ex);
+            if (exList === undefined)
+              partExamplesMap.set(part.inflectedForm, [ex]);
+            else exList.push(ex);
           }
 
           if (
             part.referenceID !== undefined &&
             entryParts.has(part.referenceID)
           ) {
-            let exList: TanakaExample[] | undefined = partExamplesMap.get(
+            const exList: TanakaExample[] | undefined = partExamplesMap.get(
               part.referenceID,
             );
-            if (exList === undefined) {
-              exList = [];
-              partExamplesMap.set(part.referenceID, exList);
-            }
 
-            exList.push(ex);
+            if (exList === undefined)
+              partExamplesMap.set(part.referenceID, [ex]);
+            else exList.push(ex);
           }
         }
 
@@ -2295,11 +2285,12 @@ export function getWord(
 
           const referenceIDMatch: boolean = part.referenceID === dictWord.id;
 
-          if (
-            (kanjiForms !== undefined && kanjiForms.has(part.baseForm)) ||
-            referenceIDMatch
-          ) {
-            if (readingAsReadingMatch || readingAsInflectedFormMatch) {
+          if (kanjiForms !== undefined && kanjiForms.has(part.baseForm)) {
+            if (
+              readingAsReadingMatch ||
+              readingAsInflectedFormMatch ||
+              referenceIDMatch
+            ) {
               readingMatchingKanjiFormExamples.push({
                 ex: example,
                 partIndex: i,
@@ -2320,7 +2311,10 @@ export function getWord(
 
           const readingAsBaseFormMatch: boolean = readings.has(part.baseForm);
 
-          if (readingAsBaseFormMatch && kanjiForms === undefined) {
+          if (
+            (readingAsBaseFormMatch || referenceIDMatch) &&
+            kanjiForms === undefined
+          ) {
             readingExamples.push({ ex: example, partIndex: i });
 
             seenPhrases.add(example.phrase);
