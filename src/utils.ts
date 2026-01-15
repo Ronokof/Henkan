@@ -2512,6 +2512,24 @@ export function generateAnkiNote(entry: Result): string[] {
         : "";
     const readingsField: string = `${firstReading}${otherReadings}`;
 
+    const firstReadingWithoutAudio: string = createEntry(
+      `<span class="word word-reading">${entry.readings[0]!.reading}</span>`,
+      entry.readings[0]!.notes,
+    );
+    const otherReadingsWithoutAudio: string =
+      entry.readings.length > 1
+        ? `<details><summary>Show other readings</summary>${entry.readings
+            .slice(1)
+            .map((readingEntry: Reading) =>
+              createEntry(
+                `<span class="word word-reading">${readingEntry.reading}</span>`,
+                readingEntry.notes,
+              ),
+            )
+            .join("")}</details>`
+        : "";
+    const readingsFieldWithoutAudio: string = `${firstReadingWithoutAudio}${otherReadingsWithoutAudio}`;
+
     const firstKanjiForm: string | undefined =
       entry.kanjiForms !== undefined
         ? createEntry(
@@ -2675,10 +2693,16 @@ export function generateAnkiNote(entry: Result): string[] {
         ? `${firstThreeDefinitions}${otherDefinitions}`
         : '<span class="word word-definition">(no definitions)</span>';
 
+    const searchField: string = [
+      entry.readings.map((r: Reading) => r.reading),
+      entry.kanjiForms?.map((kf: KanjiForm) => kf.kanjiForm) ?? [],
+    ].join(" ");
+
     fields.push(
       ...(entry.kanjiForms !== undefined && !entry.usuallyInKana
-        ? [kanjiFormsField, readingsField]
-        : [readingsField, kanjiFormsField]),
+        ? [kanjiFormsField, readingsFieldWithoutAudio]
+        : [readingsFieldWithoutAudio, kanjiFormsField]),
+      readingsField,
       translationsField,
       phrasesField,
       definitionsField,
@@ -2692,6 +2716,7 @@ export function generateAnkiNote(entry: Result): string[] {
             )
             .join("")
         : '<span class="word word-kanji">(no kanji)</span>',
+      searchField,
       ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags

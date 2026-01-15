@@ -36,6 +36,16 @@ export const notSearchedForms: Set<string> = new Set<string>([
   "out-dated kanji or kanji usage",
   "word containing out-dated kanji or kanji usage",
   "Out-dated kanji or kanji usage",
+  "irregular kanji",
+  "Irregular kanji form",
+  "irregular kanji usage",
+  "Irregular kanji usage",
+  "word containing irregular kanji usage",
+  "irregular okurigana usage",
+  "Irregular okurigana usage",
+  "irregular kana usage",
+  "Irregular kana usage",
+  "word containing irregular kana usage",
 ]);
 
 export const posList: POS[] = [
@@ -519,6 +529,10 @@ export const noteMap: Map<
   ["deity", ["deity", "Deity"]],
   ["document", ["document", "Document"]],
   ["event", ["event", "Event"]],
+  [
+    "female given name or forename",
+    ["female_given_name_or_forename", "Female given name or forename"],
+  ],
   ["female term, language, or name", ["female_language", "Female language"]],
   ["fiction", ["fiction", "Fiction"]],
   [
@@ -527,6 +541,10 @@ export const noteMap: Map<
   ],
   ["group", ["group", "Group"]],
   ["legend", ["legend", "Legend"]],
+  [
+    "male given name or forename",
+    ["male_given_name_or_forename", "Male given name or forename"],
+  ],
   ["manga slang", ["manga_slang", "Manga slang"]],
   ["male term, language, or name", ["male_language", "Male language"]],
   ["mythology", ["mythology", "Mythology"]],

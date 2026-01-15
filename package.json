@@ -1,7 +1,7 @@
 {
   "name": "henkan",
-  "version": "2.4.3",
-  "description": "A Node.JS library that helps you convert any dictionary from EDRDG, transform their entries into more user-friendly schemas and create Anki notes from them.",
+  "version": "2.4.4",
+  "description": "Converter & Simplifier for JMdict, KANJIDIC, KRADFILE2, RADKFILE2 and Tanaka Corpus",
   "keywords": [
     "fjsd",
     "japanese",
@@ -14,7 +14,11 @@
     "kana",
     "kanji",
     "japanese-grammar",
-    "jmdict"
+    "jmdict",
+    "kanjidic2",
+    "kradfile2",
+    "radkfile2",
+    "tanaka-corpus"
   ],
   "author": {
     "name": "Ronokof",

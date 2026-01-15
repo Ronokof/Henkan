@@ -58,7 +58,7 @@ function checkTransformedEntry(
   ).toBeTruthy();
 
   expect(generateAnkiNote(transformedEntry).length).toBe(
-    ignoreTags === true && transformedEntry.tags === undefined ? 6 : 7,
+    ignoreTags === true && transformedEntry.tags === undefined ? 8 : 9,
   );
 
   if (checkKanji === true)
@@ -395,7 +395,7 @@ describe("DictWord transformation to Word", () => {
 
       expect(testWord2.definitions).toBeUndefined();
 
-      expect(generateAnkiNote(testWord).length).toBe(6);
+      expect(generateAnkiNote(testWord).length).toBe(8);
       expect(generateAnkiNotesFile([]).split("\n").length).toBe(4);
     }
 
