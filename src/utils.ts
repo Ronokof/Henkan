@@ -2512,23 +2512,30 @@ export function generateAnkiNote(entry: Result): string[] {
         : "";
     const readingsField: string = `${firstReading}${otherReadings}`;
 
-    const firstReadingWithoutAudio: string = createEntry(
-      `<span class="word word-reading">${entry.readings[0]!.reading}</span>`,
-      entry.readings[0]!.notes,
-    );
-    const otherReadingsWithoutAudio: string =
-      entry.readings.length > 1
-        ? `<details><summary>Show other readings</summary>${entry.readings
-            .slice(1)
-            .map((readingEntry: Reading) =>
-              createEntry(
-                `<span class="word word-reading">${readingEntry.reading}</span>`,
-                readingEntry.notes,
-              ),
-            )
-            .join("")}</details>`
-        : "";
-    const readingsFieldWithoutAudio: string = `${firstReadingWithoutAudio}${otherReadingsWithoutAudio}`;
+    let readingsFieldWithoutAudio: string =
+      '<div id="no-r-audio" style="display: none"></div>';
+    let hasAudio: boolean = false;
+
+    if (entry.readings.some((r: Reading) => r.audio !== undefined)) {
+      const firstReadingWithoutAudio: string = createEntry(
+        `<span class="word word-reading">${entry.readings[0]!.reading}</span>`,
+        entry.readings[0]!.notes,
+      );
+      const otherReadingsWithoutAudio: string =
+        entry.readings.length > 1
+          ? `<details><summary>Show other readings</summary>${entry.readings
+              .slice(1)
+              .map((readingEntry: Reading) =>
+                createEntry(
+                  `<span class="word word-reading">${readingEntry.reading}</span>`,
+                  readingEntry.notes,
+                ),
+              )
+              .join("")}</details>`
+          : "";
+      readingsFieldWithoutAudio = `${firstReadingWithoutAudio}${otherReadingsWithoutAudio}`;
+      hasAudio = true;
+    }
 
     const firstKanjiForm: string | undefined =
       entry.kanjiForms !== undefined
@@ -2693,16 +2700,19 @@ export function generateAnkiNote(entry: Result): string[] {
         ? `${firstThreeDefinitions}${otherDefinitions}`
         : '<span class="word word-definition">(no definitions)</span>';
 
-    const searchField: string = [
-      entry.readings.map((r: Reading) => r.reading),
-      entry.kanjiForms?.map((kf: KanjiForm) => kf.kanjiForm) ?? [],
-    ].join(" ");
+    const searchField: string = `${entry.readings.map((r: Reading) => r.reading).join(" ")}${entry.kanjiForms !== undefined ? ` ${entry.kanjiForms.map((kf: KanjiForm) => kf.kanjiForm).join(" ")}` : ""} ${entry.id}`;
 
     fields.push(
       ...(entry.kanjiForms !== undefined && !entry.usuallyInKana
-        ? [kanjiFormsField, readingsFieldWithoutAudio]
-        : [readingsFieldWithoutAudio, kanjiFormsField]),
-      readingsField,
+        ? [
+            `${kanjiFormsField}<div id="kf-pos" style="display: none" data-pos="1"></div>`,
+            `${hasAudio ? readingsFieldWithoutAudio : readingsField}<div id="r-pos" style="display: none" data-pos="2"></div>`,
+          ]
+        : [
+            `${kanjiFormsField}<div id="kf-pos" style="display: none" data-pos="2"></div>`,
+            `${hasAudio ? readingsFieldWithoutAudio : readingsField}<div id="r-pos" style="display: none" data-pos="1"></div>`,
+          ]),
+      `${hasAudio ? readingsField : readingsFieldWithoutAudio}<div id="r-pos" style="display: none" data-pos="${entry.kanjiForms !== undefined && !entry.usuallyInKana ? "2" : "1"}"></div>`,
       translationsField,
       phrasesField,
       definitionsField,
