@@ -2569,7 +2569,7 @@ export function generateAnkiNote(entry: Result): string[] {
     const kanjiFormsField: string =
       firstKanjiForm !== undefined
         ? `${firstKanjiForm}${otherKanjiForms}`
-        : '<span class="word word-kanjiform">(no kanji forms)</span>';
+        : '<span class="word word-kanjiform" id="no-kanjiforms">(no kanji forms)</span>';
 
     const firstThreeTranslations: string = entry.translations
       .slice(0, 3)
@@ -2670,7 +2670,7 @@ export function generateAnkiNote(entry: Result): string[] {
     const phrasesField: string =
       firstFivePhrases !== undefined
         ? `${firstFivePhrases}${otherPhrases}`
-        : '<span class="word word-phrase">(no phrases) (Search on dictionaries!)</span>';
+        : '<span class="word word-phrase" id="no-phrases">(no phrases)</span>';
 
     const firstThreeDefinitions: string | undefined = entry.definitions
       ?.slice(0, 3)
@@ -2698,7 +2698,7 @@ export function generateAnkiNote(entry: Result): string[] {
     const definitionsField: string =
       firstThreeDefinitions !== undefined
         ? `${firstThreeDefinitions}${otherDefinitions}`
-        : '<span class="word word-definition">(no definitions)</span>';
+        : '<span class="word word-definition" id="no-definitions">(no definitions)</span>';
 
     const searchField: string = `${entry.readings.map((r: Reading) => r.reading).join(" ")}${entry.kanjiForms !== undefined ? ` ${entry.kanjiForms.map((kf: KanjiForm) => kf.kanjiForm).join(" ")}` : ""} ${entry.id}`;
 
@@ -2725,7 +2725,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="word word-kanji">(no kanji)</span>',
+        : '<span class="word word-kanji" id="no-kanji">(no kanji)</span>',
       searchField,
       ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
@@ -2758,7 +2758,7 @@ export function generateAnkiNote(entry: Result): string[] {
         ? createEntry(
             `<span class="radical radical-mnemonic">${entry.mnemonic}</span>`,
           )
-        : '<span class="radical radical-mnemonic">(no mnemonic) (Come up with your own!)</span>',
+        : '<span class="radical radical-mnemonic" id="no-mnemonic">(no mnemonic)</span>',
       entry.kanji !== undefined
         ? entry.kanji
             .map((kanji: Kanji) =>
@@ -2767,15 +2767,15 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="radical radical-kanji">(no "used-in" kanji)</span>',
+        : '<span class="radical radical-kanji" id="no-kanji">(no "used-in" kanji)</span>',
       entry.strokes !== undefined
         ? createEntry(
             `<span class="radical radical-strokes">${entry.strokes}<br>${entry.svg !== undefined ? `<img class="radical radical-stroke-order" src="${entry.svg}" alt="${entry.radical} stroke order SVG">` : "(no stroke order SVG available)"}</span>`,
           )
-        : '<span class="radical radical-strokes">(no stroke number)</span>',
+        : '<span class="radical radical-strokes" id="no-strokes">(no stroke number)</span>',
       entry.sources !== undefined
         ? `<span class="radical radical-source">${entry.sources.map((source: string, index: number) => `<a href="${source}" target="_blank">Source ${index + 1}</a>`).join("<br>")}</span>`
-        : '<span class="radical radical-source">(no sources)</span>',
+        : '<span class="radical radical-source" id="no-sources">(no sources)</span>',
       ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags
@@ -2798,7 +2798,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="kanji kanji-meaning">(no meanings)</span>',
+        : '<span class="kanji kanji-meaning" id="no-meanings">(no meanings)</span>',
       entry.onyomi !== undefined
         ? entry.onyomi
             .map((onyomiEntry: string) =>
@@ -2807,7 +2807,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : `<span class="kanji kanji-onyomi">(no onyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span>`,
+        : `<span class="kanji kanji-onyomi" id="no-onyomi">(no onyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span>`,
       entry.kunyomi !== undefined
         ? entry.kunyomi
             .map((kunyomiEntry: string) =>
@@ -2816,7 +2816,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : `<span class="kanji kanji-kunyomi">(no kunyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span>`,
+        : `<span class="kanji kanji-kunyomi" id="no-kunyomi">(no kunyomi) ${entry.kokuji === true ? "(kokuji)" : ""}</span>`,
       entry.nanori !== undefined
         ? entry.nanori
             .map((nanoriEntry: string) =>
@@ -2825,7 +2825,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="kanji kanji-nanori">(no nanori)</span>',
+        : '<span class="kanji kanji-nanori" id="no-nanori">(no nanori)</span>',
       entry.components !== undefined
         ? entry.components
             .map((componentEntry: KanjiComponent) =>
@@ -2834,12 +2834,12 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="kanji kanji-component">(no components)</span>',
+        : '<span class="kanji kanji-component" id="no-components">(no components)</span>',
       entry.mnemonic !== undefined
         ? createEntry(
             `<span class="kanji kanji-mnemonic">${entry.mnemonic}</span>`,
           )
-        : '<span class="kanji kanji-mnemonic">(no mnemonic) (Come up with your own!)</span>',
+        : '<span class="kanji kanji-mnemonic" id="no-mnemonic">(no mnemonic)</span>',
       entry.words !== undefined
         ? entry.words
             .map((word: Word) =>
@@ -2848,15 +2848,15 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="kanji kanji-words">(no words) (Search on dictionaries!)</span>',
+        : '<span class="kanji kanji-words" id="no-words">(no words)</span>',
       entry.strokes !== undefined
         ? createEntry(
             `<span class="kanji kanji-strokes">${entry.strokes}<br>${entry.svg !== undefined ? `<img class="kanji kanji-stroke-order" src="${entry.svg}" alt="${entry.kanji} stroke order SVG">` : "(no stroke order SVG available)"}</span>`,
           )
-        : '<span class="kanji kanji-strokes">(no stroke number)</span>',
+        : '<span class="kanji kanji-strokes" id="no-strokes">(no stroke number)</span>',
       entry.source !== undefined
         ? `<span class="kanji kanji-source"><a href="${entry.source}" target="_blank">Source</a></span>`
-        : '<span class="kanji kanji-source">(no components/mnemonic source)</span>',
+        : '<span class="kanji kanji-source" id="no-source">(no components/mnemonic source)</span>',
       ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags
@@ -2901,7 +2901,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="grammar grammar-reading">(no additional readings)</span>',
+        : '<span class="grammar grammar-reading" id="no-readings">(no additional readings)</span>',
       createEntry(
         `<span class="grammar grammar-meaning">${entry.meaning.meaning}${entry.meaning.example !== undefined && entry.meaning.example.length > 0 ? `<br><span class="grammar grammar-meaning-example">${entry.meaning.example}</span>` : ""}</span>`,
       ),
@@ -2913,7 +2913,7 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="grammar grammar-usage">(no usages)</span>',
+        : '<span class="grammar grammar-usage" id="no-usages">(no usages)</span>',
       entry.phrases !== undefined
         ? entry.phrases
             .map((phraseEntry: Phrase) =>
@@ -2924,10 +2924,10 @@ export function generateAnkiNote(entry: Result): string[] {
               ),
             )
             .join("")
-        : '<span class="grammar grammar-phrase">(no phrases) (Search on dictionaries!)</span>',
+        : '<span class="grammar grammar-phrase" id="no-phrases">(no phrases)</span>',
       entry.source !== undefined
         ? `<span class="grammar grammar-source"><a href="${entry.source}" target="_blank">Source</a></span>`
-        : '<span class="grammar grammar-source">(no source)</span>',
+        : '<span class="grammar grammar-source" id="no-source">(no source)</span>',
       ...(entry.tags !== undefined && entry.tags.length > 0
         ? [
             entry.tags
