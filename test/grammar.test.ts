@@ -28,9 +28,10 @@ describe("grammar note generation", () => {
       expect(generateAnkiNote(point).length).toBe(i === randomIndex ? 6 : 7);
     }
 
-    expect(generateAnkiNotesFile(grammarPoints).split("\n").length).toBe(
-      grammarPoints.length + 7,
-    );
+    expect(
+      generateAnkiNotesFile(grammarPoints, undefined, "Test").split("\n")
+        .length,
+    ).toBe(grammarPoints.length + 7);
 
     const noteID: string = grammarPoints[randomIndex]!.noteID!;
     const noteTypeName: string = grammarPoints[randomIndex]!.noteTypeName!;

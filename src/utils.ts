@@ -2488,9 +2488,10 @@ const createEntry: (
 /**
  * Generates an array where each field holds an entry’s info wrapped in HTML tags.
  * @param entry Any type of mapped entry ({@link Word}, {@link Kanji}, {@link Radical}, {@link Kana}, {@link Grammar})
+ * @param customData An additional string that will be added on the first field of any note type, as a `data-custom` attribute inside an invisible `div`
  * @returns An array of fields, each corresponding to an Anki note type field
  */
-export function generateAnkiNote(entry: Result): string[] {
+export function generateAnkiNote(entry: Result, customData?: string): string[] {
   const fields: string[] = [];
 
   if (isWord(entry)) {
@@ -2705,11 +2706,11 @@ export function generateAnkiNote(entry: Result): string[] {
     fields.push(
       ...(entry.kanjiForms !== undefined && !entry.usuallyInKana
         ? [
-            `${kanjiFormsField}<div id="kf-pos" style="display: none" data-pos="1"></div>`,
+            `${customData !== undefined ? `<div id="custom-data" style="display: none" data-custom="${customData}"></div>` : ""}${kanjiFormsField}<div id="kf-pos" style="display: none" data-pos="1"></div>`,
             `${hasAudio ? readingsFieldWithoutAudio : readingsField}<div id="r-pos" style="display: none" data-pos="2"></div>`,
           ]
         : [
-            `${kanjiFormsField}<div id="kf-pos" style="display: none" data-pos="2"></div>`,
+            `${customData !== undefined ? `<div id="custom-data" style="display: none" data-custom="${customData}"></div>` : ""}${kanjiFormsField}<div id="kf-pos" style="display: none" data-pos="2"></div>`,
             `${hasAudio ? readingsFieldWithoutAudio : readingsField}<div id="r-pos" style="display: none" data-pos="1"></div>`,
           ]),
       `${hasAudio ? readingsField : readingsFieldWithoutAudio}<div id="r-pos" style="display: none" data-pos="${entry.kanjiForms !== undefined && !entry.usuallyInKana ? "2" : "1"}"></div>`,
@@ -2741,9 +2742,9 @@ export function generateAnkiNote(entry: Result): string[] {
 
   if (isRadical(entry))
     fields.push(
-      createEntry(
+      `${customData !== undefined ? `<div id="custom-data" style="display: none" data-custom="${customData}"></div>` : ""}${createEntry(
         `<span class="radical radical-character">${entry.radical}</span>`,
-      ),
+      )}`,
       createEntry(
         `<span class="radical radical-reading">${entry.reading}</span>`,
       ),
@@ -2789,7 +2790,7 @@ export function generateAnkiNote(entry: Result): string[] {
 
   if (isKanji(entry))
     fields.push(
-      createEntry(`<span class="kanji kanji-character">${entry.kanji}</span>`),
+      `${customData !== undefined ? `<div id="custom-data" style="display: none" data-custom="${customData}"></div>` : ""}${createEntry(`<span class="kanji kanji-character">${entry.kanji}</span>`)}`,
       entry.meanings !== undefined
         ? entry.meanings
             .map((meaningEntry: string) =>
@@ -2870,7 +2871,7 @@ export function generateAnkiNote(entry: Result): string[] {
 
   if (isKana(entry))
     fields.push(
-      createEntry(`<span class="kana kana-character">${entry.kana}</span>`),
+      `${customData !== undefined ? `<div id="custom-data" style="display: none" data-custom="${customData}"></div>` : ""}${createEntry(`<span class="kana kana-character">${entry.kana}</span>`)}`,
       createEntry(
         `<span class="kana kana-reading">${entry.reading}${entry.audio !== undefined ? `<br>[sound:${entry.audio}]` : ""}</span>`,
       ),
@@ -2892,7 +2893,7 @@ export function generateAnkiNote(entry: Result): string[] {
 
   if (isGrammar(entry))
     fields.push(
-      createEntry(`<span class="grammar grammar-point">${entry.point}</span>`),
+      `${customData !== undefined ? `<div id="custom-data" style="display: none" data-custom="${customData}"></div>` : ""}${createEntry(`<span class="grammar grammar-point">${entry.point}</span>`)}`,
       entry.readings !== undefined
         ? entry.readings
             .map((readingEntry: Reading) =>
@@ -2946,11 +2947,13 @@ export function generateAnkiNote(entry: Result): string[] {
  * Generates an Anki notes file with each entry’s info organized into fields, either in HTML or plain text.
  * @param list An array containing any type of transformed entries ({@link Word}, {@link Kanji}, {@link Radical}, {@link Kana}, {@link Grammar})
  * @param defaultNoteInfo An object with options regarding default values of some note information
+ * @param customData An additional string that will be added on the first field of any note type, as a `data-custom` attribute inside an invisible `div`
  * @returns The resulting Anki notes file's content
  */
 export function generateAnkiNotesFile(
   list: readonly Result[],
   defaultNoteInfo?: DefaultNoteInfo,
+  customData?: string,
 ): string {
   const headers: string[] = [noteHeaderKeys.separator, noteHeaderKeys.html];
   let ankiNotes: string = "";
@@ -3068,7 +3071,7 @@ export function generateAnkiNotesFile(
           hasHeader.deckPath = true;
         }
 
-        const note: string[] = generateAnkiNote(result);
+        const note: string[] = generateAnkiNote(result, customData);
 
         if (!hasHeader.tags) {
           headers.push(`${noteHeaderKeys.tags}${note.length + headerCount}`);

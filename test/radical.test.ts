@@ -22,9 +22,9 @@ describe("radicals note generation", () => {
       expect(generateAnkiNote(char).length).toBe(i === randomIndex ? 7 : 8);
     }
 
-    expect(generateAnkiNotesFile(radicals).split("\n").length).toBe(
-      radicals.length + 7,
-    );
+    expect(
+      generateAnkiNotesFile(radicals, undefined, "Test").split("\n").length,
+    ).toBe(radicals.length + 7);
 
     const noteID: string = radicals[randomIndex]!.noteID!;
     const noteTypeName: string = radicals[randomIndex]!.noteTypeName!;

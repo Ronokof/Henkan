@@ -179,9 +179,9 @@ describe("DictWord transformation to Word", () => {
       }
     }
 
-    expect(generateAnkiNotesFile(entries).split("\n").length).toBe(
-      entries.length + 7,
-    );
+    expect(
+      generateAnkiNotesFile(entries, undefined, "Test").split("\n").length,
+    ).toBe(entries.length + 7);
   });
 
   it("transformation only with Tanaka examples", () => {

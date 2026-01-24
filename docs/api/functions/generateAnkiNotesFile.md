@@ -6,9 +6,9 @@
 
 # Function: generateAnkiNotesFile()
 
-> **generateAnkiNotesFile**(`list`, `defaultNoteInfo?`): `string`
+> **generateAnkiNotesFile**(`list`, `defaultNoteInfo?`, `customData?`): `string`
 
-Defined in: [utils.ts:2951](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2951)
+Defined in: [utils.ts:2953](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2953)
 
 Generates an Anki notes file with each entry’s info organized into fields, either in HTML or plain text.
 
@@ -25,6 +25,12 @@ An array containing any type of transformed entries ([Word](../interfaces/Word.m
 [`DefaultNoteInfo`](../interfaces/DefaultNoteInfo.md)
 
 An object with options regarding default values of some note information
+
+### customData?
+
+`string`
+
+An additional string that will be added on the first field of any note type, as a `data-custom` attribute inside an invisible `div`
 
 ## Returns
 

@@ -24,9 +24,9 @@ describe("kana note generation", () => {
       expect(generateAnkiNote(char).length).toBe(i === randomIndex ? 3 : 4);
     }
 
-    expect(generateAnkiNotesFile(kana).split("\n").length).toBe(
-      kana.length + 7,
-    );
+    expect(
+      generateAnkiNotesFile(kana, undefined, "Test").split("\n").length,
+    ).toBe(kana.length + 7);
 
     const noteID: string = kana[randomIndex]!.noteID!;
     const noteTypeName: string = kana[randomIndex]!.noteTypeName!;
