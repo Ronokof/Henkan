@@ -2357,6 +2357,15 @@ export function getWord(
           }
         }
 
+      const hasKfExamplesWithTranslation: boolean = kanjiFormExamples.some(
+        (ex: {
+          ex: TanakaExample;
+          partIndex: number;
+          form?: string | undefined;
+          includesTranslation?: true | undefined;
+        }) => ex.includesTranslation === true,
+      );
+
       if (kanjiFormExamples.length > 0 && readingMatchingKanjiForms.size > 0)
         kanjiFormExamples = kanjiFormExamples.filter(
           (ex: {
@@ -2365,11 +2374,11 @@ export function getWord(
             form?: string | undefined;
             includesTranslation?: true | undefined;
           }) =>
-            ex.includesTranslation === true &&
+            (!hasKfExamplesWithTranslation ||
+              ex.includesTranslation === true) &&
             ex.form !== undefined &&
             readingMatchingKanjiForms.has(ex.form),
         );
-      else kanjiFormExamples.length = 0;
 
       if (
         readingExamples.length > 0 &&
