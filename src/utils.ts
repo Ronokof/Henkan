@@ -2258,16 +2258,37 @@ export function getWord(
           ? new Set<string>(rkf.kanjiForms.map((kf: DictKanjiForm) => kf.form))
           : undefined;
 
+      const meanings: string[] = new Set<string>(
+        dictWord.meanings.flatMap((m: DictMeaning) =>
+          m.translations.map((t: DictTranslation) => {
+            if (typeof t === "string")
+              return t.replaceAll(/\([^)]*\)|\[[^\]]*\]|\{[^}]*\}/g, "").trim();
+            else
+              return t.translation
+                .replaceAll(/\([^)]*\)|\[[^\]]*\]|\{[^}]*\}/g, "")
+                .trim();
+          }),
+        ),
+      )
+        .values()
+        .toArray();
+
       let kanjiFormExamples: {
         ex: TanakaExample;
         partIndex: number;
         form?: string | undefined;
+        includesTranslation?: true | undefined;
       }[] = [];
       const readingMatchingKanjiFormExamples: {
         ex: TanakaExample;
         partIndex: number;
       }[] = [];
-      const readingExamples: { ex: TanakaExample; partIndex: number }[] = [];
+      let readingExamples: {
+        ex: TanakaExample;
+        partIndex: number;
+        referenceIDMatch?: true | undefined;
+        includesTranslation?: true | undefined;
+      }[] = [];
       const readingMatchingKanjiForms: Set<string> = new Set<string>();
       const seenPhrases: Set<string> = new Set<string>();
 
@@ -2302,6 +2323,11 @@ export function getWord(
                 ex: example,
                 partIndex: i,
                 form: part.baseForm,
+                ...(meanings.some((m: string) =>
+                  example.translation.includes(m),
+                )
+                  ? { includesTranslation: true }
+                  : {}),
               });
 
             seenPhrases.add(example.phrase);
@@ -2315,7 +2341,15 @@ export function getWord(
             (readingAsBaseFormMatch || referenceIDMatch) &&
             kanjiForms === undefined
           ) {
-            readingExamples.push({ ex: example, partIndex: i });
+            readingExamples.push({
+              ex: example,
+              partIndex: i,
+              ...(referenceIDMatch ? { referenceIDMatch: true } : {}),
+              ...(!referenceIDMatch &&
+              meanings.some((m: string) => example.translation.includes(m))
+                ? { includesTranslation: true }
+                : {}),
+            });
 
             seenPhrases.add(example.phrase);
 
@@ -2323,19 +2357,42 @@ export function getWord(
           }
         }
 
-      if (readingMatchingKanjiForms.size > 0)
+      if (kanjiFormExamples.length > 0 && readingMatchingKanjiForms.size > 0)
         kanjiFormExamples = kanjiFormExamples.filter(
           (ex: {
             ex: TanakaExample;
             partIndex: number;
             form?: string | undefined;
-          }) => ex.form !== undefined && readingMatchingKanjiForms.has(ex.form),
+            includesTranslation?: true | undefined;
+          }) =>
+            ex.includesTranslation === true &&
+            ex.form !== undefined &&
+            readingMatchingKanjiForms.has(ex.form),
+        );
+      else kanjiFormExamples.length = 0;
+
+      if (
+        readingExamples.length > 0 &&
+        readingExamples.some(
+          (ex: {
+            ex: TanakaExample;
+            partIndex: number;
+            referenceIDMatch?: true | undefined;
+            includesTranslation?: true | undefined;
+          }) => ex.includesTranslation === true || ex.referenceIDMatch === true,
+        )
+      )
+        readingExamples = readingExamples.filter(
+          (ex: {
+            ex: TanakaExample;
+            partIndex: number;
+            referenceIDMatch?: true | undefined;
+            includesTranslation?: true | undefined;
+          }) => ex.includesTranslation === true || ex.referenceIDMatch === true,
         );
 
-      const includeKanjiFormExamples: boolean = word.kanjiForms !== undefined;
-
       let wordExamples: { ex: TanakaExample; partIndex: number }[] = [
-        ...(includeKanjiFormExamples
+        ...(word.kanjiForms !== undefined
           ? [...readingMatchingKanjiFormExamples, ...kanjiFormExamples]
           : readingExamples),
       ].toSorted(
@@ -2345,7 +2402,6 @@ export function getWord(
         ) => a.ex.phrase.length - b.ex.phrase.length,
       );
 
-      readingMatchingKanjiForms.clear();
       seenPhrases.clear();
 
       const glossSpecificExamples: {
