@@ -2374,10 +2374,15 @@ export function getWord(
             form?: string | undefined;
             includesTranslation?: true | undefined;
           }) =>
-            (!hasKfExamplesWithTranslation ||
-              ex.includesTranslation === true) &&
             ex.form !== undefined &&
-            readingMatchingKanjiForms.has(ex.form),
+            readingMatchingKanjiForms.has(ex.form) &&
+            (!hasKfExamplesWithTranslation ||
+              ex.includesTranslation === true ||
+              ex.ex.parts.some(
+                (part: ExamplePart) =>
+                  readingMatchingKanjiForms.has(part.baseForm) &&
+                  part.glossNumber !== undefined,
+              )),
         );
 
       if (
