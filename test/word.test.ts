@@ -180,7 +180,9 @@ describe("DictWord transformation to Word", () => {
     }
 
     expect(
-      generateAnkiNotesFile(entries, undefined, "Test").split("\n").length,
+      generateAnkiNotesFile(entries, undefined, "Test", ["test_tag"]).split(
+        "\n",
+      ).length,
     ).toBe(entries.length + 7);
   });
 
@@ -346,6 +348,7 @@ describe("DictWord transformation to Word", () => {
           word.noteID = undefined;
           word.noteTypeName = undefined;
           word.deckPath = undefined;
+          word.tags = undefined;
           return word;
         }),
       ).split("\n").length,

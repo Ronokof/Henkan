@@ -6,9 +6,9 @@
 
 # Function: generateAnkiNote()
 
-> **generateAnkiNote**(`entry`, `customData?`): `string`[]
+> **generateAnkiNote**(`entry`, `customData?`, `additionalTags?`): `string`[]
 
-Defined in: [utils.ts:2564](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2564)
+Defined in: [utils.ts:2591](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2591)
 
 Generates an array where each field holds an entry’s info wrapped in HTML tags.
 
@@ -25,6 +25,12 @@ Any type of mapped entry ([Word](../interfaces/Word.md), [Kanji](../interfaces/K
 `string`
 
 An additional string that will be added on the first field of any note type, as a `data-custom` attribute inside an invisible `div`
+
+### additionalTags?
+
+`string`[]
+
+Additional tags that will be added alongside the existing entry tags
 
 ## Returns
 

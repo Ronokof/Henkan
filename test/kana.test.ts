@@ -25,7 +25,8 @@ describe("kana note generation", () => {
     }
 
     expect(
-      generateAnkiNotesFile(kana, undefined, "Test").split("\n").length,
+      generateAnkiNotesFile(kana, undefined, "Test", ["test_tag"]).split("\n")
+        .length,
     ).toBe(kana.length + 7);
 
     const noteID: string = kana[randomIndex]!.noteID!;
@@ -92,8 +93,12 @@ describe("kana note generation", () => {
           char.noteID = undefined;
           char.noteTypeName = undefined;
           char.deckPath = undefined;
+          char.tags = undefined;
           return char;
         }),
+        undefined,
+        undefined,
+        ["test_tag"],
       ).split("\n").length,
     ).toBe(kana.length + 4);
   });

@@ -23,7 +23,9 @@ describe("radicals note generation", () => {
     }
 
     expect(
-      generateAnkiNotesFile(radicals, undefined, "Test").split("\n").length,
+      generateAnkiNotesFile(radicals, undefined, "Test", ["test_tag"]).split(
+        "\n",
+      ).length,
     ).toBe(radicals.length + 7);
 
     const noteID: string = radicals[randomIndex]!.noteID!;
@@ -90,6 +92,7 @@ describe("radicals note generation", () => {
           radical.noteID = undefined;
           radical.noteTypeName = undefined;
           radical.deckPath = undefined;
+          radical.tags = undefined;
           return radical;
         }),
       ).split("\n").length,

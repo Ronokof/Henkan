@@ -269,7 +269,9 @@ describe("DictKanji transformation to Kanji", () => {
     }
 
     expect(
-      generateAnkiNotesFile(entries, undefined, "Test").split("\n").length,
+      generateAnkiNotesFile(entries, undefined, "Test", ["test_tag"]).split(
+        "\n",
+      ).length,
     ).toBe(entries.length + 7);
   });
 
@@ -468,6 +470,7 @@ describe("DictKanji transformation to Kanji", () => {
           kanji.noteID = undefined;
           kanji.noteTypeName = undefined;
           kanji.deckPath = undefined;
+          kanji.tags = undefined;
           return kanji;
         }),
       ).split("\n").length,

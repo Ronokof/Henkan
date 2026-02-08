@@ -1,6 +1,6 @@
 {
   "name": "henkan",
-  "version": "2.4.10",
+  "version": "2.4.11",
   "description": "Converter & Simplifier for JMdict, KANJIDIC, KRADFILE2, RADKFILE2 and Tanaka Corpus",
   "keywords": [
     "fjsd",
@@ -75,15 +75,15 @@
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
     "@vitest/coverage-v8": "^4.0.18",
-    "esbuild": "^0.27.2",
+    "esbuild": "^0.27.3",
     "eslint": "^9.39.2",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsdoc": "^62.5.0",
+    "eslint-plugin-jsdoc": "^62.5.4",
     "eslint-plugin-prettier": "^5.5.5",
     "prettier": "^3.8.1",
     "rimraf": "^6.1.2",
     "typedoc": "^0.28.16",
-    "typedoc-plugin-markdown": "^4.9.0",
+    "typedoc-plugin-markdown": "^4.10.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },

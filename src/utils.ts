@@ -2276,12 +2276,14 @@ export function getWord(
       let kanjiFormExamples: {
         ex: TanakaExample;
         partIndex: number;
-        form?: string | undefined;
+        form: string;
         includesTranslation?: true | undefined;
       }[] = [];
-      const readingMatchingKanjiFormExamples: {
+      let readingMatchingKanjiFormExamples: {
         ex: TanakaExample;
         partIndex: number;
+        form: string;
+        includesTranslation?: true | undefined;
       }[] = [];
       let readingExamples: {
         ex: TanakaExample;
@@ -2289,12 +2291,18 @@ export function getWord(
         referenceIDMatch?: true | undefined;
         includesTranslation?: true | undefined;
       }[] = [];
-      const readingMatchingKanjiForms: Set<string> = new Set<string>();
+      let readingMatchingKanjiForms: Set<string> = new Set<string>();
+      const readingMatchingKanjiFormsWithTranslations: Set<string> =
+        new Set<string>();
       const seenPhrases: Set<string> = new Set<string>();
 
       for (const example of exampleList)
         for (let i: number = 0; i < example.parts.length; i++) {
           if (seenPhrases.has(example.phrase)) break;
+
+          const includesTranslation: boolean = meanings.some((m: string) =>
+            example.translation.includes(m),
+          );
 
           const part: ExamplePart = example.parts[i]!;
 
@@ -2315,19 +2323,19 @@ export function getWord(
               readingMatchingKanjiFormExamples.push({
                 ex: example,
                 partIndex: i,
+                form: part.baseForm,
+                ...(includesTranslation ? { includesTranslation: true } : {}),
               });
 
               readingMatchingKanjiForms.add(part.baseForm);
+              if (includesTranslation)
+                readingMatchingKanjiFormsWithTranslations.add(part.baseForm);
             } else
               kanjiFormExamples.push({
                 ex: example,
                 partIndex: i,
                 form: part.baseForm,
-                ...(meanings.some((m: string) =>
-                  example.translation.includes(m),
-                )
-                  ? { includesTranslation: true }
-                  : {}),
+                ...(includesTranslation ? { includesTranslation: true } : {}),
               });
 
             seenPhrases.add(example.phrase);
@@ -2345,8 +2353,7 @@ export function getWord(
               ex: example,
               partIndex: i,
               ...(referenceIDMatch ? { referenceIDMatch: true } : {}),
-              ...(!referenceIDMatch &&
-              meanings.some((m: string) => example.translation.includes(m))
+              ...(!referenceIDMatch && includesTranslation
                 ? { includesTranslation: true }
                 : {}),
             });
@@ -2357,11 +2364,31 @@ export function getWord(
           }
         }
 
+      if (readingMatchingKanjiFormsWithTranslations.size > 0) {
+        readingMatchingKanjiForms = readingMatchingKanjiFormsWithTranslations;
+
+        readingMatchingKanjiFormExamples =
+          readingMatchingKanjiFormExamples.filter(
+            (ex: {
+              ex: TanakaExample;
+              partIndex: number;
+              form: string;
+              includesTranslation?: true | undefined;
+            }) =>
+              ex.includesTranslation === true ||
+              ex.ex.parts.some(
+                (part: ExamplePart) =>
+                  readingMatchingKanjiForms.has(part.baseForm) &&
+                  part.glossNumber !== undefined,
+              ),
+          );
+      }
+
       const hasKfExamplesWithTranslation: boolean = kanjiFormExamples.some(
         (ex: {
           ex: TanakaExample;
           partIndex: number;
-          form?: string | undefined;
+          form: string;
           includesTranslation?: true | undefined;
         }) => ex.includesTranslation === true,
       );
@@ -2371,10 +2398,9 @@ export function getWord(
           (ex: {
             ex: TanakaExample;
             partIndex: number;
-            form?: string | undefined;
+            form: string;
             includesTranslation?: true | undefined;
           }) =>
-            ex.form !== undefined &&
             readingMatchingKanjiForms.has(ex.form) &&
             (!hasKfExamplesWithTranslation ||
               ex.includesTranslation === true ||
@@ -2559,9 +2585,14 @@ const createEntry: (
  * Generates an array where each field holds an entry’s info wrapped in HTML tags.
  * @param entry Any type of mapped entry ({@link Word}, {@link Kanji}, {@link Radical}, {@link Kana}, {@link Grammar})
  * @param customData An additional string that will be added on the first field of any note type, as a `data-custom` attribute inside an invisible `div`
+ * @param additionalTags Additional tags that will be added alongside the existing entry tags
  * @returns An array of fields, each corresponding to an Anki note type field
  */
-export function generateAnkiNote(entry: Result, customData?: string): string[] {
+export function generateAnkiNote(
+  entry: Result,
+  customData?: string,
+  additionalTags?: string[],
+): string[] {
   const fields: string[] = [];
 
   if (isWord(entry)) {
@@ -2798,15 +2829,6 @@ export function generateAnkiNote(entry: Result, customData?: string): string[] {
             .join("")
         : '<span class="word word-kanji" id="no-kanji">(no kanji)</span>',
       searchField,
-      ...(entry.tags !== undefined && entry.tags.length > 0
-        ? [
-            entry.tags
-              .map((tag: string) =>
-                tag.trim().toLowerCase().replaceAll(" ", "::"),
-              )
-              .join(" "),
-          ]
-        : []),
     );
   }
 
@@ -2847,15 +2869,6 @@ export function generateAnkiNote(entry: Result, customData?: string): string[] {
       entry.sources !== undefined
         ? `<span class="radical radical-source">${entry.sources.map((source: string, index: number) => `<a href="${source}" target="_blank">Source ${index + 1}</a>`).join("<br>")}</span>`
         : '<span class="radical radical-source" id="no-sources">(no sources)</span>',
-      ...(entry.tags !== undefined && entry.tags.length > 0
-        ? [
-            entry.tags
-              .map((tag: string) =>
-                tag.trim().toLowerCase().replaceAll(" ", "::"),
-              )
-              .join(" "),
-          ]
-        : []),
     );
 
   if (isKanji(entry))
@@ -2928,15 +2941,6 @@ export function generateAnkiNote(entry: Result, customData?: string): string[] {
       entry.source !== undefined
         ? `<span class="kanji kanji-source"><a href="${entry.source}" target="_blank">Source</a></span>`
         : '<span class="kanji kanji-source" id="no-source">(no components/mnemonic source)</span>',
-      ...(entry.tags !== undefined && entry.tags.length > 0
-        ? [
-            entry.tags
-              .map((tag: string) =>
-                tag.trim().toLowerCase().replaceAll(" ", "::"),
-              )
-              .join(" "),
-          ]
-        : []),
     );
 
   if (isKana(entry))
@@ -2950,15 +2954,6 @@ export function generateAnkiNote(entry: Result, customData?: string): string[] {
             `<img class="kana kana-stroke-order" src="${entry.svg}" alt="${entry.kana} stroke order SVG">`,
           )
         : "(no stroke order SVG available)",
-      ...(entry.tags !== undefined && entry.tags.length > 0
-        ? [
-            entry.tags
-              .map((tag: string) =>
-                tag.trim().toLowerCase().replaceAll(" ", "::"),
-              )
-              .join(" "),
-          ]
-        : []),
     );
 
   if (isGrammar(entry))
@@ -2999,15 +2994,16 @@ export function generateAnkiNote(entry: Result, customData?: string): string[] {
       entry.source !== undefined
         ? `<span class="grammar grammar-source"><a href="${entry.source}" target="_blank">Source</a></span>`
         : '<span class="grammar grammar-source" id="no-source">(no source)</span>',
-      ...(entry.tags !== undefined && entry.tags.length > 0
-        ? [
-            entry.tags
-              .map((tag: string) =>
-                tag.trim().toLowerCase().replaceAll(" ", "::"),
-              )
-              .join(" "),
-          ]
-        : []),
+    );
+
+  if (
+    (entry.tags !== undefined && entry.tags.length > 0) ||
+    (additionalTags !== undefined && additionalTags.length > 0)
+  )
+    fields.push(
+      [...(entry.tags ?? []), ...(additionalTags ?? [])]
+        .map((tag: string) => tag.trim().toLowerCase().replaceAll(" ", "::"))
+        .join(" "),
     );
 
   return fields.map((field: string) => field.replaceAll("\n", "<br>"));
@@ -3018,12 +3014,14 @@ export function generateAnkiNote(entry: Result, customData?: string): string[] {
  * @param list An array containing any type of transformed entries ({@link Word}, {@link Kanji}, {@link Radical}, {@link Kana}, {@link Grammar})
  * @param defaultNoteInfo An object with options regarding default values of some note information
  * @param customData An additional string that will be added on the first field of any note type, as a `data-custom` attribute inside an invisible `div`
+ * @param additionalTags Additional tags that will be added alongside the existing entry tags
  * @returns The resulting Anki notes file's content
  */
 export function generateAnkiNotesFile(
   list: readonly Result[],
   defaultNoteInfo?: DefaultNoteInfo,
   customData?: string,
+  additionalTags?: string[],
 ): string {
   const headers: string[] = [noteHeaderKeys.separator, noteHeaderKeys.html];
   let ankiNotes: string = "";
@@ -3141,7 +3139,11 @@ export function generateAnkiNotesFile(
           hasHeader.deckPath = true;
         }
 
-        const note: string[] = generateAnkiNote(result, customData);
+        const note: string[] = generateAnkiNote(
+          result,
+          customData,
+          additionalTags,
+        );
 
         if (!hasHeader.tags) {
           headers.push(`${noteHeaderKeys.tags}${note.length + headerCount}`);
