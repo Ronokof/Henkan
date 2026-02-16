@@ -3,6 +3,10 @@ import { resolve } from 'path';
 
 export default defineConfig({
   test: {
+    pool: 'forks',
+    maxConcurrency: 1,
+    maxWorkers: 1,
+    fileParallelism: false,
     hookTimeout: 0,
     testTimeout: 0,
     teardownTimeout: 90000,
