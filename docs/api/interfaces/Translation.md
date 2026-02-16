@@ -6,11 +6,11 @@
 
 # Interface: Translation
 
-Defined in: [types.ts:679](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L679)
+Defined in: [types.ts:747](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L747)
 
-A translation of the word
+A translation of the word/name
 
-Converted from [DictMeaning](DictMeaning.md)
+Converted from [DictMeaning](DictMeaning.md) or [NeDictMeaning](NeDictMeaning.md)
 
 ## Properties
 
@@ -18,7 +18,7 @@ Converted from [DictMeaning](DictMeaning.md)
 
 > `optional` **notes**: `string`[]
 
-Defined in: [types.ts:687](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L687)
+Defined in: [types.ts:755](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L755)
 
 Information about the translation
 
@@ -28,6 +28,6 @@ Information about the translation
 
 > `readonly` **translation**: `string`
 
-Defined in: [types.ts:683](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L683)
+Defined in: [types.ts:751](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L751)
 
 The translation

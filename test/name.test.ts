@@ -1,48 +1,44 @@
 import { describe, it, expect, beforeAll, afterAll, inject } from "vitest";
 import {
   DictKanji,
-  DictWord,
+  DictName,
   EntryMaps,
   Kanji,
   KanjiForm,
-  StringNumber,
   TanakaExample,
-  Word,
-  WordDefinitionPair,
+  Name,
+  StringNumber,
 } from "../src/types";
 import {
-  convertJawiktionarySync,
-  convertJMdict,
+  convertJMnedict,
   convertKanjiDic,
   convertTanakaCorpus,
   convertTanakaCorpusWithFurigana,
   createEntryMaps,
   generateAnkiNote,
   generateAnkiNotesFile,
-  getWord,
-  getWordDefinitions,
-  getWordDefinitionsWithFurigana,
-  isWord,
+  getName,
+  isName,
   shuffleArray,
 } from "../src/utils";
 
 function checkTransformedEntry(
-  transformedEntry: Word,
-  dictEntry: DictWord,
+  transformedEntry: Name,
+  dictEntry: DictName,
   noteTypeName: string,
   deckPath: string,
   checkKanji?: true,
   checkPhrases?: true,
   ignoreTags?: true,
 ): void {
-  expect(isWord(transformedEntry)).toBeTruthy();
+  expect(isName(transformedEntry)).toBeTruthy();
   expect(
     transformedEntry.id !== undefined && transformedEntry.id === dictEntry.id,
   ).toBeTruthy();
   expect(
-    transformedEntry.noteID === `word_${transformedEntry.id}`,
+    transformedEntry.noteID === `name_${transformedEntry.id}`,
   ).toBeTruthy();
-  expect(transformedEntry.readings.length).toBeGreaterThan(0);
+  expect(transformedEntry.nameReadings.length).toBeGreaterThan(0);
   expect(transformedEntry.translations.length).toBeGreaterThan(0);
 
   expect(transformedEntry.noteTypeName === noteTypeName).toBeTruthy();
@@ -54,12 +50,9 @@ function checkTransformedEntry(
     expect(transformedEntry.tags.length).toBeGreaterThan(0);
 
   expect(transformedEntry.common === dictEntry.isCommon).toBeTruthy();
-  expect(
-    transformedEntry.usuallyInKana === dictEntry.usuallyInKana,
-  ).toBeTruthy();
 
   expect(generateAnkiNote(transformedEntry).length).toBe(
-    ignoreTags === true && transformedEntry.tags === undefined ? 8 : 9,
+    ignoreTags === true && transformedEntry.tags === undefined ? 7 : 8,
   );
 
   if (checkKanji === true)
@@ -85,12 +78,12 @@ function checkTransformedEntry(
     expect(transformedEntry.phrases.length).toBeGreaterThan(0);
 }
 
-let convertedJMdict: DictWord[];
+let convertedJMnedict: DictName[];
 let convertedKanjiDic: DictKanji[];
 let convertedTanakaCorpusWithoutFurigana: TanakaExample[];
-let wordDefsWithoutFurigana: WordDefinitionPair[];
 let entryMaps: EntryMaps;
-let randomWordID: StringNumber;
+let randomNameID: StringNumber;
+let dictLength: number;
 
 beforeAll(async () => {
   const convertedTanakaCorpus: TanakaExample[] =
@@ -104,70 +97,56 @@ beforeAll(async () => {
     convertKanjiDic(inject("kanjidic2.xml")),
   );
 
-  convertedJMdict = shuffleArray<DictWord>(
-    convertJMdict(inject("JMdict_e"), convertedTanakaCorpus),
-  );
-
-  const wordDefs: WordDefinitionPair[] = await getWordDefinitionsWithFurigana(
-    convertJawiktionarySync(inject("raw-wiktextract-data")),
-    convertedJMdict,
-  );
-
-  wordDefsWithoutFurigana = getWordDefinitions(
-    convertJawiktionarySync(inject("raw-wiktextract-data")),
-    convertedJMdict,
+  convertedJMnedict = shuffleArray<DictName>(
+    convertJMnedict(inject("JMnedict.xml"), convertedTanakaCorpus),
   );
 
   entryMaps = createEntryMaps(
-    convertedJMdict,
     undefined,
+    convertedJMnedict,
     convertedKanjiDic,
     convertedTanakaCorpus,
-    wordDefs,
   );
 
-  randomWordID = "-1";
+  randomNameID = "-1";
 
-  for (const id of entryMaps.wordExamplesMap!.keys())
+  for (const id of entryMaps.nameExamplesMap!.keys())
     if (
-      entryMaps.wordIDEntryMap!.get(id)?.kanjiForms !== undefined &&
-      entryMaps.wordDefinitionsMap!.has(id) &&
-      entryMaps.wordDefinitionsMap!.get(id)!.length > 3 &&
-      convertedJMdict.some(
-        (word: DictWord) => word.id === id && word.hasPhrases === true,
+      entryMaps.nameIDEntryMap!.get(id)?.kanjiForms !== undefined &&
+      convertedJMnedict.some(
+        (name: DictName) => name.id === id && name.hasPhrases === true,
       ) &&
-      getWord(
+      getName(
         id,
-        entryMaps.wordIDEntryMap,
+        entryMaps.nameIDEntryMap,
         undefined,
         convertedTanakaCorpusWithoutFurigana,
       )?.phrases !== undefined
     ) {
-      randomWordID = id;
+      randomNameID = id;
       break;
     }
+
+  dictLength = convertedJMnedict.length;
 });
 
 afterAll(() => (entryMaps = {}));
 
-describe("DictWord transformation to Word", () => {
+describe("DictName transformation to Name", () => {
   it("transformation only with KANJIDIC", () => {
-    const entries: Word[] = [];
+    const entries: Name[] = [];
 
-    for (let i: number = 0; i < convertedJMdict.length; i++) {
-      const entry: DictWord = convertedJMdict[i]!;
+    for (let i: number = 0; i < dictLength; i++) {
+      const entry: DictName = convertedJMnedict[i]!;
 
       const noteTypeName: string = crypto.randomUUID();
       const deckPath: string = crypto.randomUUID();
 
-      const transformedEntry: Word | undefined = getWord(
+      const transformedEntry: Name | undefined = getName(
         entry,
         undefined,
-        entry.id !== randomWordID ? entryMaps.kanjiEntryMap : convertedKanjiDic,
+        entry.id !== randomNameID ? entryMaps.kanjiEntryMap : convertedKanjiDic,
         undefined,
-        entry.id !== randomWordID
-          ? entryMaps.wordDefinitionsMap
-          : wordDefsWithoutFurigana,
         noteTypeName,
         deckPath,
       );
@@ -183,10 +162,11 @@ describe("DictWord transformation to Word", () => {
           true,
         );
 
-        for (let j: number = 0; j < transformedEntry.readings.length; j++)
-          transformedEntry.readings[j]!.audio = crypto.randomUUID();
+        for (let j: number = 0; j < transformedEntry.nameReadings.length; j++)
+          transformedEntry.nameReadings[j]!.audio = crypto.randomUUID();
 
-        entries.push(transformedEntry);
+        if (i < dictLength / 20 || transformedEntry.id === randomNameID)
+          entries.push(transformedEntry);
       }
     }
 
@@ -198,23 +178,20 @@ describe("DictWord transformation to Word", () => {
   });
 
   it("transformation only with Tanaka examples", () => {
-    const entries: Word[] = [];
+    const entries: Name[] = [];
 
-    for (let i: number = 0; i < convertedJMdict.length; i++) {
-      const entry: DictWord = convertedJMdict[i]!;
+    for (let i: number = 0; i < dictLength; i++) {
+      const entry: DictName = convertedJMnedict[i]!;
       const noteTypeName: string = crypto.randomUUID();
       const deckPath: string = crypto.randomUUID();
 
-      const transformedEntry: Word | undefined = getWord(
+      const transformedEntry: Name | undefined = getName(
         entry,
         undefined,
         undefined,
-        entry.id !== randomWordID
-          ? entryMaps.wordExamplesMap
+        entry.id !== randomNameID
+          ? entryMaps.nameExamplesMap
           : convertedTanakaCorpusWithoutFurigana,
-        entry.id !== randomWordID
-          ? entryMaps.wordDefinitionsMap
-          : wordDefsWithoutFurigana,
         noteTypeName,
         deckPath,
       );
@@ -231,10 +208,11 @@ describe("DictWord transformation to Word", () => {
           true,
         );
 
-        for (let j: number = 0; j < transformedEntry.readings.length; j++)
-          transformedEntry.readings[j]!.audio = crypto.randomUUID();
+        for (let j: number = 0; j < transformedEntry.nameReadings.length; j++)
+          transformedEntry.nameReadings[j]!.audio = crypto.randomUUID();
 
-        entries.push(transformedEntry);
+        if (i < dictLength / 20 || transformedEntry.id === randomNameID)
+          entries.push(transformedEntry);
       }
     }
 
@@ -244,27 +222,23 @@ describe("DictWord transformation to Word", () => {
   });
 
   it("transformation with KANJIDIC and Tanaka examples", () => {
-    const entries: Word[] = [];
-    const randomIndex: number = Math.floor(
-      Math.random() * convertedJMdict.length,
-    );
+    const entries: Name[] = [];
+    const randomName: DictName =
+      convertedJMnedict[Math.floor(Math.random() * dictLength)]!;
 
-    for (let i: number = 0; i < convertedJMdict.length; i++) {
-      const entry: DictWord = convertedJMdict[i]!;
+    for (let i: number = 0; i < dictLength; i++) {
+      const entry: DictName = convertedJMnedict[i]!;
 
       const noteTypeName: string = crypto.randomUUID();
       const deckPath: string = crypto.randomUUID();
 
-      const transformedEntry: Word | undefined = getWord(
+      const transformedEntry: Name | undefined = getName(
         entry,
         undefined,
-        entry.id !== randomWordID ? entryMaps.kanjiEntryMap : convertedKanjiDic,
-        entry.id !== randomWordID
-          ? entryMaps.wordExamplesMap
+        entry.id !== randomNameID ? entryMaps.kanjiEntryMap : convertedKanjiDic,
+        entry.id !== randomNameID
+          ? entryMaps.nameExamplesMap
           : convertedTanakaCorpusWithoutFurigana,
-        entry.id !== randomWordID
-          ? entryMaps.wordDefinitionsMap
-          : wordDefsWithoutFurigana,
         noteTypeName,
         deckPath,
       );
@@ -272,7 +246,8 @@ describe("DictWord transformation to Word", () => {
       expect(transformedEntry).toBeDefined();
 
       if (transformedEntry !== undefined) {
-        if (i === randomIndex) transformedEntry.tags = undefined;
+        if (transformedEntry.id === randomName.id)
+          transformedEntry.tags = undefined;
 
         checkTransformedEntry(
           transformedEntry,
@@ -281,13 +256,18 @@ describe("DictWord transformation to Word", () => {
           deckPath,
           true,
           true,
-          i !== randomIndex ? undefined : true,
+          transformedEntry.id !== randomName.id ? undefined : true,
         );
 
-        for (let j: number = 0; j < transformedEntry.readings.length; j++)
-          transformedEntry.readings[j]!.audio = crypto.randomUUID();
+        for (let j: number = 0; j < transformedEntry.nameReadings.length; j++)
+          transformedEntry.nameReadings[j]!.audio = crypto.randomUUID();
 
-        entries.push(transformedEntry);
+        if (
+          i < dictLength / 20 ||
+          transformedEntry.id === randomName.id ||
+          transformedEntry.id === randomNameID
+        )
+          entries.push(transformedEntry);
       }
     }
 
@@ -295,11 +275,15 @@ describe("DictWord transformation to Word", () => {
       entries.length + 7,
     );
 
-    const noteID: string = entries[randomIndex]!.noteID!;
-    const noteTypeName: string = entries[randomIndex]!.noteTypeName!;
-    const deckPath: string = entries[randomIndex]!.deckPath!;
+    const randomEntryIndex: number = entries.findIndex(
+      (name: Name) => name.id === randomName.id,
+    );
 
-    entries[randomIndex]!.noteID = undefined;
+    const noteID: string = entries[randomEntryIndex]!.noteID!;
+    const noteTypeName: string = entries[randomEntryIndex]!.noteTypeName!;
+    const deckPath: string = entries[randomEntryIndex]!.deckPath!;
+
+    entries[randomEntryIndex]!.noteID = undefined;
 
     expect(() =>
       generateAnkiNotesFile(entries, {
@@ -309,8 +293,8 @@ describe("DictWord transformation to Word", () => {
       }),
     ).toThrowError("Invalid result list");
 
-    entries[randomIndex]!.noteID = noteID;
-    entries[randomIndex]!.noteTypeName = undefined;
+    entries[randomEntryIndex]!.noteID = noteID;
+    entries[randomEntryIndex]!.noteTypeName = undefined;
 
     expect(() =>
       generateAnkiNotesFile(entries, {
@@ -320,8 +304,8 @@ describe("DictWord transformation to Word", () => {
       }),
     ).toThrowError("Invalid result list");
 
-    entries[randomIndex]!.noteTypeName = noteTypeName;
-    entries[randomIndex]!.deckPath = undefined;
+    entries[randomEntryIndex]!.noteTypeName = noteTypeName;
+    entries[randomEntryIndex]!.deckPath = undefined;
 
     expect(() =>
       generateAnkiNotesFile(entries, {
@@ -331,29 +315,29 @@ describe("DictWord transformation to Word", () => {
       }),
     ).toThrowError("Invalid result list");
 
-    entries[randomIndex]!.deckPath = deckPath;
-    entries[randomIndex]!.noteID = undefined;
+    entries[randomEntryIndex]!.deckPath = deckPath;
+    entries[randomEntryIndex]!.noteID = undefined;
 
     expect(() => generateAnkiNotesFile(entries)).toThrowError(
       "Invalid result list",
     );
 
-    entries[randomIndex]!.noteID = noteID;
-    entries[randomIndex]!.noteTypeName = undefined;
+    entries[randomEntryIndex]!.noteID = noteID;
+    entries[randomEntryIndex]!.noteTypeName = undefined;
 
     expect(() => generateAnkiNotesFile(entries)).toThrowError(
       "Invalid result list",
     );
 
-    entries[randomIndex]!.noteTypeName = noteTypeName;
-    entries[randomIndex]!.deckPath = undefined;
+    entries[randomEntryIndex]!.noteTypeName = noteTypeName;
+    entries[randomEntryIndex]!.deckPath = undefined;
 
     expect(() => generateAnkiNotesFile(entries)).toThrowError(
       "Invalid result list",
     );
 
-    entries[randomIndex]!.noteID = undefined;
-    entries[randomIndex]!.noteTypeName = undefined;
+    entries[randomEntryIndex]!.noteID = undefined;
+    entries[randomEntryIndex]!.noteTypeName = undefined;
 
     expect(
       generateAnkiNotesFile(entries, {
@@ -365,65 +349,64 @@ describe("DictWord transformation to Word", () => {
 
     expect(
       generateAnkiNotesFile(
-        entries.map((word: Word) => {
-          word.noteID = undefined;
-          word.noteTypeName = undefined;
-          word.deckPath = undefined;
-          word.tags = undefined;
-          return word;
+        entries.map((name: Name) => {
+          name.noteID = undefined;
+          name.noteTypeName = undefined;
+          name.deckPath = undefined;
+          name.tags = undefined;
+          return name;
         }),
       ).split("\n").length,
     ).toBe(entries.length + 4);
   });
 
   it("special cases transformation", () => {
-    expect(getWord("-1", entryMaps.wordIDEntryMap)).toBeUndefined();
+    expect(getName("-1", entryMaps.nameIDEntryMap)).toBeUndefined();
 
-    const testWord: Word | undefined = getWord(
-      randomWordID,
-      entryMaps.wordIDEntryMap,
+    const testName: Name | undefined = getName(
+      randomNameID,
+      entryMaps.nameIDEntryMap,
       convertedKanjiDic,
       convertedTanakaCorpusWithoutFurigana,
-      wordDefsWithoutFurigana,
     );
 
-    entryMaps.wordExamplesMap?.delete(randomWordID);
+    entryMaps.nameExamplesMap?.delete(randomNameID);
 
-    const testWord2: Word | undefined = getWord(
-      randomWordID,
-      convertedJMdict,
+    const testName2: Name | undefined = getName(
+      randomNameID,
+      convertedJMnedict,
       convertedKanjiDic,
-      entryMaps.wordExamplesMap,
+      entryMaps.nameExamplesMap,
     );
 
-    entryMaps.wordIDEntryMap?.delete(randomWordID);
+    entryMaps.nameIDEntryMap?.delete(randomNameID);
 
-    const testWord3: Word | undefined = getWord(
-      randomWordID,
-      entryMaps.wordIDEntryMap,
+    const testName3: Name | undefined = getName(
+      randomNameID,
+      entryMaps.nameIDEntryMap,
       convertedKanjiDic,
-      entryMaps.wordExamplesMap,
+      entryMaps.nameExamplesMap,
     );
 
-    expect(testWord).toBeDefined();
-    expect(testWord2).toBeDefined();
+    expect(testName).toBeDefined();
+    expect(testName2).toBeDefined();
     expect(
-      testWord !== undefined &&
-        testWord2 !== undefined &&
-        testWord.id === testWord2.id,
+      testName !== undefined &&
+        testName2 !== undefined &&
+        testName.id === testName2.id,
     ).toBeTruthy();
-    expect(testWord3).toBeUndefined();
+    expect(testName3).toBeUndefined();
 
-    if (testWord !== undefined && testWord2 !== undefined) {
-      testWord.tags = undefined;
+    if (testName !== undefined && testName2 !== undefined) {
+      testName.tags = undefined;
 
-      expect(testWord2.definitions).toBeUndefined();
-
-      expect(generateAnkiNote(testWord).length).toBe(8);
+      expect(generateAnkiNote(testName).length).toBe(7);
       expect(generateAnkiNotesFile([]).split("\n").length).toBe(4);
     }
 
     expect(Object.keys(createEntryMaps()).length).toBe(0);
-    expect(Object.keys(createEntryMaps(convertedJMdict)).length).toBe(2);
+    expect(
+      Object.keys(createEntryMaps(undefined, convertedJMnedict)).length,
+    ).toBe(1);
   });
 });

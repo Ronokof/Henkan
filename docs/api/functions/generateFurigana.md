@@ -8,7 +8,7 @@
 
 > **generateFurigana**(`text`, `bindedFunction`): `Promise`\<`string`\>
 
-Defined in: [utils.ts:177](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L177)
+Defined in: [utils.ts:180](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L180)
 
 Generates furigana for Japanese text.
 

@@ -6,7 +6,7 @@
 
 # Interface: TanakaExample
 
-Defined in: [types.ts:413](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L413)
+Defined in: [types.ts:463](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L463)
 
 Tanaka Corpus `examples.utf` examples
 
@@ -16,7 +16,7 @@ Tanaka Corpus `examples.utf` examples
 
 > `optional` **furigana**: `string`
 
-Defined in: [types.ts:433](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L433)
+Defined in: [types.ts:483](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L483)
 
 The Japanese phrase, with furigana attached
 
@@ -26,7 +26,7 @@ The Japanese phrase, with furigana attached
 
 > `optional` **glossNumber**: [`GlossSpecificNumber`](GlossSpecificNumber.md)
 
-Defined in: [types.ts:437](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L437)
+Defined in: [types.ts:487](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L487)
 
 The word-gloss pair
 
@@ -36,7 +36,7 @@ The word-gloss pair
 
 > `readonly` **id**: `` `${number}_${number}` ``
 
-Defined in: [types.ts:417](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L417)
+Defined in: [types.ts:467](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L467)
 
 The ID of the example
 
@@ -46,7 +46,7 @@ The ID of the example
 
 > `readonly` **parts**: [`ExamplePart`](ExamplePart.md)[]
 
-Defined in: [types.ts:429](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L429)
+Defined in: [types.ts:479](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L479)
 
 The `B` section, split into parts
 
@@ -56,7 +56,7 @@ The `B` section, split into parts
 
 > `readonly` **phrase**: `string`
 
-Defined in: [types.ts:421](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L421)
+Defined in: [types.ts:471](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L471)
 
 The Japanese phrase (found in the `A` section, **before** the tab)
 
@@ -66,6 +66,6 @@ The Japanese phrase (found in the `A` section, **before** the tab)
 
 > `readonly` **translation**: `string`
 
-Defined in: [types.ts:425](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L425)
+Defined in: [types.ts:475](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L475)
 
 The English translation of the phrase (found in the `A` section, **after** the tab)

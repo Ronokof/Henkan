@@ -47,7 +47,7 @@ export type POS =
 /**
  * Standardized dictionary names
  */
-export type DictName = "JMDict" | "Kanjidic" | "tanaka" | "radk" | "krad";
+export type DictNames = "JMDict" | "Kanjidic" | "tanaka" | "radk" | "krad";
 
 /**
  * A number written as a string
@@ -55,9 +55,9 @@ export type DictName = "JMDict" | "Kanjidic" | "tanaka" | "radk" | "krad";
 export type StringNumber = `${number}`;
 
 /**
- * Word kanji form information
+ * Word/Name kanji form information
  *
- * Equivalent to the `k_ele` JMdict element
+ * Equivalent to the `k_ele` JMdict/JMnedict element
  */
 export interface DictKanjiForm {
   /**
@@ -79,9 +79,9 @@ export interface DictKanjiForm {
 }
 
 /**
- * Word reading information
+ * Word/Name reading information
  *
- * Equivalent to the `r_ele` JMdict element
+ * Equivalent to the `r_ele` JMdict/JMnedict element
  */
 export interface DictReading {
   /**
@@ -213,6 +213,56 @@ export interface DictWord {
    * Set to `true` only if the word is usually written in kana for all word senses.
    */
   usuallyInKana?: true | undefined;
+  /**
+   * Whether or not the entry has at least one Tanaka Corpus phrase associated with it
+   *
+   * **May not always be accurate**
+   */
+  hasPhrases?: true | undefined;
+}
+
+/**
+ * Name translation information
+ *
+ * Equivalent to the `trans` JMnedict element
+ */
+export interface NeDictMeaning {
+  /**
+   * Name translations
+   */
+  translations: string[];
+  /**
+   * Types of the name
+   */
+  nameTypes?: string[] | undefined;
+}
+
+/**
+ * JMnedict entry (name)
+ *
+ * Equivalent to the `entry` JMnedict element
+ */
+export interface DictName {
+  /**
+   * The entry sequence number
+   */
+  readonly id: StringNumber;
+  /**
+   * The name's readings
+   */
+  nameReadings: DictReading[];
+  /**
+   * The name's meanings/senses
+   */
+  meanings: NeDictMeaning[];
+  /**
+   * The name's kanji forms
+   */
+  kanjiForms?: DictKanjiForm[] | undefined;
+  /**
+   * Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
+   */
+  isCommon?: true | undefined;
   /**
    * Whether or not the entry has at least one Tanaka Corpus phrase associated with it
    *
@@ -442,6 +492,10 @@ export interface TanakaExample {
  */
 export type WordIDEntryMap = Map<StringNumber, DictWord>;
 /**
+ * A `JMnedict entry ID` ---> {@link DictName} `object` map
+ */
+export type NameIDEntryMap = Map<StringNumber, DictName>;
+/**
  * A `KANJIDIC kanji character` ---> {@link DictKanji} `object` map
  */
 export type KanjiEntryMap = Map<string, DictKanji>;
@@ -454,9 +508,9 @@ export type KanjiSVGMap = Map<string, string>;
  */
 export type KanjiWordsMap = Map<string, DictWord[]>;
 /**
- * A `JMdict entry ID` ---> `Tanaka examples associated with the JMdict entry` map
+ * A `JMdict/JMnedict entry ID` ---> `Tanaka examples associated with the JMdict/JMnedict entry` map
  */
-export type WordExamplesMap = Map<StringNumber, TanakaExample[]>;
+export type EntryExamplesMap = Map<StringNumber, TanakaExample[]>;
 /**
  * A `JMdict entry ID` ---> `Japanese definitions associated with the JMdict entry` map
  */
@@ -471,6 +525,10 @@ export interface EntryMaps {
    */
   wordIDEntryMap?: WordIDEntryMap | undefined;
   /**
+   * @see {@link NameIDEntryMap}
+   */
+  nameIDEntryMap?: NameIDEntryMap | undefined;
+  /**
    * @see {@link KanjiWordsMap}
    */
   kanjiWordsMap?: KanjiWordsMap | undefined;
@@ -479,9 +537,13 @@ export interface EntryMaps {
    */
   kanjiEntryMap?: KanjiEntryMap | undefined;
   /**
-   * @see {@link WordExamplesMap}
+   * @see {@link EntryExamplesMap}
    */
-  wordExamplesMap?: WordExamplesMap | undefined;
+  wordExamplesMap?: EntryExamplesMap | undefined;
+  /**
+   * @see {@link EntryExamplesMap}
+   */
+  nameExamplesMap?: EntryExamplesMap | undefined;
   /**
    * @see {@link WordDefinitionsMap}
    */
@@ -581,7 +643,13 @@ export type Dict =
 /**
  * Names of entry types used for the Anki note IDs
  */
-export type EntryType = "word" | "kanji" | "radical" | "kana" | "grammar";
+export type EntryType =
+  | "word"
+  | "name"
+  | "kanji"
+  | "radical"
+  | "kana"
+  | "grammar";
 
 /**
  * Basic Anki note information
@@ -628,7 +696,7 @@ export interface NoteAndTag {
 }
 
 /**
- * A kanji form of the word
+ * A kanji form of the word/name
  *
  * Converted from a {@link DictKanjiForm}
  */
@@ -648,7 +716,7 @@ export interface KanjiForm {
 }
 
 /**
- * A reading of the word
+ * A reading of the word/name
  *
  * Converted from {@link DictReading}
  */
@@ -672,9 +740,9 @@ export interface Reading {
 }
 
 /**
- * A translation of the word
+ * A translation of the word/name
  *
- * Converted from {@link DictMeaning}
+ * Converted from {@link DictMeaning} or {@link NeDictMeaning}
  */
 export interface Translation {
   /**
@@ -880,6 +948,38 @@ export interface Word extends ResultEntry<"word"> {
 }
 
 /**
+ * Name information
+ *
+ * Converted from {@link DictName}
+ */
+export interface Name extends ResultEntry<"name"> {
+  /**
+   * The name readings (in kana)
+   */
+  nameReadings: Reading[];
+  /**
+   * The name translations
+   */
+  translations: Translation[];
+  /**
+   * The name kanji forms
+   */
+  kanjiForms?: KanjiForm[] | undefined;
+  /**
+   * A list of kanji used in the kanji forms
+   */
+  kanji?: Kanji[] | undefined;
+  /**
+   * Phrases associated to the name
+   */
+  phrases?: Phrase[] | undefined;
+  /**
+   * @see {@link DictName.isCommon}
+   */
+  common?: true | undefined;
+}
+
+/**
  * Kana information
  */
 export interface Kana extends ResultEntry<"kana"> {
@@ -956,7 +1056,7 @@ export interface Grammar extends ResultEntry<"grammar"> {
 /**
  * Any type of converted entry from a {@link Dict} array + others not from a dictionary
  */
-export type Result = Word | Kanji | Radical | Kana | Grammar;
+export type Result = Word | Name | Kanji | Radical | Kana | Grammar;
 
 /**
  * Default note ID, note type and deck name of a note

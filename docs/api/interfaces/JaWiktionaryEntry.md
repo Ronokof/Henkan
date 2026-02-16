@@ -6,7 +6,7 @@
 
 # Interface: JaWiktionaryEntry
 
-Defined in: [types.ts:509](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L509)
+Defined in: [types.ts:571](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L571)
 
 Useful information from a `ja.wiktionary.org` entry
 
@@ -16,7 +16,7 @@ Useful information from a `ja.wiktionary.org` entry
 
 > `optional` **forms**: `string`[]
 
-Defined in: [types.ts:525](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L525)
+Defined in: [types.ts:587](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L587)
 
 Other forms (as kanji form or kana) of the word
 
@@ -26,7 +26,7 @@ Other forms (as kanji form or kana) of the word
 
 > **pos\_title**: [`POS`](../type-aliases/POS.md)
 
-Defined in: [types.ts:517](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L517)
+Defined in: [types.ts:579](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L579)
 
 The part of speech (in Japanese)
 
@@ -36,7 +36,7 @@ The part of speech (in Japanese)
 
 > `optional` **senses**: `JaWiktionaryEntrySense`[]
 
-Defined in: [types.ts:521](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L521)
+Defined in: [types.ts:583](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L583)
 
 The word senses
 
@@ -46,6 +46,6 @@ The word senses
 
 > **word**: `string`
 
-Defined in: [types.ts:513](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L513)
+Defined in: [types.ts:575](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L575)
 
 The "title" (word) of the page

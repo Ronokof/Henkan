@@ -8,7 +8,7 @@
 
 > **getKanji**(`searchedKanji`, `dict?`, `jmDict?`, `svgList?`, `noteTypeName?`, `deckPath?`): [`Kanji`](../interfaces/Kanji.md) \| `undefined`
 
-Defined in: [utils.ts:1777](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1777)
+Defined in: [utils.ts:2016](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2016)
 
 Transforms a converted `KANJIDIC` entry into a more readable format, by providing either the kanji or the [DictKanji](../interfaces/DictKanji.md) object directly.
 

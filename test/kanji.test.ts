@@ -230,6 +230,7 @@ beforeAll(() => {
 
   entryMaps = createEntryMaps(
     convertedJMdict,
+    undefined,
     convertedKanjiDic,
     undefined,
     undefined,

@@ -8,7 +8,7 @@
 
 > **hiraganaToKatakana**(`input`): `string`
 
-Defined in: [utils.ts:124](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L124)
+Defined in: [utils.ts:127](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L127)
 
 Convert hiragana text to katakana text
 

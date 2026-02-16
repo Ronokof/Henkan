@@ -2,11 +2,11 @@
 
 ***
 
-[henkan](../README.md) / DictName
+[henkan](../README.md) / DictNames
 
-# Type Alias: DictName
+# Type Alias: DictNames
 
-> **DictName** = `"JMDict"` \| `"Kanjidic"` \| `"tanaka"` \| `"radk"` \| `"krad"`
+> **DictNames** = `"JMDict"` \| `"Kanjidic"` \| `"tanaka"` \| `"radk"` \| `"krad"`
 
 Defined in: [types.ts:50](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L50)
 

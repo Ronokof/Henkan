@@ -8,6 +8,6 @@
 
 > **KanjiEntryMap** = `Map`\<`string`, [`DictKanji`](../interfaces/DictKanji.md)\>
 
-Defined in: [types.ts:447](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L447)
+Defined in: [types.ts:501](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L501)
 
 A `KANJIDIC kanji character` ---> [DictKanji](../interfaces/DictKanji.md) `object` map

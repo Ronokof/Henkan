@@ -6,7 +6,7 @@
 
 # Interface: Definition
 
-Defined in: [types.ts:531](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L531)
+Defined in: [types.ts:593](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L593)
 
 A word definition
 
@@ -16,7 +16,7 @@ A word definition
 
 > **definition**: `string`
 
-Defined in: [types.ts:535](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L535)
+Defined in: [types.ts:597](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L597)
 
 The definition
 
@@ -26,7 +26,7 @@ The definition
 
 > `optional` **furigana**: `string`
 
-Defined in: [types.ts:539](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L539)
+Defined in: [types.ts:601](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L601)
 
 The definition with furigana attached
 
@@ -36,7 +36,7 @@ The definition with furigana attached
 
 > `optional` **mayNotBeAccurate**: `1` \| `2`
 
-Defined in: [types.ts:547](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L547)
+Defined in: [types.ts:609](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L609)
 
 Whether or not the definition is associated with other words
 

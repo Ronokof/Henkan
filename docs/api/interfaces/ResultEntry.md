@@ -6,7 +6,7 @@
 
 # Interface: ResultEntry\<E\>
 
-Defined in: [types.ts:589](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L589)
+Defined in: [types.ts:657](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L657)
 
 Basic Anki note information
 
@@ -15,6 +15,7 @@ Basic Anki note information
 - [`Kanji`](Kanji.md)
 - [`Radical`](Radical.md)
 - [`Word`](Word.md)
+- [`Name`](Name.md)
 - [`Kana`](Kana.md)
 - [`Grammar`](Grammar.md)
 
@@ -30,7 +31,7 @@ Basic Anki note information
 
 > `optional` **deckPath**: `string`
 
-Defined in: [types.ts:605](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L605)
+Defined in: [types.ts:673](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L673)
 
 The full path of the Anki deck
 
@@ -40,7 +41,7 @@ The full path of the Anki deck
 
 > `optional` **doNotCreateNote**: `true`
 
-Defined in: [types.ts:613](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L613)
+Defined in: [types.ts:681](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L681)
 
 Whether or not this entry should be converted into an Anki note
 
@@ -50,7 +51,7 @@ Whether or not this entry should be converted into an Anki note
 
 > `optional` **id**: `` `${number}` ``
 
-Defined in: [types.ts:597](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L597)
+Defined in: [types.ts:665](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L665)
 
 ID used for the Anki note ID
 
@@ -60,7 +61,7 @@ ID used for the Anki note ID
 
 > `optional` **noteID**: `string`
 
-Defined in: [types.ts:593](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L593)
+Defined in: [types.ts:661](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L661)
 
 ID used for the resulting Anki note
 
@@ -70,7 +71,7 @@ ID used for the resulting Anki note
 
 > `optional` **noteTypeName**: `string`
 
-Defined in: [types.ts:601](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L601)
+Defined in: [types.ts:669](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L669)
 
 Anki note type name
 
@@ -80,6 +81,6 @@ Anki note type name
 
 > `optional` **tags**: `string`[]
 
-Defined in: [types.ts:609](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L609)
+Defined in: [types.ts:677](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L677)
 
 Tags generated based on the entry's information

@@ -8,9 +8,9 @@
 
 Defined in: [types.ts:86](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L86)
 
-Word reading information
+Word/Name reading information
 
-Equivalent to the `r_ele` JMdict element
+Equivalent to the `r_ele` JMdict/JMnedict element
 
 ## Properties
 

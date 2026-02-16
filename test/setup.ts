@@ -11,6 +11,7 @@ const gunzip: (
 
 export type DictNames =
   | "JMdict_e"
+  | "JMnedict.xml"
   | "kanjidic2.xml"
   | "examples.utf"
   | "radkfile2"
@@ -38,6 +39,7 @@ export type DictTypes =
 
 const dictURLs: Map<DictNames, string> = new Map<DictNames, string>([
   ["JMdict_e", "http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz"],
+  ["JMnedict.xml", "http://ftp.edrdg.org/pub/Nihongo/JMnedict.xml.gz"],
   ["kanjidic2.xml", "http://www.edrdg.org/kanjidic/kanjidic2.xml.gz"],
   ["examples.utf", "http://ftp.edrdg.org/pub/Nihongo/examples.utf.gz"],
   ["kradfile2", "http://ftp.edrdg.org/pub/Nihongo/kradzip.zip"],
@@ -99,6 +101,7 @@ const dictURLs: Map<DictNames, string> = new Map<DictNames, string>([
 declare module "vitest" {
   export interface ProvidedContext {
     JMdict_e: string;
+    "JMnedict.xml": string;
     "kanjidic2.xml": string;
     "examples.utf": string;
     kradfile2: Buffer<ArrayBuffer>;
@@ -125,8 +128,7 @@ export default async function setup(project: TestProject): Promise<void> {
     let filename: string | undefined = urlSplit[urlSplit.length - 1];
     if (filename === undefined) throw new Error("Invalid filename");
 
-    if (url.endsWith(".gz")) filename = filename.replace(".gz", "");
-    else if (url.endsWith(".zip")) filename = filename.replace(".zip", "");
+    if (url.endsWith(".zip")) filename = filename.replace(".zip", "");
 
     const res: Response = await fetch(url);
     const res2: Response | undefined = url.endsWith(".json")

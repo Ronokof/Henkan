@@ -2,27 +2,31 @@
 
 ***
 
-[henkan](../README.md) / Grammar
+[henkan](../README.md) / Name
 
-# Interface: Grammar
+# Interface: Name
 
-Defined in: [types.ts:1021](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1021)
+Defined in: [types.ts:955](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L955)
 
-Grammar point information
+Name information
+
+Converted from [DictName](DictName.md)
 
 ## Extends
 
-- [`ResultEntry`](ResultEntry.md)\<`"grammar"`\>
+- [`ResultEntry`](ResultEntry.md)\<`"name"`\>
 
 ## Properties
 
-### audio?
+### common?
 
-> `optional` **audio**: `string`
+> `optional` **common**: `true`
 
-Defined in: [types.ts:1053](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1053)
+Defined in: [types.ts:979](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L979)
 
-The filename of an audio file for the grammar point
+#### See
+
+[DictName.isCommon](DictName.md#iscommon)
 
 ***
 
@@ -68,23 +72,33 @@ ID used for the Anki note ID
 
 ***
 
-### jlpt?
+### kanji?
 
-> `optional` **jlpt**: `` `N${number}` ``
+> `optional` **kanji**: [`Kanji`](Kanji.md)[]
 
-Defined in: [types.ts:1045](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1045)
+Defined in: [types.ts:971](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L971)
 
-The [post-2010 JLPT](https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_Test#Test_format) level
+A list of kanji used in the kanji forms
 
 ***
 
-### meaning
+### kanjiForms?
 
-> **meaning**: [`GrammarMeaning`](GrammarMeaning.md)
+> `optional` **kanjiForms**: [`KanjiForm`](KanjiForm.md)[]
 
-Defined in: [types.ts:1029](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1029)
+Defined in: [types.ts:967](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L967)
 
-The English meaning/translation of the grammar point
+The name kanji forms
+
+***
+
+### nameReadings
+
+> **nameReadings**: [`Reading`](Reading.md)[]
+
+Defined in: [types.ts:959](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L959)
+
+The name readings (in kana)
 
 ***
 
@@ -120,39 +134,9 @@ Anki note type name
 
 > `optional` **phrases**: [`Phrase`](Phrase.md)[]
 
-Defined in: [types.ts:1041](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1041)
+Defined in: [types.ts:975](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L975)
 
-Example phrase using the grammar point
-
-***
-
-### point
-
-> `readonly` **point**: `string`
-
-Defined in: [types.ts:1025](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1025)
-
-The most common form in which the grammar point written in
-
-***
-
-### readings?
-
-> `optional` **readings**: [`Reading`](Reading.md)[]
-
-Defined in: [types.ts:1033](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1033)
-
-The readings of the grammar point
-
-***
-
-### source?
-
-> `optional` **source**: `string`
-
-Defined in: [types.ts:1049](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1049)
-
-The source from which data for this grammar point has been extracted
+Phrases associated to the name
 
 ***
 
@@ -170,10 +154,10 @@ Tags generated based on the entry's information
 
 ***
 
-### usages?
+### translations
 
-> `optional` **usages**: `string`[]
+> **translations**: [`Translation`](Translation.md)[]
 
-Defined in: [types.ts:1037](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1037)
+Defined in: [types.ts:963](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L963)
 
-Ways in which the grammar point is used in Japanese
+The name translations

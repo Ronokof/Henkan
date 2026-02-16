@@ -8,6 +8,6 @@
 
 > **WordIDEntryMap** = `Map`\<[`StringNumber`](StringNumber.md), [`DictWord`](../interfaces/DictWord.md)\>
 
-Defined in: [types.ts:443](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L443)
+Defined in: [types.ts:493](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L493)
 
 A `JMdict entry ID` ---> [DictWord](../interfaces/DictWord.md) `object` map

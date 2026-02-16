@@ -6,17 +6,19 @@
 
 # Function: createEntryMaps()
 
-> **createEntryMaps**(`jmDict?`, `kanjiDic?`, `tanakaExamples?`, `wordDefinitionPairs?`, `svgList?`): [`EntryMaps`](../interfaces/EntryMaps.md)
+> **createEntryMaps**(`jmDict?`, `jmNedict?`, `kanjiDic?`, `tanakaExamples?`, `wordDefinitionPairs?`, `svgList?`): [`EntryMaps`](../interfaces/EntryMaps.md)
 
-Defined in: [utils.ts:821](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L821)
+Defined in: [utils.ts:956](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L956)
 
 Maps entry properties (IDs and kanji) with other entries.
 
 - [jmDict](#createentrymaps) => [WordIDEntryMap](../type-aliases/WordIDEntryMap.md), [KanjiWordsMap](../type-aliases/KanjiWordsMap.md)
 
+- [jmNedict](#createentrymaps) => [NameIDEntryMap](../type-aliases/NameIDEntryMap.md)
+
 - [kanjiDic](#createentrymaps) => [KanjiEntryMap](../type-aliases/KanjiEntryMap.md), [KanjiSVGMap](../type-aliases/KanjiSVGMap.md) (only if [svgList](#createentrymaps) is present)
 
-- [tanakaExamples](#createentrymaps) (requires [jmDict](#createentrymaps)) => [WordExamplesMap](../type-aliases/WordExamplesMap.md)
+- [tanakaExamples](#createentrymaps) => [EntryExamplesMap](../type-aliases/EntryExamplesMap.md) (requires [jmDict](#createentrymaps) or/and [jmNedict](#createentrymaps))
 
 - [wordDefinitionPairs](#createentrymaps) => [WordDefinitionsMap](../type-aliases/WordDefinitionsMap.md)
 
@@ -27,6 +29,10 @@ Maps entry properties (IDs and kanji) with other entries.
 readonly [`DictWord`](../interfaces/DictWord.md)[]
 
 An array of converted `JMdict` entries
+
+### jmNedict?
+
+readonly [`DictName`](../interfaces/DictName.md)[]
 
 ### kanjiDic?
 

@@ -8,9 +8,9 @@
 
 Defined in: [types.ts:62](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L62)
 
-Word kanji form information
+Word/Name kanji form information
 
-Equivalent to the `k_ele` JMdict element
+Equivalent to the `k_ele` JMdict/JMnedict element
 
 ## Properties
 

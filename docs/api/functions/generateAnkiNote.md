@@ -8,7 +8,7 @@
 
 > **generateAnkiNote**(`entry`, `customData?`, `additionalTags?`): `string`[]
 
-Defined in: [utils.ts:2643](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2643)
+Defined in: [utils.ts:3151](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L3151)
 
 Generates an array where each field holds an entry’s info wrapped in HTML tags.
 
@@ -18,7 +18,7 @@ Generates an array where each field holds an entry’s info wrapped in HTML tags
 
 [`Result`](../type-aliases/Result.md)
 
-Any type of mapped entry ([Word](../interfaces/Word.md), [Kanji](../interfaces/Kanji.md), [Radical](../interfaces/Radical.md), [Kana](../interfaces/Kana.md), [Grammar](../interfaces/Grammar.md))
+Any type of mapped entry ([Word](../interfaces/Word.md), [Name](../interfaces/Name.md), [Kanji](../interfaces/Kanji.md), [Radical](../interfaces/Radical.md), [Kana](../interfaces/Kana.md), [Grammar](../interfaces/Grammar.md))
 
 ### customData?
 

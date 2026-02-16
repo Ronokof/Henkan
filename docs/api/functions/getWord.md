@@ -8,7 +8,7 @@
 
 > **getWord**(`searchedWord`, `dict?`, `kanjiDic?`, `examples?`, `definitions?`, `noteTypeName?`, `deckPath?`): [`Word`](../interfaces/Word.md) \| `undefined`
 
-Defined in: [utils.ts:2048](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2048)
+Defined in: [utils.ts:2287](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2287)
 
 Transforms a converted `JMdict` entry into a more readable format, by providing either its JMdict entry ID or the [DictWord](../interfaces/DictWord.md) object directly.
 
@@ -34,9 +34,9 @@ An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/Ka
 
 ### examples?
 
-An array of converted `Tanaka Corpus` examples or a [WordExamplesMap](../type-aliases/WordExamplesMap.md)
+An array of converted `Tanaka Corpus` examples or a [EntryExamplesMap](../type-aliases/EntryExamplesMap.md)
 
-[`WordExamplesMap`](../type-aliases/WordExamplesMap.md) | readonly [`TanakaExample`](../interfaces/TanakaExample.md)[]
+[`EntryExamplesMap`](../type-aliases/EntryExamplesMap.md) | readonly [`TanakaExample`](../interfaces/TanakaExample.md)[]
 
 ### definitions?
 

@@ -8,6 +8,6 @@
 
 > **KanjiWordsMap** = `Map`\<`string`, [`DictWord`](../interfaces/DictWord.md)[]\>
 
-Defined in: [types.ts:455](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L455)
+Defined in: [types.ts:509](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L509)
 
 A `KANJIDIC kanji character` ---> `JMdict entries with kanji forms that include the kanji` map

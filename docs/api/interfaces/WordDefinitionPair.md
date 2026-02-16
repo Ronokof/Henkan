@@ -6,7 +6,7 @@
 
 # Interface: WordDefinitionPair
 
-Defined in: [types.ts:553](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L553)
+Defined in: [types.ts:615](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L615)
 
 A word paired with its definitions
 
@@ -16,7 +16,7 @@ A word paired with its definitions
 
 > **definitions**: [`Definition`](Definition.md)[]
 
-Defined in: [types.ts:561](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L561)
+Defined in: [types.ts:623](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L623)
 
 The word definitions
 
@@ -26,7 +26,7 @@ The word definitions
 
 > `optional` **wordForms**: `Set`\<`string`\>
 
-Defined in: [types.ts:567](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L567)
+Defined in: [types.ts:629](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L629)
 
 The word's readings and/or kanji forms used when searching definitions.
 
@@ -38,6 +38,6 @@ The word's readings and/or kanji forms used when searching definitions.
 
 > **wordID**: `` `${number}` ``
 
-Defined in: [types.ts:557](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L557)
+Defined in: [types.ts:619](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L619)
 
 The word's JMdict entry ID
