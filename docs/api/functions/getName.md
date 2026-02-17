@@ -8,7 +8,7 @@
 
 > **getName**(`searchedName`, `dict?`, `kanjiDic?`, `examples?`, `noteTypeName?`, `deckPath?`): [`Name`](../interfaces/Name.md) \| `undefined`
 
-Defined in: [utils.ts:2813](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2813)
+Defined in: [utils.ts:2725](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L2725)
 
 Transforms a converted `JMnedict` entry into a more readable format, by providing either its JMnedict entry ID or the [DictName](../interfaces/DictName.md) object directly.
 

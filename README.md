@@ -33,7 +33,7 @@ pnpm add henkan
 ```
 
 # Features
- - JMdict, KANJIDIC, Tanaka Corpus, RADK and KRAD conversion
+ - JMdict, JMnedict, KANJIDIC, Tanaka Corpus, RADK and KRAD conversion
  - User-friendly schemas for dictionary entries
  - Anki note generation
  - "Japanese definition"-"JMdict entry" pairing (using `ja.wiktionary.org` dumps)

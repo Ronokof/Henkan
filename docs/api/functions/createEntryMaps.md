@@ -8,7 +8,7 @@
 
 > **createEntryMaps**(`jmDict?`, `jmNedict?`, `kanjiDic?`, `tanakaExamples?`, `wordDefinitionPairs?`, `svgList?`): [`EntryMaps`](../interfaces/EntryMaps.md)
 
-Defined in: [utils.ts:956](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L956)
+Defined in: [utils.ts:950](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L950)
 
 Maps entry properties (IDs and kanji) with other entries.
 

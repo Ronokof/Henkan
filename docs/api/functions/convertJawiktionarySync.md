@@ -8,7 +8,7 @@
 
 > **convertJawiktionarySync**(`buffer`): [`JaWiktionaryEntry`](../interfaces/JaWiktionaryEntry.md)[]
 
-Defined in: [utils.ts:1272](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1272)
+Defined in: [utils.ts:1242](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1242)
 
 Converts and filters a `ja.wiktionary.org` JSONL dump (sync)
 

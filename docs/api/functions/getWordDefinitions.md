@@ -8,7 +8,7 @@
 
 > **getWordDefinitions**(`wiktionaryEntries`, `jmDict`): [`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
 
-Defined in: [utils.ts:1353](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1353)
+Defined in: [utils.ts:1323](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L1323)
 
 Pairs Japanese definitions with JMdict word entries
 
