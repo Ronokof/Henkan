@@ -8,7 +8,7 @@
 
 > **generateAnkiNotesFile**(`list`, `defaultNoteInfo?`, `customData?`, `additionalTags?`): `string`
 
-Defined in: [utils.ts:3643](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L3643)
+Defined in: [utils.ts:3649](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L3649)
 
 Generates an Anki notes file with each entry’s info organized into fields, either in HTML or plain text.
 

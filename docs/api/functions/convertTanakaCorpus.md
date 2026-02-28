@@ -8,7 +8,7 @@
 
 > **convertTanakaCorpus**(`tanakaString`): [`TanakaExample`](../interfaces/TanakaExample.md)[]
 
-Defined in: [utils.ts:692](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L692)
+Defined in: [utils.ts:698](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L698)
 
 Converts a Tanaka Corpus `examples.utf` file into an array of [TanakaExample](../interfaces/TanakaExample.md) objects.
 

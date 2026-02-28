@@ -218,54 +218,60 @@ export function getValidForms(
 ): ReadingsKanjiFormsPair {
   const kanjiFormRestrictions: Set<string> = new Set<string>();
 
-  const validReadings: DictReading[] = readings.filter(
-    (reading: DictReading, index: number) => {
-      if (index === 0) return true;
+  const existValidReadings: boolean = readings.some(
+    (r: DictReading) =>
+      r.commonness !== undefined ||
+      ((r.notes === undefined ||
+        !r.notes.some((note: string) => notSearchedForms.has(note))) &&
+        (r.kanjiFormRestrictions !== undefined || wordIsCommon === undefined)),
+  );
 
-      if (
-        reading.notes === undefined ||
-        !reading.notes.some((note: string) => notSearchedForms.has(note))
-      ) {
-        if (reading.kanjiFormRestrictions !== undefined) {
-          for (const kfr of reading.kanjiFormRestrictions)
-            kanjiFormRestrictions.add(kfr);
+  const validReadings: DictReading[] = readings.filter((r: DictReading) => {
+    if (
+      !existValidReadings ||
+      r.commonness !== undefined ||
+      r.notes === undefined ||
+      !r.notes.some((note: string) => notSearchedForms.has(note))
+    ) {
+      if (r.kanjiFormRestrictions !== undefined) {
+        for (const kfr of r.kanjiFormRestrictions)
+          kanjiFormRestrictions.add(kfr);
 
-          return true;
-        }
-
-        if (wordIsCommon === undefined || reading.commonness !== undefined)
+        if (
+          r.notes === undefined ||
+          !r.notes.some((note: string) => notSearchedForms.has(note))
+        )
           return true;
       }
 
-      return false;
-    },
-  );
+      if (
+        !existValidReadings ||
+        wordIsCommon === undefined ||
+        r.commonness !== undefined
+      )
+        return true;
+    }
 
-  const existValidKf: boolean | undefined = kanjiForms?.some(
-    (kf: DictKanjiForm, index: number) =>
-      index !== 0 &&
-      (kf.notes === undefined ||
-        (!kf.notes.some((note: string) => notSearchedForms.has(note)) &&
-          (wordIsCommon === undefined || kf.commonness !== undefined)) ||
-        kanjiFormRestrictions.has(kf.form)),
+    return false;
+  });
+
+  const existValidKanjiForms: boolean | undefined = kanjiForms?.some(
+    (kf: DictKanjiForm) =>
+      kanjiFormRestrictions.has(kf.form) ||
+      kf.commonness !== undefined ||
+      ((kf.notes === undefined ||
+        !kf.notes.some((note: string) => notSearchedForms.has(note))) &&
+        wordIsCommon === undefined),
   );
 
   const validKanjiForms: DictKanjiForm[] | undefined = kanjiForms?.filter(
-    (kanjiForm: DictKanjiForm, index: number) => {
-      if (index === 0) return true;
-
-      if (existValidKf === true)
-        return (
-          kanjiForm.notes === undefined ||
-          (!kanjiForm.notes.some((note: string) =>
-            notSearchedForms.has(note),
-          ) &&
-            (wordIsCommon === undefined ||
-              kanjiForm.commonness !== undefined)) ||
-          kanjiFormRestrictions.has(kanjiForm.form)
-        );
-      else return true;
-    },
+    (kf: DictKanjiForm) =>
+      existValidKanjiForms === false ||
+      kanjiFormRestrictions.has(kf.form) ||
+      kf.commonness !== undefined ||
+      ((kf.notes === undefined ||
+        !kf.notes.some((note: string) => notSearchedForms.has(note))) &&
+        wordIsCommon === undefined),
   );
 
   return {

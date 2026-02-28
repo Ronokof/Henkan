@@ -8,7 +8,7 @@
 
 > **convertJMnedict**(`xmlString`, `examples?`): [`DictName`](../interfaces/DictName.md)[]
 
-Defined in: [utils.ts:470](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L470)
+Defined in: [utils.ts:476](https://github.com/Ronokof/Henkan/blob/main/src/utils.ts#L476)
 
 Converts a JMnedict `JMnedict.xml` file into an array of [DictWord](../interfaces/DictWord.md) objects.
 
