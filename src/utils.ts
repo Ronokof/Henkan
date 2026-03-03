@@ -2293,26 +2293,38 @@ export function getWord(
       tags: [],
     };
 
-    if (dictWord.isCommon === true) {
-      word.common = true;
-      word.tags!.push("word::common");
-    }
+    if (dictWord.isCommon === true) word.common = true;
+
+    const priorities: Set<string> = new Set<string>();
 
     if (dictWord.kanjiForms !== undefined)
       word.kanjiForms = dictWord.kanjiForms.map(
         (dictKanjiForm: DictKanjiForm) => ({
           kanjiForm: dictKanjiForm.form,
-          ...(dictKanjiForm.notes !== undefined
+          ...(dictKanjiForm.notes !== undefined ||
+          dictKanjiForm.commonness !== undefined
             ? {
-                notes: dictKanjiForm.notes.map((note: string) => {
-                  const noteAndTag: NoteAndTag = lookupWordNote(
-                    note,
-                    [],
-                    word.tags!,
-                  );
+                notes: [
+                  ...(dictKanjiForm.commonness !== undefined
+                    ? ["Common kanji form"].map((commonKf: string) => {
+                        for (const priority of dictKanjiForm.commonness!) {
+                          word.tags!.push(`word::common::${priority}`);
+                          priorities.add(priority);
+                        }
 
-                  return capitalizeString(noteAndTag.note);
-                }),
+                        return commonKf;
+                      })
+                    : []),
+                  ...(dictKanjiForm.notes?.map((note: string) => {
+                    const noteAndTag: NoteAndTag = lookupWordNote(
+                      note,
+                      [],
+                      word.tags!,
+                    );
+
+                    return capitalizeString(noteAndTag.note);
+                  }) ?? []),
+                ],
               }
             : {}),
           ...(dictKanjiForm.commonness !== undefined &&
@@ -2325,25 +2337,38 @@ export function getWord(
     word.readings = dictWord.readings.map((dictReading: DictReading) => ({
       reading: dictReading.reading,
       ...(dictReading.kanjiFormRestrictions !== undefined ||
-      dictReading.notes !== undefined
+      dictReading.notes !== undefined ||
+      dictReading.commonness !== undefined
         ? {
             notes: [
+              ...(dictReading.notes !== undefined ||
+              dictReading.commonness !== undefined
+                ? [
+                    ...(dictReading.commonness !== undefined
+                      ? ["Common reading"].map((commonR: string) => {
+                          for (const priority of dictReading.commonness!)
+                            if (!priorities.has(priority))
+                              word.tags!.push(`word::common::${priority}`);
+
+                          return commonR;
+                        })
+                      : []),
+                    ...(dictReading.notes?.map((note: string) => {
+                      const noteAndTag: NoteAndTag = lookupWordNote(
+                        note,
+                        [],
+                        word.tags!,
+                      );
+
+                      return capitalizeString(noteAndTag.note);
+                    }) ?? []),
+                  ]
+                : []),
               ...(dictReading.kanjiFormRestrictions !== undefined
                 ? dictReading.kanjiFormRestrictions.map(
                     (restriction: string) =>
                       `Reading restricted to ${restriction}`,
                   )
-                : []),
-              ...(dictReading.notes !== undefined
-                ? dictReading.notes.map((note: string) => {
-                    const noteAndTag: NoteAndTag = lookupWordNote(
-                      note,
-                      [],
-                      word.tags!,
-                    );
-
-                    return capitalizeString(noteAndTag.note);
-                  })
                 : []),
             ],
           }
@@ -2760,10 +2785,7 @@ export function getName(
       tags: [],
     };
 
-    if (dictName.isCommon === true) {
-      name.common = true;
-      name.tags!.push("name::common");
-    }
+    if (dictName.isCommon === true) name.common = true;
 
     if (dictName.kanjiForms !== undefined)
       name.kanjiForms = dictName.kanjiForms.map(
@@ -2775,11 +2797,23 @@ export function getName(
     name.nameReadings = dictName.nameReadings.map(
       (dictReading: DictReading) => ({
         reading: dictReading.reading,
-        ...(dictReading.kanjiFormRestrictions !== undefined
+        ...(dictReading.kanjiFormRestrictions !== undefined ||
+        dictReading.commonness !== undefined
           ? {
-              notes: dictReading.kanjiFormRestrictions.map(
-                (restriction: string) => `Reading restricted to ${restriction}`,
-              ),
+              notes: [
+                ...(dictReading.commonness !== undefined
+                  ? ["Common reading"].map((commonR: string) => {
+                      for (const priority of dictReading.commonness!)
+                        name.tags!.push(`name::common::${priority}`);
+
+                      return commonR;
+                    })
+                  : []),
+                ...(dictReading.kanjiFormRestrictions?.map(
+                  (restriction: string) =>
+                    `Reading restricted to ${restriction}`,
+                ) ?? []),
+              ],
             }
           : {}),
         ...(dictReading.commonness !== undefined &&

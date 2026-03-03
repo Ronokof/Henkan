@@ -1,6 +1,6 @@
 {
   "name": "henkan",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Converter & Simplifier for JMdict, JMnedict, KANJIDIC, KRADFILE2, RADKFILE2 and Tanaka Corpus",
   "keywords": [
     "fjsd",
