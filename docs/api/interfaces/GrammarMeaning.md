@@ -14,7 +14,7 @@ Grammar point meaning
 
 ### example?
 
-> `optional` **example**: `string`
+> `optional` **example?**: `string`
 
 Defined in: [types.ts:1015](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1015)
 

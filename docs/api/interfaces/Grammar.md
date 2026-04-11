@@ -18,7 +18,7 @@ Grammar point information
 
 ### audio?
 
-> `optional` **audio**: `string`
+> `optional` **audio?**: `string`
 
 Defined in: [types.ts:1053](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1053)
 
@@ -28,7 +28,7 @@ The filename of an audio file for the grammar point
 
 ### deckPath?
 
-> `optional` **deckPath**: `string`
+> `optional` **deckPath?**: `string`
 
 Defined in: [types.ts:673](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L673)
 
@@ -42,7 +42,7 @@ The full path of the Anki deck
 
 ### doNotCreateNote?
 
-> `optional` **doNotCreateNote**: `true`
+> `optional` **doNotCreateNote?**: `true`
 
 Defined in: [types.ts:681](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L681)
 
@@ -56,7 +56,7 @@ Whether or not this entry should be converted into an Anki note
 
 ### id?
 
-> `optional` **id**: `` `${number}` ``
+> `optional` **id?**: `` `${number}` ``
 
 Defined in: [types.ts:665](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L665)
 
@@ -70,7 +70,7 @@ ID used for the Anki note ID
 
 ### jlpt?
 
-> `optional` **jlpt**: `` `N${number}` ``
+> `optional` **jlpt?**: `` `N${number}` ``
 
 Defined in: [types.ts:1045](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1045)
 
@@ -90,7 +90,7 @@ The English meaning/translation of the grammar point
 
 ### noteID?
 
-> `optional` **noteID**: `string`
+> `optional` **noteID?**: `string`
 
 Defined in: [types.ts:661](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L661)
 
@@ -104,7 +104,7 @@ ID used for the resulting Anki note
 
 ### noteTypeName?
 
-> `optional` **noteTypeName**: `string`
+> `optional` **noteTypeName?**: `string`
 
 Defined in: [types.ts:669](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L669)
 
@@ -118,7 +118,7 @@ Anki note type name
 
 ### phrases?
 
-> `optional` **phrases**: [`Phrase`](Phrase.md)[]
+> `optional` **phrases?**: [`Phrase`](Phrase.md)[]
 
 Defined in: [types.ts:1041](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1041)
 
@@ -138,7 +138,7 @@ The most common form in which the grammar point written in
 
 ### readings?
 
-> `optional` **readings**: [`Reading`](Reading.md)[]
+> `optional` **readings?**: [`Reading`](Reading.md)[]
 
 Defined in: [types.ts:1033](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1033)
 
@@ -148,7 +148,7 @@ The readings of the grammar point
 
 ### source?
 
-> `optional` **source**: `string`
+> `optional` **source?**: `string`
 
 Defined in: [types.ts:1049](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1049)
 
@@ -158,7 +158,7 @@ The source from which data for this grammar point has been extracted
 
 ### tags?
 
-> `optional` **tags**: `string`[]
+> `optional` **tags?**: `string`[]
 
 Defined in: [types.ts:677](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L677)
 
@@ -172,7 +172,7 @@ Tags generated based on the entry's information
 
 ### usages?
 
-> `optional` **usages**: `string`[]
+> `optional` **usages?**: `string`[]
 
 Defined in: [types.ts:1037](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1037)
 

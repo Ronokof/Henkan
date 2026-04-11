@@ -16,7 +16,7 @@ Converted from [DictMeaning](DictMeaning.md) or [NeDictMeaning](NeDictMeaning.md
 
 ### notes?
 
-> `optional` **notes**: `string`[]
+> `optional` **notes?**: `string`[]
 
 Defined in: [types.ts:755](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L755)
 

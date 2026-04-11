@@ -40,7 +40,7 @@ describe("radicals note generation", () => {
         noteType: true,
         deckPath: true,
       }),
-    ).toThrowError("Invalid result list");
+    ).toThrow("Invalid result list");
 
     radicals[randomIndex]!.noteTypeName = noteTypeName;
     radicals[randomIndex]!.deckPath = undefined;
@@ -51,26 +51,26 @@ describe("radicals note generation", () => {
         noteType: true,
         deckPath: true,
       }),
-    ).toThrowError("Invalid result list");
+    ).toThrow("Invalid result list");
 
     radicals[randomIndex]!.deckPath = deckPath;
     radicals[randomIndex]!.noteID = undefined;
 
-    expect(() => generateAnkiNotesFile(radicals)).toThrowError(
+    expect(() => generateAnkiNotesFile(radicals)).toThrow(
       "Invalid result list",
     );
 
     radicals[randomIndex]!.noteID = noteID;
     radicals[randomIndex]!.noteTypeName = undefined;
 
-    expect(() => generateAnkiNotesFile(radicals)).toThrowError(
+    expect(() => generateAnkiNotesFile(radicals)).toThrow(
       "Invalid result list",
     );
 
     radicals[randomIndex]!.noteTypeName = noteTypeName;
     radicals[randomIndex]!.deckPath = undefined;
 
-    expect(() => generateAnkiNotesFile(radicals)).toThrowError(
+    expect(() => generateAnkiNotesFile(radicals)).toThrow(
       "Invalid result list",
     );
 

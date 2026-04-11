@@ -24,7 +24,7 @@ The definition
 
 ### furigana?
 
-> `optional` **furigana**: `string`
+> `optional` **furigana?**: `string`
 
 Defined in: [types.ts:601](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L601)
 
@@ -34,7 +34,7 @@ The definition with furigana attached
 
 ### mayNotBeAccurate?
 
-> `optional` **mayNotBeAccurate**: `1` \| `2`
+> `optional` **mayNotBeAccurate?**: `1` \| `2`
 
 Defined in: [types.ts:609](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L609)
 

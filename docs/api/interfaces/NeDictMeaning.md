@@ -16,7 +16,7 @@ Equivalent to the `trans` JMnedict element
 
 ### nameTypes?
 
-> `optional` **nameTypes**: `string`[]
+> `optional` **nameTypes?**: `string`[]
 
 Defined in: [types.ts:237](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L237)
 

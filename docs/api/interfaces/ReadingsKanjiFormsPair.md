@@ -14,7 +14,7 @@ A word's readings-kanji forms pair
 
 ### kanjiForms?
 
-> `optional` **kanjiForms**: [`DictKanjiForm`](DictKanjiForm.md)[]
+> `optional` **kanjiForms?**: [`DictKanjiForm`](DictKanjiForm.md)[]
 
 Defined in: [types.ts:120](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L120)
 

@@ -16,7 +16,7 @@ Equivalent to the `r_ele` JMdict/JMnedict element
 
 ### commonness?
 
-> `optional` **commonness**: `string`[]
+> `optional` **commonness?**: `string`[]
 
 Defined in: [types.ts:102](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L102)
 
@@ -30,7 +30,7 @@ Priority codes
 
 ### kanjiFormRestrictions?
 
-> `optional` **kanjiFormRestrictions**: `string`[]
+> `optional` **kanjiFormRestrictions?**: `string`[]
 
 Defined in: [types.ts:106](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L106)
 
@@ -40,7 +40,7 @@ Kanji forms the reading is restricted to
 
 ### notes?
 
-> `optional` **notes**: `string`[]
+> `optional` **notes?**: `string`[]
 
 Defined in: [types.ts:96](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L96)
 

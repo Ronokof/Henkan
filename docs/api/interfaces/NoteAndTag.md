@@ -24,7 +24,7 @@ The note
 
 ### tag?
 
-> `readonly` `optional` **tag**: `string`
+> `readonly` `optional` **tag?**: `string`
 
 Defined in: [types.ts:695](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L695)
 

@@ -16,27 +16,27 @@ Transforms a converted `KANJIDIC` entry into a more readable format, by providin
 
 ### searchedKanji
 
-The kanji character (requires [dict](#getkanji)) or a [DictKanji](../interfaces/DictKanji.md) object
+`string` \| [`DictKanji`](../interfaces/DictKanji.md)
 
-`string` | [`DictKanji`](../interfaces/DictKanji.md)
+The kanji character (requires [dict](#getkanji)) or a [DictKanji](../interfaces/DictKanji.md) object
 
 ### dict?
 
-An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md) (not needed if [searchedKanji](#getkanji) is a [DictKanji](../interfaces/DictKanji.md) object)
+[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) \| readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 
-[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) | readonly [`DictKanji`](../interfaces/DictKanji.md)[]
+An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md) (not needed if [searchedKanji](#getkanji) is a [DictKanji](../interfaces/DictKanji.md) object)
 
 ### jmDict?
 
-An array of converted `JMdict` entries or a [KanjiWordsMap](../type-aliases/KanjiWordsMap.md)
+[`KanjiWordsMap`](../type-aliases/KanjiWordsMap.md) \| readonly [`DictWord`](../interfaces/DictWord.md)[]
 
-[`KanjiWordsMap`](../type-aliases/KanjiWordsMap.md) | readonly [`DictWord`](../interfaces/DictWord.md)[]
+An array of converted `JMdict` entries or a [KanjiWordsMap](../type-aliases/KanjiWordsMap.md)
 
 ### svgList?
 
-An array of SVG file names or a [KanjiSVGMap](../type-aliases/KanjiSVGMap.md)
+[`KanjiSVGMap`](../type-aliases/KanjiSVGMap.md) \| readonly `string`[]
 
-[`KanjiSVGMap`](../type-aliases/KanjiSVGMap.md) | readonly `string`[]
+An array of SVG file names or a [KanjiSVGMap](../type-aliases/KanjiSVGMap.md)
 
 ### noteTypeName?
 

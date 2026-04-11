@@ -16,7 +16,7 @@ Equivalent to the `reading_meaning` KANJIDIC2 element
 
 ### groups?
 
-> `optional` **groups**: [`DictKanjiReadingMeaningGroup`](DictKanjiReadingMeaningGroup.md)[]
+> `optional` **groups?**: [`DictKanjiReadingMeaningGroup`](DictKanjiReadingMeaningGroup.md)[]
 
 Defined in: [types.ts:345](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L345)
 
@@ -26,7 +26,7 @@ The Kanji "readings-meanings" pairs
 
 ### nanori?
 
-> `optional` **nanori**: `string`[]
+> `optional` **nanori?**: `string`[]
 
 Defined in: [types.ts:349](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L349)
 

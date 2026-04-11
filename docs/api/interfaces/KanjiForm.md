@@ -16,7 +16,7 @@ Converted from a [DictKanjiForm](DictKanjiForm.md)
 
 ### common?
 
-> `optional` **common**: `true`
+> `optional` **common?**: `true`
 
 Defined in: [types.ts:715](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L715)
 
@@ -36,7 +36,7 @@ The kanji form
 
 ### notes?
 
-> `optional` **notes**: `string`[]
+> `optional` **notes?**: `string`[]
 
 Defined in: [types.ts:711](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L711)
 

@@ -16,7 +16,7 @@ Converted from [DictReading](DictReading.md)
 
 ### audio?
 
-> `optional` **audio**: `string`
+> `optional` **audio?**: `string`
 
 Defined in: [types.ts:739](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L739)
 
@@ -26,7 +26,7 @@ The filename of an audio file for the reading
 
 ### common?
 
-> `optional` **common**: `true`
+> `optional` **common?**: `true`
 
 Defined in: [types.ts:735](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L735)
 
@@ -36,7 +36,7 @@ Whether or not the reading is common
 
 ### notes?
 
-> `optional` **notes**: `string`[]
+> `optional` **notes?**: `string`[]
 
 Defined in: [types.ts:731](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L731)
 

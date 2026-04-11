@@ -291,7 +291,7 @@ describe("DictName transformation to Name", () => {
         noteType: true,
         deckPath: true,
       }),
-    ).toThrowError("Invalid result list");
+    ).toThrow("Invalid result list");
 
     entries[randomEntryIndex]!.noteID = noteID;
     entries[randomEntryIndex]!.noteTypeName = undefined;
@@ -302,7 +302,7 @@ describe("DictName transformation to Name", () => {
         noteType: true,
         deckPath: true,
       }),
-    ).toThrowError("Invalid result list");
+    ).toThrow("Invalid result list");
 
     entries[randomEntryIndex]!.noteTypeName = noteTypeName;
     entries[randomEntryIndex]!.deckPath = undefined;
@@ -313,28 +313,22 @@ describe("DictName transformation to Name", () => {
         noteType: true,
         deckPath: true,
       }),
-    ).toThrowError("Invalid result list");
+    ).toThrow("Invalid result list");
 
     entries[randomEntryIndex]!.deckPath = deckPath;
     entries[randomEntryIndex]!.noteID = undefined;
 
-    expect(() => generateAnkiNotesFile(entries)).toThrowError(
-      "Invalid result list",
-    );
+    expect(() => generateAnkiNotesFile(entries)).toThrow("Invalid result list");
 
     entries[randomEntryIndex]!.noteID = noteID;
     entries[randomEntryIndex]!.noteTypeName = undefined;
 
-    expect(() => generateAnkiNotesFile(entries)).toThrowError(
-      "Invalid result list",
-    );
+    expect(() => generateAnkiNotesFile(entries)).toThrow("Invalid result list");
 
     entries[randomEntryIndex]!.noteTypeName = noteTypeName;
     entries[randomEntryIndex]!.deckPath = undefined;
 
-    expect(() => generateAnkiNotesFile(entries)).toThrowError(
-      "Invalid result list",
-    );
+    expect(() => generateAnkiNotesFile(entries)).toThrow("Invalid result list");
 
     entries[randomEntryIndex]!.noteID = undefined;
     entries[randomEntryIndex]!.noteTypeName = undefined;

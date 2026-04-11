@@ -14,7 +14,7 @@ Useful information from a `ja.wiktionary.org` entry
 
 ### forms?
 
-> `optional` **forms**: `string`[]
+> `optional` **forms?**: `string`[]
 
 Defined in: [types.ts:587](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L587)
 
@@ -34,7 +34,7 @@ The part of speech (in Japanese)
 
 ### senses?
 
-> `optional` **senses**: `JaWiktionaryEntrySense`[]
+> `optional` **senses?**: `JaWiktionaryEntrySense`[]
 
 Defined in: [types.ts:583](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L583)
 

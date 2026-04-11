@@ -68,6 +68,6 @@ describe("JMnedict conversion", () => {
   });
 
   it("XML conversion error", () => {
-    expect(() => convertJMnedict("NOTJMNEDICT")).toThrowError();
+    expect(() => convertJMnedict("NOTJMNEDICT")).toThrow();
   });
 });

@@ -24,7 +24,7 @@ The word definitions
 
 ### wordForms?
 
-> `optional` **wordForms**: `Set`\<`string`\>
+> `optional` **wordForms?**: `Set`\<`string`\>
 
 Defined in: [types.ts:629](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L629)
 

@@ -16,7 +16,7 @@ Equivalent to the `misc` KANJIDIC2 element *(excluding some subelements)*
 
 ### frequency?
 
-> `optional` **frequency**: `string`
+> `optional` **frequency?**: `string`
 
 Defined in: [types.ts:299](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L299)
 
@@ -28,7 +28,7 @@ A number from `1` to `2500`
 
 ### grade?
 
-> `optional` **grade**: `string`
+> `optional` **grade?**: `string`
 
 Defined in: [types.ts:293](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L293)
 
@@ -44,7 +44,7 @@ The kanji grade level
 
 ### jlpt?
 
-> `optional` **jlpt**: `` `N${number}` ``
+> `optional` **jlpt?**: `` `N${number}` ``
 
 Defined in: [types.ts:303](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L303)
 
@@ -54,7 +54,7 @@ The [pre-2010 JLPT](https://en.wikipedia.org/wiki/Japanese-Language_Proficiency_
 
 ### strokeNumber?
 
-> `optional` **strokeNumber**: `string`
+> `optional` **strokeNumber?**: `string`
 
 Defined in: [types.ts:283](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L283)
 

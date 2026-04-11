@@ -20,7 +20,7 @@ Converted from [DictWord](DictWord.md)
 
 ### common?
 
-> `optional` **common**: `true`
+> `optional` **common?**: `true`
 
 Defined in: [types.ts:943](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L943)
 
@@ -32,7 +32,7 @@ Defined in: [types.ts:943](https://github.com/Ronokof/Henkan/blob/main/src/types
 
 ### deckPath?
 
-> `optional` **deckPath**: `string`
+> `optional` **deckPath?**: `string`
 
 Defined in: [types.ts:673](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L673)
 
@@ -46,7 +46,7 @@ The full path of the Anki deck
 
 ### definitions?
 
-> `optional` **definitions**: [`Definition`](Definition.md)[]
+> `optional` **definitions?**: [`Definition`](Definition.md)[]
 
 Defined in: [types.ts:939](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L939)
 
@@ -56,7 +56,7 @@ Japanese definitions associated with the word
 
 ### doNotCreateNote?
 
-> `optional` **doNotCreateNote**: `true`
+> `optional` **doNotCreateNote?**: `true`
 
 Defined in: [types.ts:681](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L681)
 
@@ -70,7 +70,7 @@ Whether or not this entry should be converted into an Anki note
 
 ### id?
 
-> `optional` **id**: `` `${number}` ``
+> `optional` **id?**: `` `${number}` ``
 
 Defined in: [types.ts:665](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L665)
 
@@ -84,7 +84,7 @@ ID used for the Anki note ID
 
 ### kanji?
 
-> `optional` **kanji**: [`Kanji`](Kanji.md)[]
+> `optional` **kanji?**: [`Kanji`](Kanji.md)[]
 
 Defined in: [types.ts:931](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L931)
 
@@ -94,7 +94,7 @@ A list of kanji used in the kanji forms
 
 ### kanjiForms?
 
-> `optional` **kanjiForms**: [`KanjiForm`](KanjiForm.md)[]
+> `optional` **kanjiForms?**: [`KanjiForm`](KanjiForm.md)[]
 
 Defined in: [types.ts:927](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L927)
 
@@ -104,7 +104,7 @@ The word kanji forms
 
 ### noteID?
 
-> `optional` **noteID**: `string`
+> `optional` **noteID?**: `string`
 
 Defined in: [types.ts:661](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L661)
 
@@ -118,7 +118,7 @@ ID used for the resulting Anki note
 
 ### noteTypeName?
 
-> `optional` **noteTypeName**: `string`
+> `optional` **noteTypeName?**: `string`
 
 Defined in: [types.ts:669](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L669)
 
@@ -132,7 +132,7 @@ Anki note type name
 
 ### phrases?
 
-> `optional` **phrases**: [`Phrase`](Phrase.md)[]
+> `optional` **phrases?**: [`Phrase`](Phrase.md)[]
 
 Defined in: [types.ts:935](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L935)
 
@@ -152,7 +152,7 @@ The word readings (in kana)
 
 ### tags?
 
-> `optional` **tags**: `string`[]
+> `optional` **tags?**: `string`[]
 
 Defined in: [types.ts:677](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L677)
 
@@ -176,7 +176,7 @@ The word translations/senses
 
 ### usuallyInKana?
 
-> `optional` **usuallyInKana**: `true`
+> `optional` **usuallyInKana?**: `true`
 
 Defined in: [types.ts:947](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L947)
 

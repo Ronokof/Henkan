@@ -16,7 +16,7 @@ Equivalent to the `sense` JMdict element
 
 ### antonyms?
 
-> `optional` **antonyms**: `string`[]
+> `optional` **antonyms?**: `string`[]
 
 Defined in: [types.ts:159](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L159)
 
@@ -26,7 +26,7 @@ References to antonyms of the word *(when used with this meaning)*
 
 ### dialects?
 
-> `optional` **dialects**: `string`[]
+> `optional` **dialects?**: `string`[]
 
 Defined in: [types.ts:181](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L181)
 
@@ -40,7 +40,7 @@ Regional dialects the meaning is restricted to
 
 ### fields?
 
-> `optional` **fields**: `string`[]
+> `optional` **fields?**: `string`[]
 
 Defined in: [types.ts:165](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L165)
 
@@ -54,7 +54,7 @@ Field of application of the word *(when used with this meaning)*
 
 ### info?
 
-> `optional` **info**: `string`[]
+> `optional` **info?**: `string`[]
 
 Defined in: [types.ts:169](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L169)
 
@@ -64,7 +64,7 @@ Additional information about the meaning
 
 ### kanjiFormRestrictions?
 
-> `optional` **kanjiFormRestrictions**: `string`[]
+> `optional` **kanjiFormRestrictions?**: `string`[]
 
 Defined in: [types.ts:151](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L151)
 
@@ -74,7 +74,7 @@ Kanji forms the meaning is restricted to
 
 ### misc?
 
-> `optional` **misc**: `string`[]
+> `optional` **misc?**: `string`[]
 
 Defined in: [types.ts:175](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L175)
 
@@ -102,7 +102,7 @@ Part of speech information
 
 ### readingRestrictions?
 
-> `optional` **readingRestrictions**: `string`[]
+> `optional` **readingRestrictions?**: `string`[]
 
 Defined in: [types.ts:155](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L155)
 
@@ -112,7 +112,7 @@ Readings the meaning is restricted to
 
 ### references?
 
-> `optional` **references**: `string`[]
+> `optional` **references?**: `string`[]
 
 Defined in: [types.ts:147](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L147)
 

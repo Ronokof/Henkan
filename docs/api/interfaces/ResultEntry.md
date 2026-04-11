@@ -29,7 +29,7 @@ Basic Anki note information
 
 ### deckPath?
 
-> `optional` **deckPath**: `string`
+> `optional` **deckPath?**: `string`
 
 Defined in: [types.ts:673](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L673)
 
@@ -39,7 +39,7 @@ The full path of the Anki deck
 
 ### doNotCreateNote?
 
-> `optional` **doNotCreateNote**: `true`
+> `optional` **doNotCreateNote?**: `true`
 
 Defined in: [types.ts:681](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L681)
 
@@ -49,7 +49,7 @@ Whether or not this entry should be converted into an Anki note
 
 ### id?
 
-> `optional` **id**: `` `${number}` ``
+> `optional` **id?**: `` `${number}` ``
 
 Defined in: [types.ts:665](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L665)
 
@@ -59,7 +59,7 @@ ID used for the Anki note ID
 
 ### noteID?
 
-> `optional` **noteID**: `string`
+> `optional` **noteID?**: `string`
 
 Defined in: [types.ts:661](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L661)
 
@@ -69,7 +69,7 @@ ID used for the resulting Anki note
 
 ### noteTypeName?
 
-> `optional` **noteTypeName**: `string`
+> `optional` **noteTypeName?**: `string`
 
 Defined in: [types.ts:669](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L669)
 
@@ -79,7 +79,7 @@ Anki note type name
 
 ### tags?
 
-> `optional` **tags**: `string`[]
+> `optional` **tags?**: `string`[]
 
 Defined in: [types.ts:677](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L677)
 

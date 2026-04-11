@@ -16,33 +16,33 @@ Transforms a converted `JMdict` entry into a more readable format, by providing 
 
 ### searchedWord
 
-The ID of the `JMdict` entry (requires [dict](#getword)) or a [DictWord](../interfaces/DictWord.md) object
+`` `${number}` `` \| [`DictWord`](../interfaces/DictWord.md)
 
-`` `${number}` `` | [`DictWord`](../interfaces/DictWord.md)
+The ID of the `JMdict` entry (requires [dict](#getword)) or a [DictWord](../interfaces/DictWord.md) object
 
 ### dict?
 
-An array converted `JMdict` entries or a [WordIDEntryMap](../type-aliases/WordIDEntryMap.md) *(not needed if [searchedWord](#getword) is a [DictWord](../interfaces/DictWord.md) object)*
+[`WordIDEntryMap`](../type-aliases/WordIDEntryMap.md) \| readonly [`DictWord`](../interfaces/DictWord.md)[]
 
-[`WordIDEntryMap`](../type-aliases/WordIDEntryMap.md) | readonly [`DictWord`](../interfaces/DictWord.md)[]
+An array converted `JMdict` entries or a [WordIDEntryMap](../type-aliases/WordIDEntryMap.md) *(not needed if [searchedWord](#getword) is a [DictWord](../interfaces/DictWord.md) object)*
 
 ### kanjiDic?
 
-An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md)
+[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) \| readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 
-[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) | readonly [`DictKanji`](../interfaces/DictKanji.md)[]
+An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md)
 
 ### examples?
 
-An array of converted `Tanaka Corpus` examples or a [EntryExamplesMap](../type-aliases/EntryExamplesMap.md)
+[`EntryExamplesMap`](../type-aliases/EntryExamplesMap.md) \| readonly [`TanakaExample`](../interfaces/TanakaExample.md)[]
 
-[`EntryExamplesMap`](../type-aliases/EntryExamplesMap.md) | readonly [`TanakaExample`](../interfaces/TanakaExample.md)[]
+An array of converted `Tanaka Corpus` examples or a [EntryExamplesMap](../type-aliases/EntryExamplesMap.md)
 
 ### definitions?
 
-An array of `ja.wiktionary.org` word-definitions pairs or a [WordDefinitionsMap](../type-aliases/WordDefinitionsMap.md)
+[`WordDefinitionsMap`](../type-aliases/WordDefinitionsMap.md) \| readonly [`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
 
-[`WordDefinitionsMap`](../type-aliases/WordDefinitionsMap.md) | readonly [`WordDefinitionPair`](../interfaces/WordDefinitionPair.md)[]
+An array of `ja.wiktionary.org` word-definitions pairs or a [WordDefinitionsMap](../type-aliases/WordDefinitionsMap.md)
 
 ### noteTypeName?
 

@@ -67,6 +67,6 @@ describe("KANJIDIC conversion", () => {
   });
 
   it("XML conversion error", () => {
-    expect(() => convertKanjiDic("NOTKANJIDIC")).toThrowError();
+    expect(() => convertKanjiDic("NOTKANJIDIC")).toThrow();
   });
 });

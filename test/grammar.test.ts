@@ -45,7 +45,7 @@ describe("grammar note generation", () => {
         noteType: true,
         deckPath: true,
       }),
-    ).toThrowError("Invalid result list");
+    ).toThrow("Invalid result list");
 
     grammarPoints[randomIndex]!.noteTypeName = noteTypeName;
     grammarPoints[randomIndex]!.deckPath = undefined;
@@ -56,26 +56,26 @@ describe("grammar note generation", () => {
         noteType: true,
         deckPath: true,
       }),
-    ).toThrowError("Invalid result list");
+    ).toThrow("Invalid result list");
 
     grammarPoints[randomIndex]!.deckPath = deckPath;
     grammarPoints[randomIndex]!.noteID = undefined;
 
-    expect(() => generateAnkiNotesFile(grammarPoints)).toThrowError(
+    expect(() => generateAnkiNotesFile(grammarPoints)).toThrow(
       "Invalid result list",
     );
 
     grammarPoints[randomIndex]!.noteID = noteID;
     grammarPoints[randomIndex]!.noteTypeName = undefined;
 
-    expect(() => generateAnkiNotesFile(grammarPoints)).toThrowError(
+    expect(() => generateAnkiNotesFile(grammarPoints)).toThrow(
       "Invalid result list",
     );
 
     grammarPoints[randomIndex]!.noteTypeName = noteTypeName;
     grammarPoints[randomIndex]!.deckPath = undefined;
 
-    expect(() => generateAnkiNotesFile(grammarPoints)).toThrowError(
+    expect(() => generateAnkiNotesFile(grammarPoints)).toThrow(
       "Invalid result list",
     );
 

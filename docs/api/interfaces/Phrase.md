@@ -16,7 +16,7 @@ Converted from [TanakaExample](TanakaExample.md)
 
 ### glossNumber?
 
-> `readonly` `optional` **glossNumber**: [`GlossSpecificNumber`](GlossSpecificNumber.md)
+> `readonly` `optional` **glossNumber?**: [`GlossSpecificNumber`](GlossSpecificNumber.md)
 
 Defined in: [types.ts:907](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L907)
 

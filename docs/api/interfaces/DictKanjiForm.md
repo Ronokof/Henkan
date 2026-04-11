@@ -16,7 +16,7 @@ Equivalent to the `k_ele` JMdict/JMnedict element
 
 ### commonness?
 
-> `optional` **commonness**: `string`[]
+> `optional` **commonness?**: `string`[]
 
 Defined in: [types.ts:78](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L78)
 
@@ -40,7 +40,7 @@ The kanji form of the word
 
 ### notes?
 
-> `optional` **notes**: `string`[]
+> `optional` **notes?**: `string`[]
 
 Defined in: [types.ts:72](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L72)
 

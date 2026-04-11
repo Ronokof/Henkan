@@ -24,7 +24,7 @@ The component character
 
 ### meaning?
 
-> `optional` **meaning**: `string`
+> `optional` **meaning?**: `string`
 
 Defined in: [types.ts:769](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L769)
 

@@ -16,7 +16,7 @@ Equivalent to the `entry` JMdict element + miscellaneous info
 
 ### hasPhrases?
 
-> `optional` **hasPhrases**: `true`
+> `optional` **hasPhrases?**: `true`
 
 Defined in: [types.ts:221](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L221)
 
@@ -38,7 +38,7 @@ The entry sequence number
 
 ### isCommon?
 
-> `optional` **isCommon**: `true`
+> `optional` **isCommon?**: `true`
 
 Defined in: [types.ts:209](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L209)
 
@@ -48,7 +48,7 @@ Whether or not the entry has a priority tag (`k_pri` or `r_pri`)
 
 ### kanjiForms?
 
-> `optional` **kanjiForms**: [`DictKanjiForm`](DictKanjiForm.md)[]
+> `optional` **kanjiForms?**: [`DictKanjiForm`](DictKanjiForm.md)[]
 
 Defined in: [types.ts:205](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L205)
 
@@ -78,7 +78,7 @@ The word's readings
 
 ### usuallyInKana?
 
-> `optional` **usuallyInKana**: `true`
+> `optional` **usuallyInKana?**: `true`
 
 Defined in: [types.ts:215](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L215)
 

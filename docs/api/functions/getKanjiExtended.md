@@ -22,15 +22,15 @@ Additional info for the kanji (mnemonic, components, words)
 
 ### kanji
 
-The kanji character or a [DictKanji](../interfaces/DictKanji.md) object
+`string` \| [`DictKanji`](../interfaces/DictKanji.md)
 
-`string` | [`DictKanji`](../interfaces/DictKanji.md)
+The kanji character or a [DictKanji](../interfaces/DictKanji.md) object
 
 ### dict?
 
-An array of converted KANJIDIC entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md) *(not needed if [kanji](#getkanjiextended) is a [DictKanji](../interfaces/DictKanji.md) object)*
+[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) \| readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 
-[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) | readonly [`DictKanji`](../interfaces/DictKanji.md)[]
+An array of converted KANJIDIC entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md) *(not needed if [kanji](#getkanjiextended) is a [DictKanji](../interfaces/DictKanji.md) object)*
 
 ### useWords?
 
@@ -40,15 +40,15 @@ Whether or not to use the words provided in the `info` object (if present) inste
 
 ### jmDict?
 
-An array of converted `JMdict` entries or a [KanjiWordsMap](../type-aliases/KanjiWordsMap.md)
+[`KanjiWordsMap`](../type-aliases/KanjiWordsMap.md) \| readonly [`DictWord`](../interfaces/DictWord.md)[]
 
-[`KanjiWordsMap`](../type-aliases/KanjiWordsMap.md) | readonly [`DictWord`](../interfaces/DictWord.md)[]
+An array of converted `JMdict` entries or a [KanjiWordsMap](../type-aliases/KanjiWordsMap.md)
 
 ### svgList?
 
-An array of SVG file names or a [KanjiSVGMap](../type-aliases/KanjiSVGMap.md)
+[`KanjiSVGMap`](../type-aliases/KanjiSVGMap.md) \| readonly `string`[]
 
-[`KanjiSVGMap`](../type-aliases/KanjiSVGMap.md) | readonly `string`[]
+An array of SVG file names or a [KanjiSVGMap](../type-aliases/KanjiSVGMap.md)
 
 ### noteTypeName?
 

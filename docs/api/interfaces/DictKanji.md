@@ -16,7 +16,7 @@ Equivalent to the `character` KANJIDIC2 element *(excluding some subelements)*
 
 ### isKokuji?
 
-> `optional` **isKokuji**: `true`
+> `optional` **isKokuji?**: `true`
 
 Defined in: [types.ts:373](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L373)
 
@@ -36,7 +36,7 @@ The kanji character
 
 ### misc?
 
-> `optional` **misc**: [`DictKanjiMisc`](DictKanjiMisc.md)
+> `optional` **misc?**: [`DictKanjiMisc`](DictKanjiMisc.md)
 
 Defined in: [types.ts:365](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L365)
 
@@ -46,7 +46,7 @@ The miscellaneous information about the kanji
 
 ### readingMeaning?
 
-> `optional` **readingMeaning**: [`DictKanjiReadingMeaning`](DictKanjiReadingMeaning.md)[]
+> `optional` **readingMeaning?**: [`DictKanjiReadingMeaning`](DictKanjiReadingMeaning.md)[]
 
 Defined in: [types.ts:369](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L369)
 

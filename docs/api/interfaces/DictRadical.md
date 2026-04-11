@@ -14,7 +14,7 @@ RADKFILE2 entry (radical)
 
 ### kanji?
 
-> `optional` **kanji**: [`DictKanji`](DictKanji.md)[]
+> `optional` **kanji?**: [`DictKanji`](DictKanji.md)[]
 
 Defined in: [types.ts:391](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L391)
 

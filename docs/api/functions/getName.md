@@ -16,27 +16,27 @@ Transforms a converted `JMnedict` entry into a more readable format, by providin
 
 ### searchedName
 
-The ID of the `JMnedict` entry (requires [dict](#getname)) or a [DictName](../interfaces/DictName.md) object
+`` `${number}` `` \| [`DictName`](../interfaces/DictName.md)
 
-`` `${number}` `` | [`DictName`](../interfaces/DictName.md)
+The ID of the `JMnedict` entry (requires [dict](#getname)) or a [DictName](../interfaces/DictName.md) object
 
 ### dict?
 
-An array converted `JMnedict` entries or a [NameIDEntryMap](../type-aliases/NameIDEntryMap.md) *(not needed if [searchedName](#getname) is a [DictName](../interfaces/DictName.md) object)*
+[`NameIDEntryMap`](../type-aliases/NameIDEntryMap.md) \| readonly [`DictName`](../interfaces/DictName.md)[]
 
-[`NameIDEntryMap`](../type-aliases/NameIDEntryMap.md) | readonly [`DictName`](../interfaces/DictName.md)[]
+An array converted `JMnedict` entries or a [NameIDEntryMap](../type-aliases/NameIDEntryMap.md) *(not needed if [searchedName](#getname) is a [DictName](../interfaces/DictName.md) object)*
 
 ### kanjiDic?
 
-An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md)
+[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) \| readonly [`DictKanji`](../interfaces/DictKanji.md)[]
 
-[`KanjiEntryMap`](../type-aliases/KanjiEntryMap.md) | readonly [`DictKanji`](../interfaces/DictKanji.md)[]
+An array of converted `KANJIDIC` entries or a [KanjiEntryMap](../type-aliases/KanjiEntryMap.md)
 
 ### examples?
 
-An array of converted `Tanaka Corpus` examples or a [EntryExamplesMap](../type-aliases/EntryExamplesMap.md)
+[`EntryExamplesMap`](../type-aliases/EntryExamplesMap.md) \| readonly [`TanakaExample`](../interfaces/TanakaExample.md)[]
 
-[`EntryExamplesMap`](../type-aliases/EntryExamplesMap.md) | readonly [`TanakaExample`](../interfaces/TanakaExample.md)[]
+An array of converted `Tanaka Corpus` examples or a [EntryExamplesMap](../type-aliases/EntryExamplesMap.md)
 
 ### noteTypeName?
 

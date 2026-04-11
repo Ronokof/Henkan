@@ -22,7 +22,7 @@ Setting any of the properties to:
 
 ### deckPath?
 
-> `optional` **deckPath**: `string` \| `true`
+> `optional` **deckPath?**: `string` \| `true`
 
 Defined in: [types.ts:1087](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1087)
 
@@ -32,7 +32,7 @@ A default for [Result.deckPath](Kana.md#deckpath)
 
 ### guid?
 
-> `optional` **guid**: `true` \| `"main_information"`
+> `optional` **guid?**: `true` \| `"main_information"`
 
 Defined in: [types.ts:1079](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1079)
 
@@ -44,7 +44,7 @@ A default for [Result.noteID](Kana.md#noteid)
 
 ### noteType?
 
-> `optional` **noteType**: `string` \| `true`
+> `optional` **noteType?**: `string` \| `true`
 
 Defined in: [types.ts:1083](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L1083)
 

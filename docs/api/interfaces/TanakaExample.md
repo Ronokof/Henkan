@@ -14,7 +14,7 @@ Tanaka Corpus `examples.utf` examples
 
 ### furigana?
 
-> `optional` **furigana**: `string`
+> `optional` **furigana?**: `string`
 
 Defined in: [types.ts:483](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L483)
 
@@ -24,7 +24,7 @@ The Japanese phrase, with furigana attached
 
 ### glossNumber?
 
-> `optional` **glossNumber**: [`GlossSpecificNumber`](GlossSpecificNumber.md)
+> `optional` **glossNumber?**: [`GlossSpecificNumber`](GlossSpecificNumber.md)
 
 Defined in: [types.ts:487](https://github.com/Ronokof/Henkan/blob/main/src/types.ts#L487)
 
